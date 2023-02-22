@@ -40,6 +40,7 @@ def load_from_preprocessed(dir):
                   for sub_dir in os.listdir(dir)]
     dfs = [pd.read_csv(x) for x in data]
     df = pd.concat(dfs)
+    return df
 
 def load_mimic(random_seed: int = 42) -> tuple:
     # Load MIMIC-III data panda dataframes
