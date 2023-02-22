@@ -52,6 +52,7 @@ def load_mimic(random_seed: int = 42) -> tuple:
 
     data_df = pd.merge(label_df, feature_df, on='stay')
     data_df.drop(columns=drop_cols, inplace=True)
+
     ##################### I WILL LEAVE THIS ALONE FOR NOW ######################
     # mask = df[label] is True
     # df_dead = df[mask]
@@ -63,16 +64,11 @@ def load_mimic(random_seed: int = 42) -> tuple:
     #     ]
     # )
     ############################################################################
-    # ==================================== Till here it works fine
+
     df = sklearn.utils.shuffle(data_df, random_state=random_seed)
     df = df.reset_index(drop=True)
     features, labels = df.loc[:, df.columns != 'y_true'], df['y_true']
-    print(df)
-    print(list(df['y_true']))
-    print(list(df.loc[:, df.columns != 'y_true']))
     return features, labels
-    # ==================================== I have worked untill here
-    exit()
 
 
 def load_cutract(random_seed: int = 42) -> tuple:
@@ -127,7 +123,7 @@ def load_cutract(random_seed: int = 42) -> tuple:
 def approximation_quality(
     cv: int = 0,
     random_seed: int = 55,
-    save_path: str = "experiments/results/prostate/quality/",
+    save_path: str = "experiments/results/mimic/quality/",
     train_model: bool = True,
     train_data_only=False,
 ) -> None:
@@ -137,11 +133,11 @@ def approximation_quality(
     print(
         100 * "-"
         + "\n"
-        + "Welcome in the approximation quality experiment for Prostate Cancer. \n"
+        + "Welcome in the approximation quality experiment for in hospital mortality. \n"
         f"Settings: random_seed = {random_seed} ; cv = {cv} ; device = {device}.\n"
         + 100 * "-"
     )
-
+    # TIL HERE IT WORKS FINE
     # Define parameters
     n_epoch_model = 5
     log_interval = 100
@@ -152,6 +148,8 @@ def approximation_quality(
     reg_factor_init = 0.01
     reg_factor_final = 1.0
     n_epoch_simplex = 10000
+
+    print(1)
 
     current_path = Path.cwd()
     save_path = current_path / save_path
@@ -164,6 +162,10 @@ def approximation_quality(
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.15, random_state=random_seed + cv, stratify=y
     )
+
+    print(X_train, X_test, y_train, y_test)
+    # I AM WORKING TILL HERE
+    exit()
 
     train_data = MimicDataset(X_train, y_train)
     train_loader = DataLoader(train_data, batch_size=50, shuffle=True)
