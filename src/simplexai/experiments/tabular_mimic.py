@@ -68,8 +68,8 @@ def load_mimic(random_seed: int = 42) -> tuple:
     df = df.reset_index(drop=True)
     features, labels = df.loc[:, df.columns != 'y_true'], df['y_true']
     print(df)
-    print(df['y_true'])
-    print(df.loc[:, df.columns != 'y_true'])
+    print(list(df['y_true']))
+    print(list(df.loc[:, df.columns != 'y_true']))
     return features, labels
     # ==================================== I have worked untill here
     exit()
