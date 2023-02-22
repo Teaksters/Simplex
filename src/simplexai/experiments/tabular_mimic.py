@@ -166,7 +166,6 @@ def approximation_quality(
     test_data = MimicDataset(X_test, y_test)
     test_loader = DataLoader(test_data, batch_size=50, shuffle=True)
 
-    #################### TIL HERE IT WORKS FINE ####################
     if train_model:
         # Create the model
         classifier = MortalityPredictor(n_cont=0, input_feature_num=25)  # WORKING ON THIS
@@ -237,8 +236,10 @@ def approximation_quality(
     classifier.to(device)
     classifier.eval()
 
+    #################### TIL HERE IT WORKS FINE ####################
     #################### I AM WORKING TILL HERE ####################
-    exit()
+    # exit()
+    # TESTING NOW
 
     # Load data for the explainers
     print(100 * "-" + "\n" + "Now fitting the explainers. \n" + 100 * "-")
