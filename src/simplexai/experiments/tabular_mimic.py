@@ -34,23 +34,23 @@ class MimicDataset(Dataset):
         target = self.y.iloc[i]
         return data, target
 
+def load_from_preprocessed(dir):
+    # Reads and concatenates the train and test data into one dataframe
+    data = os.path.join(DATA_DIR, dir)
+    data = [os.path.join(data, dir, 'listfile.csv')
+                  for dir in os.listdir(data)]
+    dfs = [pd.read_csv(x) for x in data]
+    df = pd.concat(dfs)
 
 def load_mimic(random_seed: int = 42) -> tuple:
-    # Read all the label data into one panda dataframe
-    labels = os.path.join(DATA_DIR, 'in-hospital-mortality')
-    labels = [os.path.join(labels, dir, 'listfile.csv')
-                  for dir in os.listdir(labels)]
-    label_dfs = [pd.read_csv(label) for label in labels]
-    label_df = pd.concat(label_dfs)
-
+    # Load MIMIC-III data panda dataframes
+    label_dir = os.path.join(DATA_DIR, 'in-hospital-mortality')
+    label_df = load_from_preprocessed(label_dir)
+    print(label_df)
     # ==================================== Till here it works fine
     # Read the feature data into one panda dataframe
-    features = os.path.join(DATA_DIR, 'phenotyping')
-    features = [os.path.join(features, dir, 'listfile.csv')
-                    for dir in os.listdir(features)]
-    feature_dfs = [pd.read_csv(feature) for feature in features]
-    feature_df = pd.concat(label_dfs)
-
+    feature_dir = os.path.join(DATA_DIR, 'phenotyping')
+    feature_df = load_from_preprocessed(feature_dir)
     print(feature_df)
     # ==================================== I have worked untill here
     exit()
