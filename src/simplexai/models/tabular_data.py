@@ -16,7 +16,8 @@ class MortalityPredictor(BlackBox):
         self.lin1 = nn.Linear(input_feature_num, 200)
         self.lin2 = nn.Linear(200, 50)
         self.lin3 = nn.Linear(50, 2)
-        self.bn1 = nn.BatchNorm1d(self.n_cont)
+        if self.n_cont > 0:
+            self.bn1 = nn.BatchNorm1d(self.n_cont)
         self.drops = nn.Dropout(0.3)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -27,7 +28,8 @@ class MortalityPredictor(BlackBox):
 
     def latent_representation(self, x: torch.Tensor) -> torch.Tensor:
         x_cont, x_disc = x[:, : self.n_cont], x[:, self.n_cont :]
-        x_cont = self.bn1(x_cont)
+        if self.n_cont > 0:
+            x_cont = self.bn1(x_cont)
         x = torch.cat([x_cont, x_disc], 1)
         x = F.relu(self.lin1(x))
         x = self.drops(x)
