@@ -49,9 +49,9 @@ def load_mimic(random_seed: int = 42) -> tuple:
     label_df = load_from_preprocessed(label_dir)
     feature_dir = os.path.join(DATA_DIR, 'phenotyping')
     feature_df = load_from_preprocessed(feature_dir)
+
     data_df = pd.merge(label_df, feature_df, on='stay')
     data_df.drop(columns=drop_cols, inplace=True)
-    print(data_df, list(data_df))
     ##################### I WILL LEAVE THIS ALONE FOR NOW ######################
     # mask = df[label] is True
     # df_dead = df[mask]
@@ -64,11 +64,15 @@ def load_mimic(random_seed: int = 42) -> tuple:
     # )
     ############################################################################
     # ==================================== Till here it works fine
-    # ==================================== I have worked untill here
-    exit()
     df = sklearn.utils.shuffle(data_df, random_state=random_seed)
     df = df.reset_index(drop=True)
-    return df[features], df[label]
+    features, labels = df.loc[:, df.columns != 'y_true'], df['y_true']
+    print(df)
+    print(df['y_true'])
+    print(df.loc[:, df.columns != 'y_true'])
+    return features, labels
+    # ==================================== I have worked untill here
+    exit()
 
 
 def load_cutract(random_seed: int = 42) -> tuple:
