@@ -51,6 +51,7 @@ plt.rc("text", usetex=True)
 params = {"text.latex.preamble": r"\usepackage{amsmath}"}
 plt.rcParams.update(params)
 load_dir = Path.cwd() / "experiments/results/ar/quality/"
+print(load_dir)
 
 for cv in cv_list:
     for k in k_list:
@@ -111,6 +112,8 @@ for m, metric_name in enumerate(metric_names):
             mean_df[metric_name, explainer_name] + std_df[metric_name, explainer_name],
             alpha=0.2,
         )
+
+print("where it is safed", load_dir)
 
 plt.figure(1)
 plt.xlabel(r"$K$")

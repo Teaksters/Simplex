@@ -129,3 +129,4 @@ data
 *.pth
 *.pkl
 *.pdf
+experiments/results/
