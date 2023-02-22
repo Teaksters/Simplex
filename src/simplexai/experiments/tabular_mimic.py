@@ -43,7 +43,7 @@ def load_mimic(random_seed: int = 42) -> tuple:
     label_df = pd.concat(label_dfs)
 
     print(label_df)
-    exit() 
+    exit()
     # ====================================
     mask = df[label] is True
     df_dead = df[mask]
@@ -144,7 +144,7 @@ def approximation_quality(
         os.makedirs(save_path)
 
     # Load the data
-    X, y = load_seer(random_seed=random_seed + cv)
+    X, y = load_mimic(random_seed=random_seed + cv)
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.15, random_state=random_seed + cv, stratify=y
     )
@@ -369,7 +369,7 @@ def outlier_detection(
     n_epoch_simplex = 10000
 
     # Load the data
-    X, y = load_seer(random_seed=random_seed + cv)
+    X, y = load_mimic(random_seed=random_seed + cv)
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.15, random_state=random_seed + cv, stratify=y
     )
@@ -556,7 +556,7 @@ def corpus_size_effect(random_seed: int = 42) -> None:
         classifier.eval()
 
         # Load the data
-        X, y = load_seer(random_seed=random_seed + cv)
+        X, y = load_mimic(random_seed=random_seed + cv)
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.15, random_state=random_seed + cv, stratify=y
         )
