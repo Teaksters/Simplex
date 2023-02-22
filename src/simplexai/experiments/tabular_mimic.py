@@ -50,7 +50,7 @@ def load_mimic(random_seed: int = 42) -> tuple:
     feature_dir = os.path.join(DATA_DIR, 'phenotyping')
     feature_df = load_from_preprocessed(feature_dir)
     data_df = pd.merge(label_df, feature_df, on='stay')
-    data_df.drop('stay', inplace=True)
+    data_df.drop(columns='stay', inplace=True)
     print(data_df, list(data_df))
     ##################### I WILL LEAVE THIS ALONE FOR NOW ######################
     # mask = df[label] is True
