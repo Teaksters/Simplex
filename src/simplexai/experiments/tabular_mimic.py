@@ -36,8 +36,8 @@ class MimicDataset(Dataset):
 
 def load_from_preprocessed(dir):
     # Reads and concatenates the train and test data into one dataframe
-    data = [os.path.join(dir, 'listfile.csv')
-                  for dir in os.listdir(data)]
+    data = [os.path.join(dir, sub_dir, 'listfile.csv')
+                  for sub_dir in os.listdir(dir)]
     dfs = [pd.read_csv(x) for x in data]
     df = pd.concat(dfs)
 
