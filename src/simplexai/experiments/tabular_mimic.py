@@ -231,14 +231,14 @@ def approximation_quality(
         torch.save(classifier.state_dict(), save_path / f"model_cv{cv}.pth")
         torch.save(optimizer.state_dict(), save_path / f"optimizer_cv{cv}.pth")
 
-        #################### I AM WORKING TILL HERE ####################
-        exit()
-
     # Load model:
-    classifier = MortalityPredictor(n_cont=3)
+    classifier = MortalityPredictor(n_cont=0, input_feature_num=25)
     classifier.load_state_dict(torch.load(save_path / f"model_cv{cv}.pth"))
     classifier.to(device)
     classifier.eval()
+
+    #################### I AM WORKING TILL HERE ####################
+    exit()
 
     # Load data for the explainers
     print(100 * "-" + "\n" + "Now fitting the explainers. \n" + 100 * "-")
