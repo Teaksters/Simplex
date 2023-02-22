@@ -119,7 +119,7 @@ def load_cutract(random_seed: int = 42) -> tuple:
     df = df.reset_index(drop=True)
     return df[features], df[label]
 
-
+########################## WORK IN PROGRESS ######################
 def approximation_quality(
     cv: int = 0,
     random_seed: int = 55,
@@ -161,20 +161,15 @@ def approximation_quality(
         X, y, test_size=0.15, random_state=random_seed + cv, stratify=y
     )
 
-    # TIL HERE IT WORKS FINE
-
     train_data = MimicDataset(X_train, y_train)
     train_loader = DataLoader(train_data, batch_size=50, shuffle=True)
     test_data = MimicDataset(X_test, y_test)
     test_loader = DataLoader(test_data, batch_size=50, shuffle=True)
 
-    print(train_data, train_loader, test_data, test_loader)
-    # I AM WORKING TILL HERE
-    exit()
-
+    #################### TIL HERE IT WORKS FINE ####################
     if train_model:
         # Create the model
-        classifier = MortalityPredictor(n_cont=3)
+        classifier = MortalityPredictor(n_cont=0, input_feature_num=25)  # WORKING ON THIS
         classifier.to(device)
         optimizer = optim.Adam(classifier.parameters(), weight_decay=weight_decay)
 
@@ -184,6 +179,8 @@ def approximation_quality(
         train_counter = []
         test_losses = []
 
+        #################### I AM WORKING TILL HERE ####################
+        exit()
         def train(epoch):
             classifier.train()
             for batch_idx, (data, target) in enumerate(train_loader):
