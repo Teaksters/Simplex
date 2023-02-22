@@ -43,15 +43,17 @@ def load_from_preprocessed(dir):
     return df
 
 def load_mimic(random_seed: int = 42) -> tuple:
-    # Load MIMIC-III data panda dataframes
+    # Load MIMIC-III data into panda dataframes
     label_dir = os.path.join(DATA_DIR, 'in-hospital-mortality')
     label_df = load_from_preprocessed(label_dir)
-    print(label_df)
-    # ==================================== Till here it works fine
-    # Read the feature data into one panda dataframe
     feature_dir = os.path.join(DATA_DIR, 'phenotyping')
     feature_df = load_from_preprocessed(feature_dir)
+    # ==================================== Till here it works fine
+    # Combine the dataframes only using matching patient entries
+    data_df = pd.merge(label_df, feature_df, on='stay')
+    print(label_df)
     print(feature_df)
+    print(data_df)
     # ==================================== I have worked untill here
     exit()
     mask = df[label] is True
