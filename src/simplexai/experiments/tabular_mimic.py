@@ -43,14 +43,14 @@ def load_from_preprocessed(dir):
     return df
 
 def load_mimic(random_seed: int = 42) -> tuple:
-
+    drop_cols = ['stay', 'period_length']
     # Load MIMIC-III data into panda dataframes
     label_dir = os.path.join(DATA_DIR, 'in-hospital-mortality')
     label_df = load_from_preprocessed(label_dir)
     feature_dir = os.path.join(DATA_DIR, 'phenotyping')
     feature_df = load_from_preprocessed(feature_dir)
     data_df = pd.merge(label_df, feature_df, on='stay')
-    data_df.drop(columns='stay', inplace=True)
+    data_df.drop(columns=drop_cols, inplace=True)
     print(data_df, list(data_df))
     ##################### I WILL LEAVE THIS ALONE FOR NOW ######################
     # mask = df[label] is True
@@ -65,7 +65,8 @@ def load_mimic(random_seed: int = 42) -> tuple:
     ############################################################################
     # ==================================== Till here it works fine
     # ==================================== I have worked untill here
-    df = sklearn.utils.shuffle(df, random_state=random_seed)
+    exit()
+    df = sklearn.utils.shuffle(data_df, random_state=random_seed)
     df = df.reset_index(drop=True)
     return df[features], df[label]
 
