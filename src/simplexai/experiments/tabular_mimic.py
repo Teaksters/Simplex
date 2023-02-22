@@ -38,14 +38,22 @@ class MimicDataset(Dataset):
 def load_mimic(random_seed: int = 42) -> tuple:
     # Read all the label data into one panda dataframe
     labels = os.path.join(DATA_DIR, 'in-hospital-mortality')
-    labels = [os.path.join(labels, dir, 'listfile.csv') for dir in os.listdir(labels)]
+    labels = [os.path.join(labels, dir, 'listfile.csv')
+                  for dir in os.listdir(labels)]
     label_dfs = [pd.read_csv(label) for label in labels]
     label_df = pd.concat(label_dfs)
 
-    mask =  label_df['y_true'] is True
-    print(label_df, label_df['y_true'].sum())
+    # ==================================== Till here it works fine
+    # Read the feature data into one panda dataframe
+    features = os.path.join(DATA_DIR, 'phenotyping')
+    features = [os.path.join(features, dir, 'listfile.csv')
+                    for dir in os.listdir(features)]
+    feature_dfs = [pd.read_csv(feature) for feature in features]
+    feature_df = pd.concat(label_dfs)
+
+    print(feature_df)
+    # ==================================== I have worked untill here
     exit()
-    # ====================================
     mask = df[label] is True
     df_dead = df[mask]
     df_survive = df[~mask]
