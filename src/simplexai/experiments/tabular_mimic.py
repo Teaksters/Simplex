@@ -179,8 +179,6 @@ def approximation_quality(
         train_counter = []
         test_losses = []
 
-        #################### I AM WORKING TILL HERE ####################
-        exit()
         def train(epoch):
             classifier.train()
             for batch_idx, (data, target) in enumerate(train_loader):
@@ -232,6 +230,9 @@ def approximation_quality(
             test()
         torch.save(classifier.state_dict(), save_path / f"model_cv{cv}.pth")
         torch.save(optimizer.state_dict(), save_path / f"optimizer_cv{cv}.pth")
+
+        #################### I AM WORKING TILL HERE ####################
+        exit()
 
     # Load model:
     classifier = MortalityPredictor(n_cont=3)
