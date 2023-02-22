@@ -42,7 +42,8 @@ def load_mimic(random_seed: int = 42) -> tuple:
     label_dfs = [pd.read_csv(label) for label in labels]
     label_df = pd.concat(label_dfs)
 
-    print(label_df)
+    mask = label_df['y_true'] is True
+    print(label_df.shape(), mask.sum(), mask.sum() / label_df.shape()[0])
     exit()
     # ====================================
     mask = df[label] is True
