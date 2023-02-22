@@ -137,7 +137,7 @@ def approximation_quality(
         f"Settings: random_seed = {random_seed} ; cv = {cv} ; device = {device}.\n"
         + 100 * "-"
     )
-    # TIL HERE IT WORKS FINE
+
     # Define parameters
     n_epoch_model = 5
     log_interval = 100
@@ -148,8 +148,6 @@ def approximation_quality(
     reg_factor_init = 0.01
     reg_factor_final = 1.0
     n_epoch_simplex = 10000
-
-    print(1)
 
     current_path = Path.cwd()
     save_path = current_path / save_path
@@ -163,14 +161,16 @@ def approximation_quality(
         X, y, test_size=0.15, random_state=random_seed + cv, stratify=y
     )
 
-    print(X_train, X_test, y_train, y_test)
-    # I AM WORKING TILL HERE
-    exit()
+    # TIL HERE IT WORKS FINE
 
     train_data = MimicDataset(X_train, y_train)
     train_loader = DataLoader(train_data, batch_size=50, shuffle=True)
     test_data = MimicDataset(X_test, y_test)
     test_loader = DataLoader(test_data, batch_size=50, shuffle=True)
+
+    print(train_data, train_loader, test_data, test_loader)
+    # I AM WORKING TILL HERE
+    exit()
 
     if train_model:
         # Create the model
