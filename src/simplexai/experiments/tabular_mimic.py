@@ -53,16 +53,16 @@ def load_mimic(random_seed: int = 42) -> tuple:
     data_df = pd.merge(label_df, feature_df, on='stay')
     data_df.drop(columns=drop_cols, inplace=True)
 
-    ##################### I WILL LEAVE THIS ALONE FOR NOW ######################
-    # mask = df[label] is True
-    # df_dead = df[mask]
-    # df_survive = df[~mask]
-    # df = pd.concat(
-    #     [
-    #         df_dead.sample(12000, random_state=random_seed),
-    #         df_survive.sample(12000, random_state=random_seed),
-    #     ]
-    # )
+    ##################### WORKING ON THIS ######################################
+    mask = data_df[label] is True
+    df_dead = data_df[mask]
+    df_survive = data_df[~mask]
+    data_df = pd.concat(
+        [
+            df_dead.sample(2500, random_state=random_seed),
+            df_survive.sample(2500, random_state=random_seed),
+        ]
+    )
     ############################################################################
 
     df = sklearn.utils.shuffle(data_df, random_state=random_seed)
@@ -236,11 +236,6 @@ def approximation_quality(
     classifier.to(device)
     classifier.eval()
 
-    #################### TIL HERE IT WORKS FINE ####################
-    #################### I AM WORKING TILL HERE ####################
-    # exit()
-    # TESTING NOW
-
     # Load data for the explainers
     print(100 * "-" + "\n" + "Now fitting the explainers. \n" + 100 * "-")
 
@@ -353,7 +348,7 @@ def approximation_quality(
     )
     print(f"representer output r2 = {output_r2_score:.2g}.")
 
-
+########################## HAVEN'T TESTED FUNCTIONALITY ########################
 def outlier_detection(
     cv: int = 0,
     random_seed: int = 42,
@@ -537,8 +532,9 @@ def outlier_detection(
     with open(explainer_path, "wb") as f:
         print(f"Saving nn_uniform decomposition in {explainer_path}.")
         pkl.dump(nn_uniform, f)
+ ###############################################################################
 
-
+########################## HAVEN'T TESTED FUNCTIONALITY ########################
 def corpus_size_effect(random_seed: int = 42) -> None:
     torch.random.manual_seed(random_seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -605,14 +601,14 @@ def corpus_size_effect(random_seed: int = 42) -> None:
 
     print(residuals.mean(dim=-1))
     print(residuals.std(dim=-1))
-
+################################################################################
 
 def main(experiment: str = "approximation_quality", cv: int = 0) -> None:
     if experiment == "approximation_quality":
         approximation_quality(cv=cv)
-    elif experiment == "outlier_detection":
+    elif experiment == "outlier_detection": # TODO
         outlier_detection(cv=cv)
-    elif experiment == "corpus_size":
+    elif experiment == "corpus_size": #TODO
         corpus_size_effect()
     else:
         raise ValueError(
