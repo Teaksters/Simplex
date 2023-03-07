@@ -42,16 +42,7 @@ def load_from_preprocessed(dir):
     df = pd.concat(dfs)
     return df
 
-def load_tabular_mimic(random_seed: int = 42) -> tuple:
-    # Specify undesired columns
-    drop_cols = ['stay', 'period_length']
-    # Load MIMIC-III data into panda dataframes
-    label_dir = os.path.join(DATA_DIR, 'in-hospital-mortality')
-    label_df = load_from_preprocessed(label_dir)
-    feature_dir = os.path.join(DATA_DIR, 'phenotyping')
-    feature_df = load_from_preprocessed(feature_dir)
-
-    ##################### WORKING ####################################
+def load_age(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
     drop_cols2 = ['HADM_ID', 'ICUSTAY_ID', 'LAST_CAREUNIT', 'DBSOURCE', 'INTIME',
                  'OUTTIME', 'LOS', 'ADMITTIME', 'DISCHTIME', 'DEATHTIME',
                  'ETHNICITY', 'DIAGNOSIS', 'GENDER', 'DOB', 'DOD',
@@ -76,11 +67,25 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
 
     general_df.rename(columns={'SUBJECT_ID': 'stay'}, inplace=True)
     general_df.drop(columns=drop_cols2, inplace=True)
+    return general_df
+
+
+def load_tabular_mimic(random_seed: int = 42) -> tuple:
+    # Specify undesired columns
+    drop_cols = ['stay', 'period_length']
+    # Load MIMIC-III data into panda dataframes
+    label_dir = os.path.join(DATA_DIR, 'in-hospital-mortality')
+    label_df = load_from_preprocessed(label_dir)
+    feature_dir = os.path.join(DATA_DIR, 'phenotyping')
+    feature_df = load_from_preprocessed(feature_dir)
+    age_df = load_age()
+
+    ##################### WORKING ####################################
+
 
     # Merge data into workable complete format
     data_df = pd.merge(label_df, feature_df, on='stay')
-    print(data_df)
-    data_df = pd.merge(data_df, general_df, on='stay')
+    data_df = pd.merge(data_df, age_df, on='stay')
     data_df.drop(columns=drop_cols, inplace=True)
     print(data_df)
     exit()
