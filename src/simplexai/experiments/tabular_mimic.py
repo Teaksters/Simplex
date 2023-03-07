@@ -79,9 +79,9 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
 
     # Merge data into workable complete format
     data_df = pd.merge(label_df, feature_df, on='stay')
+    data_df = pd.merge(data_df, general_df, on='stay')
     data_df.drop(columns=drop_cols, inplace=True)
     print(data_df)
-    data_df = pd.merge(data_df, general_df, on='stay')
     print(data_df)
     exit()
     ##################################################################
