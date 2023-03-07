@@ -55,11 +55,21 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
     general_df = pd.read_csv(os.path.join(DATA_DIR, 'all_stays.csv'))
     general_df.sort_values(['SUBJECT_ID', 'ICUSTAY_ID'])
     # Adhere to data format of other dataframes
-    unique_df = general_df[general_df.duplicated('SUBJECT_ID') == False]
-    unique_df['SUBJECT_ID'] = unique_df['SUBJECT_ID'].astype(str) + "_episode1_timeseries.csv"
-    print(unique_df)
+    general_df = general_df[general_df.duplicated('SUBJECT_ID') == False]
+    general_df['SUBJECT_ID'] = general_df['SUBJECT_ID'].astype(str) + "_episode1_timeseries.csv"
+
     duplicates_df = general_df[general_df.duplicated('SUBJECT_ID') == True]
-    duplicates_df.sort_values(['SUBJECT_ID', 'ICUSTAY_ID'])
+    i = 2
+    while not duplicates_df.empty:
+        # update general df
+        episode_str = "_episode" + str(i) + "_timeseries.csv"
+        temp_df = duplicates_df[duplicates_df.duplicated('SUBJECT_ID') == False]
+        temp_df['SUBJECT_ID'] = temp_df['SUBJECT_ID'].astype(str) + episode_str
+        general_df = general_df.concat([general_df, temp_df])
+        # prepare for next round
+        duplicates_df = duplicates_df[duplicates_df.duplicated('SUBJECT_ID') == True]
+        i += 1
+    print(general_df)
     print(duplicates_df)
     exit()
     ##################################################################
