@@ -42,7 +42,8 @@ def load_from_preprocessed(dir):
     df = pd.concat(dfs)
     return df
 
-def load_mimic(random_seed: int = 42) -> tuple:
+def load_tabular_mimic(random_seed: int = 42) -> tuple:
+    # Specify undesired columns
     drop_cols = ['stay', 'period_length']
     # Load MIMIC-III data into panda dataframes
     label_dir = os.path.join(DATA_DIR, 'in-hospital-mortality')
@@ -50,19 +51,34 @@ def load_mimic(random_seed: int = 42) -> tuple:
     feature_dir = os.path.join(DATA_DIR, 'phenotyping')
     feature_df = load_from_preprocessed(feature_dir)
 
+    ##################### WORKING ####################################
+    general_df = pd.read_csv(os.path.join(DATA_DIR, 'all_stays.csv'))
+    # Adhere to data format of other dataframes
+    unique_df = general_df[general_df.duplicated('SUBJECT_ID') == False]
+    unique_df['SUBJECT_ID'] = unique_df['SUBJECT_ID'] + "_episode1_timeseries.csv"
+    print(unique_df)
+    duplicates_df = general_df[general_df.duplicated('SUBJECT_ID') == True]
+    duplicates_df.sort_values(['SUBJECT_ID', 'ICUSTAY_ID'])
+    print(duplicates_df)
+    exit()
+    ##################################################################
+
+    # Merge data into workable complete format
     data_df = pd.merge(label_df, feature_df, on='stay')
     data_df.drop(columns=drop_cols, inplace=True)
 
-    ##################### WORKING ON THIS ######################################
-    mask = data_df[label] is True
-    df_dead = data_df[mask]
-    df_survive = data_df[~mask]
-    data_df = pd.concat(
-        [
-            df_dead.sample(2500, random_state=random_seed),
-            df_survive.sample(2500, random_state=random_seed),
-        ]
-    )
+    ##################### OPTIONAL ######################################
+    ### Balance data set for even amount of survivors and mortalities ###
+    #####################################################################
+    # mask = data_df[label] is True
+    # df_dead = data_df[mask]
+    # df_survive = data_df[~mask]
+    # data_df = pd.concat(
+    #     [
+    #         df_dead.sample(2500, random_state=random_seed),
+    #         df_survive.sample(2500, random_state=random_seed),
+    #     ]
+    # )
     ############################################################################
 
     df = sklearn.utils.shuffle(data_df, random_state=random_seed)
@@ -156,7 +172,7 @@ def approximation_quality(
         os.makedirs(save_path)
 
     # Load the data
-    X, y = load_mimic(random_seed=random_seed + cv)
+    X, y = load_tabular_mimic(random_seed=random_seed + cv)
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.15, random_state=random_seed + cv, stratify=y
     )
@@ -381,7 +397,7 @@ def outlier_detection(
     n_epoch_simplex = 10000
 
     # Load the data
-    X, y = load_mimic(random_seed=random_seed + cv)
+    X, y = load_tabular_mimic(random_seed=random_seed + cv)
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.15, random_state=random_seed + cv, stratify=y
     )
@@ -569,7 +585,7 @@ def corpus_size_effect(random_seed: int = 42) -> None:
         classifier.eval()
 
         # Load the data
-        X, y = load_mimic(random_seed=random_seed + cv)
+        X, y = load_tabular_mimic(random_seed=random_seed + cv)
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.15, random_state=random_seed + cv, stratify=y
         )
