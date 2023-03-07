@@ -53,6 +53,7 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
 
     ##################### WORKING ####################################
     general_df = pd.read_csv(os.path.join(DATA_DIR, 'all_stays.csv'))
+    general_df.sort_values(['SUBJECT_ID', 'ICUSTAY_ID'])
     # Adhere to data format of other dataframes
     unique_df = general_df[general_df.duplicated('SUBJECT_ID') == False]
     unique_df['SUBJECT_ID'] = unique_df['SUBJECT_ID'].astype(str) + "_episode1_timeseries.csv"
