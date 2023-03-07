@@ -43,7 +43,7 @@ def load_from_preprocessed(dir):
     return df
 
 def load_age(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
-    drop_cols2 = ['HADM_ID', 'ICUSTAY_ID', 'LAST_CAREUNIT', 'DBSOURCE', 'INTIME',
+    drop_cols = ['HADM_ID', 'ICUSTAY_ID', 'LAST_CAREUNIT', 'DBSOURCE', 'INTIME',
                  'OUTTIME', 'LOS', 'ADMITTIME', 'DISCHTIME', 'DEATHTIME',
                  'ETHNICITY', 'DIAGNOSIS', 'GENDER', 'DOB', 'DOD',
                  'MORTALITY_INUNIT', 'MORTALITY', 'MORTALITY_INHOSPITAL']
@@ -66,13 +66,14 @@ def load_age(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
         i += 1
 
     general_df.rename(columns={'SUBJECT_ID': 'stay'}, inplace=True)
-    general_df.drop(columns=drop_cols2, inplace=True)
+    general_df.drop(columns=drop_cols, inplace=True)
     return general_df
 
 
 def load_tabular_mimic(random_seed: int = 42) -> tuple:
     # Specify undesired columns
     drop_cols = ['stay', 'period_length']
+
     # Load MIMIC-III data into panda dataframes
     label_dir = os.path.join(DATA_DIR, 'in-hospital-mortality')
     label_df = load_from_preprocessed(label_dir)
@@ -80,16 +81,10 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
     feature_df = load_from_preprocessed(feature_dir)
     age_df = load_age()
 
-    ##################### WORKING ####################################
-
-
     # Merge data into workable complete format
     data_df = pd.merge(label_df, feature_df, on='stay')
     data_df = pd.merge(data_df, age_df, on='stay')
     data_df.drop(columns=drop_cols, inplace=True)
-    print(data_df)
-    exit()
-    ##################################################################
 
     ##################### OPTIONAL ######################################
     ### Balance data set for even amount of survivors and mortalities ###
@@ -159,7 +154,6 @@ def load_cutract(random_seed: int = 42) -> tuple:
     df = df.reset_index(drop=True)
     return df[features], df[label]
 
-########################## WORK IN PROGRESS ######################
 def approximation_quality(
     cv: int = 0,
     random_seed: int = 55,
@@ -206,9 +200,10 @@ def approximation_quality(
     test_data = MimicDataset(X_test, y_test)
     test_loader = DataLoader(test_data, batch_size=50, shuffle=True)
 
+    ########################## WORKING ######################
     if train_model:
         # Create the model
-        classifier = MortalityPredictor(n_cont=0, input_feature_num=25)  # WORKING ON THIS
+        classifier = MortalityPredictor(n_cont=1, input_feature_num=25)  # WORKING ON THIS
         classifier.to(device)
         optimizer = optim.Adam(classifier.parameters(), weight_decay=weight_decay)
 
@@ -271,7 +266,7 @@ def approximation_quality(
         torch.save(optimizer.state_dict(), save_path / f"optimizer_cv{cv}.pth")
 
     # Load model:
-    classifier = MortalityPredictor(n_cont=0, input_feature_num=25)
+    classifier = MortalityPredictor(n_cont=1, input_feature_num=25)
     classifier.load_state_dict(torch.load(save_path / f"model_cv{cv}.pth"))
     classifier.to(device)
     classifier.eval()
