@@ -71,7 +71,7 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
         i += 1
 
     general_df.rename(columns={'SUBJECT_ID': 'stay'})
-    print(general_df))
+    print(general_df)
     exit()
     ##################################################################
 
