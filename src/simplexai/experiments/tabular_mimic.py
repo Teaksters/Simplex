@@ -52,15 +52,14 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
     feature_df = load_from_preprocessed(feature_dir)
 
     ##################### WORKING ####################################
-    general_df = pd.read_csv(os.path.join(DATA_DIR, 'all_stays.csv'))
-    general_df.sort_values(['SUBJECT_ID', 'ICUSTAY_ID'])
+    full_df = pd.read_csv(os.path.join(DATA_DIR, 'all_stays.csv'))
+    full_df.sort_values(['SUBJECT_ID', 'ICUSTAY_ID'])
     # Adhere to data format of other dataframes
-    general_df = general_df[general_df.duplicated('SUBJECT_ID') == False]
+    general_df = full_df[full_df.duplicated('SUBJECT_ID') == False]
     general_df['SUBJECT_ID'] = general_df['SUBJECT_ID'].astype(str) + "_episode1_timeseries.csv"
 
-    duplicates_df = general_df[general_df.duplicated('SUBJECT_ID') == True]
+    duplicates_df = full_df[full_df.duplicated('SUBJECT_ID') == True]
     print(duplicates_df)
-    exit()
     i = 2
     while not duplicates_df.empty:
         # update general df
