@@ -52,6 +52,10 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
     feature_df = load_from_preprocessed(feature_dir)
 
     ##################### WORKING ####################################
+    drop_cols2 = ['HADM_ID', 'ICUSTAY_ID', 'LAST_CAREUNIT', 'DBSOURCE', 'INTIME',
+                 'OUTTIME', 'LOS', 'ADMITTIME', 'DISCHTIME', 'DEATHTIME',
+                 'ETHNICITY', 'DIAGNOSIS', 'GENDER', 'DOB', 'DOD',
+                 'MORTALITY_INUNIT', 'MORTALITY', 'MORTALITY_INHOSPITAL']
     full_df = pd.read_csv(os.path.join(DATA_DIR, 'all_stays.csv'))
     full_df.sort_values(['SUBJECT_ID', 'ICUSTAY_ID'])
     # Adhere to data format of other dataframes
@@ -71,13 +75,16 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
         i += 1
 
     general_df.rename(columns={'SUBJECT_ID': 'stay'}, inplace=True)
-    print(list(general_df))
-    exit()
-    ##################################################################
+    general_df.drop(columns=drop_cols2, inplace=True)
 
     # Merge data into workable complete format
     data_df = pd.merge(label_df, feature_df, on='stay')
     data_df.drop(columns=drop_cols, inplace=True)
+    print(data_df)
+    data_df = pd.merge(data_df, general_df, on='stay')
+    print(data_df)
+    exit()
+    ##################################################################
 
     ##################### OPTIONAL ######################################
     ### Balance data set for even amount of survivors and mortalities ###
