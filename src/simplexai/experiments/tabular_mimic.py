@@ -70,7 +70,7 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
         duplicates_df = duplicates_df[duplicates_df.duplicated('SUBJECT_ID') == True]
         i += 1
 
-    general_df.rename(columns={'SUBJECT_ID': 'stay'})
+    general_df.rename(columns={'SUBJECT_ID': 'stay'}, inplace=True)
     print(general_df)
     exit()
     ##################################################################
