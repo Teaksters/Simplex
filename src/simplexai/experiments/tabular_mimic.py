@@ -60,6 +60,7 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
 
     duplicates_df = general_df[general_df.duplicated('SUBJECT_ID') == True]
     print(duplicates_df)
+    exit()
     i = 2
     while not duplicates_df.empty:
         # update general df
