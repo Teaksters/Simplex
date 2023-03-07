@@ -59,23 +59,17 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
     general_df['SUBJECT_ID'] = general_df['SUBJECT_ID'].astype(str) + "_episode1_timeseries.csv"
 
     duplicates_df = full_df[full_df.duplicated('SUBJECT_ID') == True]
-    print(duplicates_df)
     i = 2
     while not duplicates_df.empty:
         # update general df
         episode_str = "_episode" + str(i) + "_timeseries.csv"
         temp_df = duplicates_df[duplicates_df.duplicated('SUBJECT_ID') == False]
         temp_df['SUBJECT_ID'] = temp_df['SUBJECT_ID'].astype(str) + episode_str
-        print('XXXXXXXXXXXXXXXXXXxx')
-        print(general_df)
         general_df = pd.concat([general_df, temp_df])
-        print(general_df)
-        print('XXXXXXXXXXXXXXXXXXxx')
         # prepare for next round
         duplicates_df = duplicates_df[duplicates_df.duplicated('SUBJECT_ID') == True]
         i += 1
-    print(duplicates_df)
-    print(general_df)
+    print(list(general_df["SUBJECT_ID"]))
     exit()
     ##################################################################
 
