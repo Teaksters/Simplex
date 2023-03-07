@@ -55,7 +55,7 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
     general_df = pd.read_csv(os.path.join(DATA_DIR, 'all_stays.csv'))
     # Adhere to data format of other dataframes
     unique_df = general_df[general_df.duplicated('SUBJECT_ID') == False]
-    unique_df['SUBJECT_ID'] = unique_df['SUBJECT_ID'] + "_episode1_timeseries.csv"
+    unique_df['SUBJECT_ID'] = str(unique_df['SUBJECT_ID']) + "_episode1_timeseries.csv"
     print(unique_df)
     duplicates_df = general_df[general_df.duplicated('SUBJECT_ID') == True]
     duplicates_df.sort_values(['SUBJECT_ID', 'ICUSTAY_ID'])
