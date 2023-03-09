@@ -161,6 +161,7 @@ def load_time_series_mimic(random_seed: int = 42) -> tuple:
     df = load_tabular_mimic()
     df = pd.concat([df, pd.DataFrame(columns=temporal_features)])
     df[temporal_features] = df[temporal_features].astype('object')
+    print(df.dtypes)
 
     # Define all paths to time serie data
     paths = generate_paths('in-hospital-mortality')
