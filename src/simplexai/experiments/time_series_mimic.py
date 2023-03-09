@@ -159,8 +159,8 @@ def load_time_series_mimic(random_seed: int = 42) -> tuple:
 
     # Load tabular data
     df = load_tabular_mimic()
-    df = pd.concat([df, pd.DataFrame(columns=temporal_features)])
-    df[temporal_features] = df[temporal_features].astype('object')
+    df = pd.concat([df, pd.DataFrame(columns=temporal_features, dtype='object')])
+    # df[temporal_features] = df[temporal_features].astype('object')
     print(df)
     print(df.dtypes)
 
