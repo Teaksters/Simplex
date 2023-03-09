@@ -173,9 +173,9 @@ def load_time_series_mimic(random_seed: int = 42) -> tuple:
         temp_df = pd.read_csv(path)
         for col in temporal_features:
             print(stay, col)
-            print(df.loc[df.index[df['stay'] == stay], col])
+            print(df.loc[df.index[df['stay'] == stay][0], col])
             print(temp_df[col].tolist())
-            df.at[df.index[df['stay'] == stay], col] = temp_df[col].tolist()
+            df.at[df.index[df['stay'] == stay][0], col] = temp_df[col].tolist()
             print(df.loc[df.index[df['stay'] == stay], col])
             # print(list(temp_df))
             exit()
