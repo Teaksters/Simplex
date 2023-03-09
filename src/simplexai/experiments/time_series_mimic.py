@@ -157,16 +157,17 @@ def load_time_series_mimic(random_seed: int = 42) -> tuple:
     ]
     label = 'y_true'
 
+
+    ######################## DONE TILL HERE ###########################
     # Load tabular data
     df = load_tabular_mimic()
-    df = pd.concat([df, pd.DataFrame(columns=temporal_features, dtype=object)])
+    df = pd.concat([df, pd.DataFrame(columns=temporal_features, dtype='object')])
     # df[temporal_features] = df[temporal_features].astype('object')
     print(df)
     print(df.dtypes)
 
     # Define all paths to time serie data
     paths = generate_paths('in-hospital-mortality')
-    ######################## DONE TILL HERE ###########################
     for path in paths:
         stay = path.split('/')[-1]
         temp_df = pd.read_csv(path)
