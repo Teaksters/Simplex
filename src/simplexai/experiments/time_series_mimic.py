@@ -84,6 +84,19 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
     df = df.reset_index(drop=True)
     return df
 
+def generate_paths(dir):
+    file_paths = os.path.abspath(
+                     os.path.join(DATA_DIR, dir)
+    )
+    file_paths = [os.path.join(file_paths, sub_dir)
+                      for sub_dir in os.listdir(file_paths)]
+    file_paths = [os.path.join(path, file)
+                      for path in file_paths
+                          for file in os.listdir(path)
+                              if file[-4:] == '.csv']
+    return file_paths
+
+########################### WORKING ######################################
 def load_time_series_mimic(random_seed: int = 42) -> tuple:
     # Specify desired features and label
     temporal_features = [
@@ -143,19 +156,9 @@ def load_time_series_mimic(random_seed: int = 42) -> tuple:
     ]
     label = 'y_true'
     # Define all paths to time serie data
-    file_paths = os.path.abspath(
-                     os.path.join(DATA_DIR, 'in-hospital-mortality')
-    )
-    print(file_paths)
-    file_paths = [os.path.join(file_paths, sub_dir)
-                      for sub_dir in os.listdir(file_paths)]
-    print(file_paths)
-    file_paths = [os.path.join(path, file)
-                      for path in file_paths
-                          for file in os.listdir(path)
-                              if file[-4:] == '.csv']
-    print(file_paths)
-
+    paths = generate_paths('in-hospital-mortality')
+    ######################## DONE TILL HERE ###########################
+    print(paths)
     temporal_df = pd.read_csv(
         os.path.abspath(
             os.path.join(
