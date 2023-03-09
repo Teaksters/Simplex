@@ -158,15 +158,11 @@ def load_time_series_mimic(random_seed: int = 42) -> tuple:
     # Define all paths to time serie data
     paths = generate_paths('in-hospital-mortality')
     ######################## DONE TILL HERE ###########################
-    print(paths)
-    temporal_df = pd.read_csv(
-        os.path.abspath(
-            os.path.join(
-                ROOT_DIR,
-                "./data/Time series Prostate Cancer/temporal.csv",
-            )
-        )
-    )
+    for path in paths:
+        id = path.split('/')[-1].split('.')[0]
+        print(id)
+    exit()
+    ####################### WORKING TILL HERE #########################
     max_time_points = temporal_df["New ID"].value_counts().max()
     const_df = pd.read_csv(
         os.path.abspath(
