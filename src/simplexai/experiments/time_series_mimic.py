@@ -159,7 +159,7 @@ def load_time_series_mimic(random_seed: int = 42) -> tuple:
 
     # Load tabular data
     df = load_tabular_mimic()
-    df = pd.concat([df, pd.DataFrame(columns=temporal_features)])
+    df = pd.concat([df, pd.DataFrame(columns=temporal_features, dtype=object)])
 
     # Define all paths to time serie data
     paths = generate_paths('in-hospital-mortality')
@@ -171,7 +171,7 @@ def load_time_series_mimic(random_seed: int = 42) -> tuple:
             print(stay, col)
             print(df.loc[df.index[df['stay'] == stay], col])
             print(temp_df[col].tolist())
-            df.at[df.index[df['stay'] == stay], col] = temp_df[col]
+            df.at[df.index[df['stay'] == stay], col] = temp_df[col].tolist()
             print(df.loc[df.index[df['stay'] == stay], col])
             # print(list(temp_df))
             exit()
