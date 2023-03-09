@@ -203,7 +203,7 @@ def approximation_quality(
     ########################## WORKING ######################
     if train_model:
         # Create the model
-        classifier = MortalityPredictor(n_cont=1, input_feature_num=25)  # WORKING ON THIS
+        classifier = MortalityPredictor(n_cont=1, input_feature_num=26)  # WORKING ON THIS
         classifier.to(device)
         optimizer = optim.Adam(classifier.parameters(), weight_decay=weight_decay)
 
@@ -247,6 +247,11 @@ def approximation_quality(
                     data = data.to(device)
                     target = target.type(torch.LongTensor)
                     target = target.to(device)
+
+                    #######################################33
+                    print(data)
+                    exit()
+                    #########################################
                     output = classifier(data)
                     test_loss += F.nll_loss(output, target, reduction="sum").item()
                     pred = output.data.max(1, keepdim=True)[1]
@@ -266,7 +271,7 @@ def approximation_quality(
         torch.save(optimizer.state_dict(), save_path / f"optimizer_cv{cv}.pth")
 
     # Load model:
-    classifier = MortalityPredictor(n_cont=1, input_feature_num=25)
+    classifier = MortalityPredictor(n_cont=1, input_feature_num=26)
     classifier.load_state_dict(torch.load(save_path / f"model_cv{cv}.pth"))
     classifier.to(device)
     classifier.eval()
