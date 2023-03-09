@@ -143,7 +143,9 @@ def load_time_series_mimic(random_seed: int = 42) -> tuple:
     ]
     label = 'y_true'
     # Define all paths to time serie data
-    file_paths = os.path.join(ROOT_DIR, DATA_DIR, 'in-hospital-mortality')
+    file_paths = os.path.abspath(
+                     os.path.join(DATA_DIR, 'in-hospital-mortality')
+    )
     print(file_paths)
     file_paths = [os.path.join(file_paths, sub_dir)
                       for sub_dir in os.listdir(file_paths)]
