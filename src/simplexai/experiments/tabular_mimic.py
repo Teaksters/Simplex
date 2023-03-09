@@ -83,7 +83,7 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
 
     # Merge data into workable complete format
     data_df = pd.merge(label_df, feature_df, on='stay')
-    data_df = pd.merge(data_df, age_df, on='stay')
+    data_df = pd.merge(age_df, data_df, on='stay')
     data_df.drop(columns=drop_cols, inplace=True)
 
     ##################### OPTIONAL ######################################
@@ -247,11 +247,6 @@ def approximation_quality(
                     data = data.to(device)
                     target = target.type(torch.LongTensor)
                     target = target.to(device)
-
-                    #######################################33
-                    print(data)
-                    exit()
-                    #########################################
                     output = classifier(data)
                     test_loss += F.nll_loss(output, target, reduction="sum").item()
                     pred = output.data.max(1, keepdim=True)[1]
