@@ -158,8 +158,6 @@ def load_time_series_mimic(random_seed: int = 42) -> tuple:
 
     # Load tabular data
     df = load_tabular_mimic()
-    print(df)
-    print(list(df))
 
     # Define all paths to time serie data
     paths = generate_paths('in-hospital-mortality')
@@ -167,7 +165,7 @@ def load_time_series_mimic(random_seed: int = 42) -> tuple:
     for path in paths:
         stay = path.split('/')[-1].split('.')[0]
         temp_df = pd.read_csv(path)
-        # print(temp_df)
+        print(list(temp_df))
     exit()
     ####################### WORKING TILL HERE #########################
     max_time_points = temporal_df["New ID"].value_counts().max()
