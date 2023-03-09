@@ -155,6 +155,11 @@ def load_time_series_mimic(random_seed: int = 42) -> tuple:
         'Shock',
     ]
     label = 'y_true'
+
+    # Load tabular data
+    df = load_tabular_mimic()
+    print(df)
+
     # Define all paths to time serie data
     paths = generate_paths('in-hospital-mortality')
     ######################## DONE TILL HERE ###########################
