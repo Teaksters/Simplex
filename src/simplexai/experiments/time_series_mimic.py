@@ -165,7 +165,7 @@ def load_time_series_mimic(random_seed: int = 42) -> tuple:
     paths = generate_paths('in-hospital-mortality')
     ######################## DONE TILL HERE ###########################
     for path in paths:
-        stay = path.split('/')[-1].split('.')[0]
+        stay = path.split('/')[-1]
         temp_df = pd.read_csv(path)
         for col in temporal_features:
             print(df['stay'])
