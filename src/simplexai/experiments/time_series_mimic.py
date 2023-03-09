@@ -150,7 +150,7 @@ def load_time_series_mimic(random_seed: int = 42) -> tuple:
     file_paths = [os.path.join(file_paths, sub_dir)
                       for sub_dir in os.listdir(file_paths)]
     print(file_paths)
-    file_paths = [os.path.join(path)
+    file_paths = [os.path.join(path, file)
                       for path in file_paths
                           for file in os.listdir(path)
                               if file[-4:] == '.csv']
