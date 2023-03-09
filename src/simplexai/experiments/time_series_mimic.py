@@ -80,8 +80,8 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
     # )
     ############################################################################
 
-    df = sklearn.utils.shuffle(data_df, random_state=random_seed)
-    df = df.reset_index(drop=True)
+    # df = sklearn.utils.shuffle(data_df, random_state=random_seed)
+    # df = df.reset_index(drop=True)
     return df
 
 def generate_paths(dir):
