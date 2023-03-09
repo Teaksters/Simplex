@@ -170,9 +170,9 @@ def load_time_series_mimic(random_seed: int = 42) -> tuple:
         for col in temporal_features:
             print(stay, col)
             print(df.loc[df.index[df['stay'] == stay], col])
-            # print(df.loc[df['stay'] == stay][col])
-            #
-            # df.at[df.index[df['stay'] == stay], col] =
+            print(temp_df[col].tolist())
+            df.at[df.index[df['stay'] == stay], col] = temp_df[col].tolist()
+            print(df.loc[df.index[df['stay'] == stay], col])
             # print(list(temp_df))
             exit()
     ####################### WORKING TILL HERE #########################
