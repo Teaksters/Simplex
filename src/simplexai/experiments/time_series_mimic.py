@@ -100,23 +100,24 @@ def generate_paths(dir):
 def load_time_series_mimic(random_seed: int = 42) -> tuple:
     # Specify desired features and label
     temporal_features = [
-        "Hours",
-        "Capillary refill rate	Diastolic blood pressure",
-        "Fraction inspired oxygen",
-        "Glascow coma scale eye opening",
-        "Glascow coma scale motor response",
-        "Glascow coma scale total",
-        "Glascow coma scale verbal response",
-        "Glucose",
-        "Heart Rate",
-        "Height",
-        "Mean blood pressure",
-        "Oxygen saturation",
-        "Respiratory rate",
-        "Systolic blood pressure",
-        "Temperature",
-        "Weight",
-        "pH",
+        'Hours',
+        'Capillary refill rate',
+        'Diastolic blood pressure',
+        'Fraction inspired oxygen',
+        'Glascow coma scale eye opening',
+        'Glascow coma scale motor response',
+        'Glascow coma scale total',
+        'Glascow coma scale verbal response',
+        'Glucose',
+        'Heart Rate',
+        'Height',
+        'Mean blood pressure',
+        'Oxygen saturation',
+        'Respiratory rate',
+        'Systolic blood pressure',
+        'Temperature',
+        'Weight',
+        'pH'
     ]
     constant_features = [
         'AGE'
@@ -158,6 +159,9 @@ def load_time_series_mimic(random_seed: int = 42) -> tuple:
 
     # Load tabular data
     df = load_tabular_mimic()
+    df = pd.concat([df, pd.DataFrame(columns=temporal_features)])
+    print(df)
+    print(list(df))
 
     # Define all paths to time serie data
     paths = generate_paths('in-hospital-mortality')
