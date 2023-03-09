@@ -159,8 +159,9 @@ def load_time_series_mimic(random_seed: int = 42) -> tuple:
     paths = generate_paths('in-hospital-mortality')
     ######################## DONE TILL HERE ###########################
     for path in paths:
-        id = path.split('/')[-1].split('.')[0]
-        print(id)
+        stay = path.split('/')[-1].split('.')[0]
+        temp_df = pd.read_csv(path)
+        print(temp_df)
     exit()
     ####################### WORKING TILL HERE #########################
     max_time_points = temporal_df["New ID"].value_counts().max()
