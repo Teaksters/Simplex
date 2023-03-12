@@ -285,7 +285,8 @@ def approximation_quality(
     batch_id_test, (test_data, test_targets) = next(test_examples)
     batch_id_corpus, (corpus_data, corpus_target) = next(corpus_examples)
     corpus_data = corpus_data.to(device).detach()
-
+    corpus_data[:, 0] = -50 # Set age to -50
+    # corpus_data[:, 0] = 1000 # Try setting it to 1000
     print(corpus_data)
 
     test_data = test_data.to(device).detach()
