@@ -200,10 +200,9 @@ def approximation_quality(
     test_data = MimicDataset(X_test, y_test)
     test_loader = DataLoader(test_data, batch_size=50, shuffle=True)
 
-    ########################## WORKING ######################
     if train_model:
         # Create the model
-        classifier = MortalityPredictor(n_cont=1, input_feature_num=26)  # WORKING ON THIS
+        classifier = MortalityPredictor(n_cont=1, input_feature_num=26)
         classifier.to(device)
         optimizer = optim.Adam(classifier.parameters(), weight_decay=weight_decay)
 
@@ -271,6 +270,7 @@ def approximation_quality(
     classifier.to(device)
     classifier.eval()
 
+    ########################## WORKING HERE TO ADJUST AGE ######################
     # Load data for the explainers
     print(100 * "-" + "\n" + "Now fitting the explainers. \n" + 100 * "-")
 
@@ -285,6 +285,9 @@ def approximation_quality(
     batch_id_test, (test_data, test_targets) = next(test_examples)
     batch_id_corpus, (corpus_data, corpus_target) = next(corpus_examples)
     corpus_data = corpus_data.to(device).detach()
+
+    print(corpus_data)
+
     test_data = test_data.to(device).detach()
     corpus_latent_reps = classifier.latent_representation(corpus_data).detach()
     corpus_probas = classifier.probabilities(corpus_data).detach()
@@ -293,6 +296,8 @@ def approximation_quality(
         torch.arange(corpus_size), corpus_target.type(torch.LongTensor)
     ] = 1
     test_latent_reps = classifier.latent_representation(test_data).detach()
+
+    ############################################################################
 
     # Save data:
     corpus_data_path = save_path / f"corpus_data_cv{cv}.pkl"
