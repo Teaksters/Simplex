@@ -287,8 +287,8 @@ def approximation_quality(
     corpus_data = corpus_data.to(device).detach()
 
     # Experiments
-    corpus_data[:, 0] = -50 # Set age to -50
-    # corpus_data[:, 0] = 1000 # Try setting it to 1000
+    # corpus_data[:, 0] = -50 # Set age to -50
+    corpus_data[:, 0] = 1000 # Try setting it to 1000
 
     test_data = test_data.to(device).detach()
     corpus_latent_reps = classifier.latent_representation(corpus_data).detach()
