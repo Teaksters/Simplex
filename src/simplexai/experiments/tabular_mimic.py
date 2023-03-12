@@ -200,69 +200,69 @@ def approximation_quality(
     test_data = MimicDataset(X_test, y_test)
     test_loader = DataLoader(test_data, batch_size=50, shuffle=True)
 
-    # if train_model:
-    #     # Create the model
-    #     classifier = MortalityPredictor(n_cont=1, input_feature_num=26)
-    #     classifier.to(device)
-    #     optimizer = optim.Adam(classifier.parameters(), weight_decay=weight_decay)
-    #
-    #     # Train the model
-    #     print(100 * "-" + "\n" + "Now fitting the model. \n" + 100 * "-")
-    #     train_losses = []
-    #     train_counter = []
-    #     test_losses = []
-    #
-    #     def train(epoch):
-    #         classifier.train()
-    #         for batch_idx, (data, target) in enumerate(train_loader):
-    #             data = data.to(device)
-    #             target = target.type(torch.LongTensor)
-    #             target = target.to(device)
-    #             optimizer.zero_grad()
-    #             output = classifier(data)
-    #             loss = F.nll_loss(output, target)
-    #             loss.backward()
-    #             optimizer.step()
-    #             if batch_idx % log_interval == 0:
-    #                 print(
-    #                     f"Train Epoch: {epoch} [{batch_idx * len(data)}/{len(train_loader.dataset)}"
-    #                     f" ({100. * batch_idx / len(train_loader):.0f}%)]\tLoss: {loss.item():.6f}"
-    #                 )
-    #                 train_losses.append(loss.item())
-    #                 train_counter.append(
-    #                     (batch_idx * 128) + ((epoch - 1) * len(train_loader.dataset))
-    #                 )
-    #                 torch.save(classifier.state_dict(), save_path / f"model_cv{cv}.pth")
-    #                 torch.save(
-    #                     optimizer.state_dict(), save_path / f"optimizer_cv{cv}.pth"
-    #                 )
-    #
-    #     def test():
-    #         classifier.eval()
-    #         test_loss = 0
-    #         correct = 0
-    #         with torch.no_grad():
-    #             for data, target in test_loader:
-    #                 data = data.to(device)
-    #                 target = target.type(torch.LongTensor)
-    #                 target = target.to(device)
-    #                 output = classifier(data)
-    #                 test_loss += F.nll_loss(output, target, reduction="sum").item()
-    #                 pred = output.data.max(1, keepdim=True)[1]
-    #                 correct += pred.eq(target.data.view_as(pred)).sum()
-    #         test_loss /= len(test_loader.dataset)
-    #         test_losses.append(test_loss)
-    #         print(
-    #             f"\nTest set: Avg. loss: {test_loss:.4f}, Accuracy: {correct}/{len(test_loader.dataset)}"
-    #             f"({100. * correct / len(test_loader.dataset):.0f}%)\n"
-    #         )
-    #
-    #     test()
-    #     for epoch in range(1, n_epoch_model + 1):
-    #         train(epoch)
-    #         test()
-    #     torch.save(classifier.state_dict(), save_path / f"model_cv{cv}.pth")
-    #     torch.save(optimizer.state_dict(), save_path / f"optimizer_cv{cv}.pth")
+    if train_model:
+        # Create the model
+        classifier = MortalityPredictor(n_cont=1, input_feature_num=26)
+        classifier.to(device)
+        optimizer = optim.Adam(classifier.parameters(), weight_decay=weight_decay)
+
+        # Train the model
+        print(100 * "-" + "\n" + "Now fitting the model. \n" + 100 * "-")
+        train_losses = []
+        train_counter = []
+        test_losses = []
+
+        def train(epoch):
+            classifier.train()
+            for batch_idx, (data, target) in enumerate(train_loader):
+                data = data.to(device)
+                target = target.type(torch.LongTensor)
+                target = target.to(device)
+                optimizer.zero_grad()
+                output = classifier(data)
+                loss = F.nll_loss(output, target)
+                loss.backward()
+                optimizer.step()
+                if batch_idx % log_interval == 0:
+                    print(
+                        f"Train Epoch: {epoch} [{batch_idx * len(data)}/{len(train_loader.dataset)}"
+                        f" ({100. * batch_idx / len(train_loader):.0f}%)]\tLoss: {loss.item():.6f}"
+                    )
+                    train_losses.append(loss.item())
+                    train_counter.append(
+                        (batch_idx * 128) + ((epoch - 1) * len(train_loader.dataset))
+                    )
+                    torch.save(classifier.state_dict(), save_path / f"model_cv{cv}.pth")
+                    torch.save(
+                        optimizer.state_dict(), save_path / f"optimizer_cv{cv}.pth"
+                    )
+
+        def test():
+            classifier.eval()
+            test_loss = 0
+            correct = 0
+            with torch.no_grad():
+                for data, target in test_loader:
+                    data = data.to(device)
+                    target = target.type(torch.LongTensor)
+                    target = target.to(device)
+                    output = classifier(data)
+                    test_loss += F.nll_loss(output, target, reduction="sum").item()
+                    pred = output.data.max(1, keepdim=True)[1]
+                    correct += pred.eq(target.data.view_as(pred)).sum()
+            test_loss /= len(test_loader.dataset)
+            test_losses.append(test_loss)
+            print(
+                f"\nTest set: Avg. loss: {test_loss:.4f}, Accuracy: {correct}/{len(test_loader.dataset)}"
+                f"({100. * correct / len(test_loader.dataset):.0f}%)\n"
+            )
+
+        test()
+        for epoch in range(1, n_epoch_model + 1):
+            train(epoch)
+            test()
+        torch.save(classifier.state_dict(), save_path / f"model_cv{cv}.pth")
+        torch.save(optimizer.state_dict(), save_path / f"optimizer_cv{cv}.pth")
 
     # Load model:
     classifier = MortalityPredictor(n_cont=1, input_feature_num=26)
