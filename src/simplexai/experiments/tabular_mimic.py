@@ -280,7 +280,7 @@ def approximation_quality(
     ### TODO: take out all new borns and ages non-applicable for scaling ages ##
     ############################################################################
     print(train_data.X)
-    rm_idx = train_data.X.index[train_data.X['AGE'] <= 18].tolist()
+    rm_idx = train_data.X.index[train_data.X['AGE'] <= 25].tolist()
     print(rm_idx)
     print(len(rm_idx))
     exit()
