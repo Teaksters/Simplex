@@ -156,6 +156,7 @@ def load_cutract(random_seed: int = 42) -> tuple:
 
 def approximation_quality(
     cv: int = 0,
+    age_scaler: int=1,
     random_seed: int = 55,
     save_path: str = "experiments/results/mimic/quality/",
     train_model: bool = True,
@@ -278,15 +279,9 @@ def approximation_quality(
 
     ############################################################################
     ### TODO: take out all new borns and ages non-applicable for scaling ages ##
+    # Update: There is no data point with an age lower then 18 so is not necessary
     ############################################################################
-    print(train_data.X)
-    rm_idx = train_data.X.index[train_data.X['AGE'] <= 25].tolist()
-    print(rm_idx)
-    print(len(rm_idx))
-    exit()
-    # corpus_data = # train data filtered with ages > 18
-    corpus_loader = DataLoader(corpus_data, batch_size=corpus_size, shuffle=True)
-    ############################################################################
+
     if train_data_only:
         test_loader = DataLoader(train_data, batch_size=test_size, shuffle=True)
     else:
@@ -297,7 +292,12 @@ def approximation_quality(
     batch_id_corpus, (corpus_data, corpus_target) = next(corpus_examples)
     corpus_data = corpus_data.to(device).detach()
 
-    # Experiments
+    # Experiment with age scaling
+    print(corpus_data)
+    corpus_data[:, 0] *= age_scaler
+    print(corpus_data)
+
+    # Initial Experiments
     # corpus_data[:, 0] = -50 # Set age to -50
     # corpus_data[:, 0] = 1000 # Try setting it to 1000
 
@@ -656,9 +656,9 @@ def corpus_size_effect(random_seed: int = 42) -> None:
     print(residuals.std(dim=-1))
 ################################################################################
 
-def main(experiment: str = "approximation_quality", cv: int = 0) -> None:
+def main(experiment: str = "approximation_quality", cv: int = 0, age_scaler: int = 1) -> None:
     if experiment == "approximation_quality":
-        approximation_quality(cv=cv)
+        approximation_quality(cv=cv, age_scaler=age_scaler)
     elif experiment == "outlier_detection": # TODO
         outlier_detection(cv=cv)
     elif experiment == "corpus_size": #TODO
@@ -679,5 +679,6 @@ if __name__ == "__main__":
         help="Experiment to perform",
     )
     parser.add_argument("-cv", type=int, default=0, help="Cross validation parameter")
+    parser.add_argument("-age_scaler", type=int, default=1, help="Scaling variable for sample ages")
     args = parser.parse_args()
-    main(args.experiment, args.cv)
+    main(args.experiment, args.cv, )
