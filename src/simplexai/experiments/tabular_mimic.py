@@ -275,7 +275,15 @@ def approximation_quality(
     print(100 * "-" + "\n" + "Now fitting the explainers. \n" + 100 * "-")
 
     explainer_names = ["simplex", "nn_uniform", "nn_dist"]
-    corpus_loader = DataLoader(train_data, batch_size=corpus_size, shuffle=True)
+
+    ############################################################################
+    ### TODO: take out all new borns and ages non-applicable for scaling ages ##
+    ############################################################################
+    print(train_data)
+    exit()
+    corpus_data = # train data filtered with ages > 18
+    corpus_loader = DataLoader(corpus_data, batch_size=corpus_size, shuffle=True)
+    ############################################################################
     if train_data_only:
         test_loader = DataLoader(train_data, batch_size=test_size, shuffle=True)
     else:
@@ -288,7 +296,7 @@ def approximation_quality(
 
     # Experiments
     # corpus_data[:, 0] = -50 # Set age to -50
-    corpus_data[:, 0] = 1000 # Try setting it to 1000
+    # corpus_data[:, 0] = 1000 # Try setting it to 1000
 
     test_data = test_data.to(device).detach()
     corpus_latent_reps = classifier.latent_representation(corpus_data).detach()
