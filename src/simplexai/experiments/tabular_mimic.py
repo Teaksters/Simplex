@@ -280,6 +280,9 @@ def approximation_quality(
     ### TODO: take out all new borns and ages non-applicable for scaling ages ##
     ############################################################################
     print(train_data.X)
+    rm_idx = train_data.X.index[train_data.X['AGE'] <= 5].tolist()
+    print(rm_idx)
+    print(len(rm_idx))
     exit()
     # corpus_data = # train data filtered with ages > 18
     corpus_loader = DataLoader(corpus_data, batch_size=corpus_size, shuffle=True)
