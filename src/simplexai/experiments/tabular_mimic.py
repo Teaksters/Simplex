@@ -295,10 +295,12 @@ def approximation_quality(
     corpus_data = corpus_data.to(device).detach()
 
     # Experiment with age scaling
+    print(age_scaler)
     print(corpus_data)
     corpus_data[:, 0] = corpus_data[:, 0] * age_scaler
     print(corpus_data)
 
+    exit()
     # Initial Experiments
     # corpus_data[:, 0] = -50 # Set age to -50
     # corpus_data[:, 0] = 1000 # Try setting it to 1000
