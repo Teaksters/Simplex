@@ -282,7 +282,7 @@ def approximation_quality(
     # Update: There is no data point with an age lower then 18 so is not necessary
     ############################################################################
 
-    corpus_loader = DataLoader(corpus_data, batch_size=corpus_size, shuffle=True)
+    corpus_loader = DataLoader(train_data, batch_size=corpus_size, shuffle=True)
 
     if train_data_only:
         test_loader = DataLoader(train_data, batch_size=test_size, shuffle=True)
