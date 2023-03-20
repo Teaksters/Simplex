@@ -156,7 +156,7 @@ def load_cutract(random_seed: int = 42) -> tuple:
 
 def approximation_quality(
     cv: int = 0,
-    age_scaler: int=1,
+    age_scaler: float=1.,
     random_seed: int = 55,
     save_path: str = "experiments/results/mimic/quality/",
     train_model: bool = True,
@@ -296,7 +296,7 @@ def approximation_quality(
 
     # Experiment with age scaling
     corpus_data[:, 0] = corpus_data[:, 0] * age_scaler
-    
+
     # Initial Experiments
     # corpus_data[:, 0] = -50 # Set age to -50
     # corpus_data[:, 0] = 1000 # Try setting it to 1000
@@ -656,7 +656,7 @@ def corpus_size_effect(random_seed: int = 42) -> None:
     print(residuals.std(dim=-1))
 ################################################################################
 
-def main(experiment: str = "approximation_quality", cv: int = 0, age_scaler: int = 1) -> None:
+def main(experiment: str = "approximation_quality", cv: int = 0, age_scaler: float = 1.) -> None:
     if experiment == "approximation_quality":
         approximation_quality(cv=cv, age_scaler=age_scaler)
     elif experiment == "outlier_detection": # TODO
@@ -679,6 +679,6 @@ if __name__ == "__main__":
         help="Experiment to perform",
     )
     parser.add_argument("-cv", type=int, default=0, help="Cross validation parameter")
-    parser.add_argument("-age_scaler", type=int, default=1, help="Scaling variable for sample ages")
+    parser.add_argument("-age_scaler", type=float, default=1., help="Scaling variable for sample ages")
     args = parser.parse_args()
     main(args.experiment, args.cv, args.age_scaler)
