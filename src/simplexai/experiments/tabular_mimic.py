@@ -281,7 +281,7 @@ def approximation_quality(
     ############################################################################
     print(train_data)
     exit()
-    corpus_data = # train data filtered with ages > 18
+    # corpus_data = # train data filtered with ages > 18
     corpus_loader = DataLoader(corpus_data, batch_size=corpus_size, shuffle=True)
     ############################################################################
     if train_data_only:
