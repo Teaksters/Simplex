@@ -258,12 +258,12 @@ def approximation_quality(
                 f"({100. * correct / len(test_loader.dataset):.0f}%)\n"
             )
 
-        # test()
-        # for epoch in range(1, n_epoch_model + 1):
-        #     train(epoch)
-        #     test()
-        # torch.save(classifier.state_dict(), save_path / f"model_cv{cv}.pth")
-        # torch.save(optimizer.state_dict(), save_path / f"optimizer_cv{cv}.pth")
+        test()
+        for epoch in range(1, n_epoch_model + 1):
+            train(epoch)
+            test()
+        torch.save(classifier.state_dict(), save_path / f"model_cv{cv}.pth")
+        torch.save(optimizer.state_dict(), save_path / f"optimizer_cv{cv}.pth")
 
     # Load model:
     classifier = MortalityPredictor(n_cont=1, input_feature_num=26)
@@ -295,12 +295,8 @@ def approximation_quality(
     corpus_data = corpus_data.to(device).detach()
 
     # Experiment with age scaling
-    print(age_scaler)
-    print(corpus_data)
     corpus_data[:, 0] = corpus_data[:, 0] * age_scaler
-    print(corpus_data)
-
-    exit()
+    
     # Initial Experiments
     # corpus_data[:, 0] = -50 # Set age to -50
     # corpus_data[:, 0] = 1000 # Try setting it to 1000
