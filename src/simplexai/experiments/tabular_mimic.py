@@ -257,12 +257,12 @@ def approximation_quality(
                 f"({100. * correct / len(test_loader.dataset):.0f}%)\n"
             )
 
-        test()
-        for epoch in range(1, n_epoch_model + 1):
-            train(epoch)
-            test()
-        torch.save(classifier.state_dict(), save_path / f"model_cv{cv}.pth")
-        torch.save(optimizer.state_dict(), save_path / f"optimizer_cv{cv}.pth")
+        # test()
+        # for epoch in range(1, n_epoch_model + 1):
+        #     train(epoch)
+        #     test()
+        # torch.save(classifier.state_dict(), save_path / f"model_cv{cv}.pth")
+        # torch.save(optimizer.state_dict(), save_path / f"optimizer_cv{cv}.pth")
 
     # Load model:
     classifier = MortalityPredictor(n_cont=1, input_feature_num=26)
