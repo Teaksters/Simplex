@@ -685,4 +685,4 @@ if __name__ == "__main__":
     parser.add_argument("-cv", type=int, default=0, help="Cross validation parameter")
     parser.add_argument("-age_scaler", type=int, default=1, help="Scaling variable for sample ages")
     args = parser.parse_args()
-    main(args.experiment, args.cv, )
+    main(args.experiment, args.cv, args.age_scaler)
