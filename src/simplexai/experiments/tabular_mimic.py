@@ -296,7 +296,7 @@ def approximation_quality(
 
     # Experiment with age scaling
     print(corpus_data)
-    corpus_data[:, 0] *= age_scaler
+    corpus_data[:, 0] = corpus_data[:, 0] * age_scaler
     print(corpus_data)
 
     # Initial Experiments
