@@ -16,149 +16,22 @@ from simplexai.explainers.representer import Representer
 from simplexai.explainers.simplex import Simplex
 from simplexai.models.tabular_data import MortalityPredictor
 from simplexai.utils.schedulers import ExponentialScheduler
+from simplexai.experiments.tabular_mimic import MimicDataset, \
+                                                load_from_preprocessed, \
+                                                load_age, \
+                                                load_tabular_mimic, \
+
+
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = '../Data/preprocessed'
 
 
-class MimicDataset(Dataset):
-    def __init__(self, X, y=None) -> None:
-        self.X = X
-        self.y = y.astype(int)
-
-    def __len__(self) -> int:
-        return len(self.X)
-
-    def __getitem__(self, i: int) -> tuple:
-        data = torch.tensor(self.X.iloc[i, :], dtype=torch.float32)
-        target = self.y.iloc[i]
-        return data, target
-
-def load_from_preprocessed(dir):
-    # Reads and concatenates the train and test data into one dataframe
-    data = [os.path.join(dir, sub_dir, 'listfile.csv')
-                  for sub_dir in os.listdir(dir)]
-    dfs = [pd.read_csv(x) for x in data]
-    df = pd.concat(dfs)
-    return df
-
-def load_age(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
-    drop_cols = ['HADM_ID', 'ICUSTAY_ID', 'LAST_CAREUNIT', 'DBSOURCE', 'INTIME',
-                 'OUTTIME', 'LOS', 'ADMITTIME', 'DISCHTIME', 'DEATHTIME',
-                 'ETHNICITY', 'DIAGNOSIS', 'GENDER', 'DOB', 'DOD',
-                 'MORTALITY_INUNIT', 'MORTALITY', 'MORTALITY_INHOSPITAL']
-    full_df = pd.read_csv(os.path.join(DATA_DIR, 'all_stays.csv'))
-    full_df.sort_values(['SUBJECT_ID', 'ICUSTAY_ID'])
-    # Adhere to data format of other dataframes
-    general_df = full_df[full_df.duplicated('SUBJECT_ID') == False]
-    general_df.loc['SUBJECT_ID'] = general_df['SUBJECT_ID'].astype(str) + "_episode1_timeseries.csv"
-
-    duplicates_df = full_df[full_df.duplicated('SUBJECT_ID') == True]
-    i = 2
-    while not duplicates_df.empty:
-        # update general df
-        episode_str = "_episode" + str(i) + "_timeseries.csv"
-        temp_df = duplicates_df[duplicates_df.duplicated('SUBJECT_ID') == False]
-        temp_df.loc['SUBJECT_ID'] = temp_df['SUBJECT_ID'].astype(str) + episode_str
-        general_df = pd.concat([general_df, temp_df])
-        # prepare for next round
-        duplicates_df = duplicates_df[duplicates_df.duplicated('SUBJECT_ID') == True]
-        i += 1
-
-    general_df.rename(columns={'SUBJECT_ID': 'stay'}, inplace=True)
-    general_df.drop(columns=drop_cols, inplace=True)
-    return general_df
-
-
-def load_tabular_mimic(random_seed: int = 42) -> tuple:
-    # Specify undesired columns
-    drop_cols = ['stay', 'period_length']
-
-    # Load MIMIC-III data into panda dataframes
-    label_dir = os.path.join(DATA_DIR, 'in-hospital-mortality')
-    label_df = load_from_preprocessed(label_dir)
-    feature_dir = os.path.join(DATA_DIR, 'phenotyping')
-    feature_df = load_from_preprocessed(feature_dir)
-    age_df = load_age()
-
-    # Merge data into workable complete format
-    data_df = pd.merge(label_df, feature_df, on='stay')
-    data_df = pd.merge(age_df, data_df, on='stay')
-    data_df.drop(columns=drop_cols, inplace=True)
-
-    ##################### OPTIONAL ######################################
-    ### Balance data set for even amount of survivors and mortalities ###
-    #####################################################################
-    # mask = data_df[label] is True
-    # df_dead = data_df[mask]
-    # df_survive = data_df[~mask]
-    # data_df = pd.concat(
-    #     [
-    #         df_dead.sample(2500, random_state=random_seed),
-    #         df_survive.sample(2500, random_state=random_seed),
-    #     ]
-    # )
-    ############################################################################
-
-    df = sklearn.utils.shuffle(data_df, random_state=random_seed)
-    df = df.reset_index(drop=True)
-    features, labels = df.loc[:, df.columns != 'y_true'], df['y_true']
-    return features, labels
-
-
-def load_cutract(random_seed: int = 42) -> tuple:
-    features = [
-        "age",
-        "psa",
-        "comorbidities",
-        "treatment_CM",
-        "treatment_Primary hormone therapy",
-        "treatment_Radical Therapy-RDx",
-        "treatment_Radical therapy-Sx",
-        "grade_1.0",
-        "grade_2.0",
-        "grade_3.0",
-        "grade_4.0",
-        "grade_5.0",
-        "stage_1",
-        "stage_2",
-        "stage_3",
-        "stage_4",
-        "gleason1_1",
-        "gleason1_2",
-        "gleason1_3",
-        "gleason1_4",
-        "gleason1_5",
-        "gleason2_1",
-        "gleason2_2",
-        "gleason2_3",
-        "gleason2_4",
-        "gleason2_5",
-    ]
-    label = "mortCancer"
-    df = pd.read_csv(
-        os.path.abspath(
-            os.path.join(ROOT_DIR, "../Data/")
-        )
-    )
-    mask = df[label] is True
-    df_dead = df[mask]
-    df_survive = df[~mask]
-    df = pd.concat(
-        [
-            df_dead.sample(1000, random_state=random_seed),
-            df_survive.sample(1000, random_state=random_seed),
-        ]
-    )
-    df = sklearn.utils.shuffle(df, random_state=random_seed)
-    df = df.reset_index(drop=True)
-    return df[features], df[label]
-
-def approximation_quality(
+def approximation_quality_scaled(  # NAME CHANGED
     cv: int = 0,
     age_scaler: float=1.,
     random_seed: int = 55,
-    save_path: str = "experiments/results/mimic/quality/",
+    save_path: str = "experiments/results/mimic/quality/scaled", # update here
     train_model: bool = True,
     train_data_only=False,
 ) -> None:
@@ -179,13 +52,13 @@ def approximation_quality(
     weight_decay = 1e-5
     corpus_size = 100
     test_size = 100
-    n_keep_list = [2, 5, 10, 50]
+    n_keep_list = [5, 10, 15]  # NEED TO PICK A SUITABLE K
     reg_factor_init = 0.01
     reg_factor_final = 1.0
     n_epoch_simplex = 10000
 
     current_path = Path.cwd()
-    save_path = current_path / save_path
+    save_path = current_path / save_path / str(age_scaler)  # Update here
     if not save_path.exists():
         print(f"Creating the saving directory {save_path}")
         os.makedirs(save_path)
@@ -322,6 +195,10 @@ def approximation_quality(
         print(f"Saving test data in {test_data_path}.")
         pkl.dump([test_latent_reps, test_targets], f)
 
+
+    ############################################################################
+    ############## I THINK I'LL ONLY DO THE TESTS FOR ONE K INSTEAD OF THE #####
+    ############## MULTIPLE USED HERE ##########################################
     # Fit the explainers
     for n_keep in n_keep_list:
         print(30 * "-" + f"n_keep = {n_keep}" + 30 * "-")
@@ -400,6 +277,14 @@ def approximation_quality(
         output_true.cpu().numpy(), output_approx.cpu().numpy()
     )
     print(f"representer output r2 = {output_r2_score:.2g}.")
+
+    print(
+        100 * "-"
+        + "\n"
+        + "Finnished the approximation quality experiment for in hospital mortality. \n"
+        f"Settings: random_seed = {random_seed} ; cv = {cv} ; device = {device}.\n"
+        + 100 * "-"
+    )
 
 ########################## HAVEN'T TESTED FUNCTIONALITY ########################
 def outlier_detection(
@@ -658,6 +543,7 @@ def corpus_size_effect(random_seed: int = 42) -> None:
 
 def main(experiment: str = "approximation_quality", cv: int = 0, age_scaler: float = 1.) -> None:
     if experiment == "approximation_quality":
+
         approximation_quality(cv=cv, age_scaler=age_scaler)
     elif experiment == "outlier_detection": # TODO
         outlier_detection(cv=cv)
@@ -679,6 +565,7 @@ if __name__ == "__main__":
         help="Experiment to perform",
     )
     parser.add_argument("-cv", type=int, default=0, help="Cross validation parameter")
-    parser.add_argument("-age_scaler", type=float, default=1., help="Scaling variable for sample ages")
+    parser.add_argument("-age_scalers", nargs='*', type=float, default=[1.], help="Scaling variable for sample ages")
     args = parser.parse_args()
-    main(args.experiment, args.cv, args.age_scaler)
+    for age_scaler in args.age_scalers:
+        main(args.experiment, args.cv, age_scaler)
