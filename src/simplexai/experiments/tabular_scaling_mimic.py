@@ -19,7 +19,7 @@ from simplexai.utils.schedulers import ExponentialScheduler
 from simplexai.experiments.tabular_mimic import MimicDataset, \
                                                 load_from_preprocessed, \
                                                 load_age, \
-                                                load_tabular_mimic, \
+                                                load_tabular_mimic
 
 
 
