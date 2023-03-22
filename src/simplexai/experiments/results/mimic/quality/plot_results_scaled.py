@@ -135,7 +135,7 @@ min_df = results_df.groupby(["explainer", "n_keep", "scaler"]).aggregate("min").
 max_df = results_df.groupby(["explainer", "n_keep", "scaler"]).aggregate("max").unstack(level=0)
 q1_df = results_df.groupby(["explainer", "n_keep", "scaler"]).quantile(0.25).unstack(level=0)
 q3_df = results_df.groupby(["explainer", "n_keep", "scaler"]).quantile(0.75).unstack(level=0)
-results_df = results_df.groupby(["explainer", "n_keep", "scaler"])
+results_df = results_df.groupby(["explainer", "n_keep", "scaler"]).unstack(level=0)
 
 print(results_df)
 exit()
