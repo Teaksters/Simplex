@@ -137,7 +137,7 @@ q1_df = results_df.groupby(["explainer", "n_keep", "scaler"]).quantile(0.25).uns
 q3_df = results_df.groupby(["explainer", "n_keep", "scaler"]).quantile(0.75).unstack(level=0)
 results_df = results_df.groupby(["explainer", "n_keep", "scaler"])
 
-print(results_df[()'simplex', 5, 1.0)])
+print(results_df[('simplex', 5, 1.0)])
 print(list(results_df))
 exit()
 
