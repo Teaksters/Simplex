@@ -136,11 +136,9 @@ max_df = results_df.groupby(["explainer", "n_keep", "scaler"]).aggregate("max").
 q1_df = results_df.groupby(["explainer", "n_keep", "scaler"]).quantile(0.25).unstack(level=0)
 q3_df = results_df.groupby(["explainer", "n_keep", "scaler"]).quantile(0.75).unstack(level=0)
 
-print(list(results_df))
-results_df = results_df.groupby(["explainer", "n_keep", "scaler"])
-
-# print(results_df[('simplex', 5, 1.0)])
-print(list(results_df))
+print(results_df.loc[(results_df['explainer'] == 'simplex') & \
+                     (results_df['n_keep'] == 5) & \
+                     (results_df['scaler'] == 1.0)])
 exit()
 
 for m, metric_name in enumerate(metric_names):
