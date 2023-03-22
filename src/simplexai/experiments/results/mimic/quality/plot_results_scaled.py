@@ -71,7 +71,7 @@ load_path = current_path / "experiments/results/mimic/quality/scaled"
 for scaler in scalers:
     for cv in cv_list:
         classifier = MortalityPredictor(n_cont=1, input_feature_num=26)
-        classifier.load_state_dict(torch.load(load_path / f"model_cv{cv}.pth"))
+        classifier.load_state_dict(torch.load(load_path / scaler / f"model_cv{cv}.pth"))
         classifier.to(device)
         classifier.eval()
         for n_keep in n_keep_list:
