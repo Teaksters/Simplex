@@ -51,7 +51,7 @@ def load_age(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
     full_df.sort_values(['SUBJECT_ID', 'ICUSTAY_ID'])
     # Adhere to data format of other dataframes
     general_df = full_df[full_df.duplicated('SUBJECT_ID') == False]
-    general_df.loc['SUBJECT_ID'] = general_df['SUBJECT_ID'].astype(str) + "_episode1_timeseries.csv"
+    general_df['SUBJECT_ID'] = general_df['SUBJECT_ID'].astype(str) + "_episode1_timeseries.csv"
 
     duplicates_df = full_df[full_df.duplicated('SUBJECT_ID') == True]
     i = 2
@@ -59,7 +59,7 @@ def load_age(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
         # update general df
         episode_str = "_episode" + str(i) + "_timeseries.csv"
         temp_df = duplicates_df[duplicates_df.duplicated('SUBJECT_ID') == False]
-        temp_df.loc['SUBJECT_ID'] = temp_df['SUBJECT_ID'].astype(str) + episode_str
+        temp_df['SUBJECT_ID'] = temp_df['SUBJECT_ID'].astype(str) + episode_str
         general_df = pd.concat([general_df, temp_df])
         # prepare for next round
         duplicates_df = duplicates_df[duplicates_df.duplicated('SUBJECT_ID') == True]
