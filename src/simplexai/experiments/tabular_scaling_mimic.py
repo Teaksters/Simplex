@@ -27,7 +27,7 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = '../Data/preprocessed'
 
 
-def approximation_quality_scaled(  # NAME CHANGED
+def approximation_quality(
     cv: int = 0,
     age_scaler: float=1.,
     random_seed: int = 55,
