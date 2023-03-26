@@ -147,16 +147,19 @@ for m, metric_name in enumerate(metric_names):
         plt.figure(m + 1) # I want a seperate plot for each explainer AND metric
         data = []
         input = []
+        Ks = []
         for k, K in enumerate(n_keep_list):
             data.append([])
-            input.append([K])
+            input.append([])
+            Ks.append(K)
             for scaler in scalers:
                 temp_data = results_df.loc[(results_df['explainer'] == explainer_name) & \
                                            (results_df['n_keep'] == K) & \
                                            (results_df['scaler'] == scaler)]
                 data[k].append(temp_data[metric_name]) # Maybe this is wrong..?
                 input[k].append(scaler)
-        # plt.boxplot(data)
+        plt.boxplot(data[0][0])
+        plt.savefig('test.jpg')
         print(data)
         print(input)
         exit()
