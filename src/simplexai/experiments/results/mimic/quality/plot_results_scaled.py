@@ -129,37 +129,37 @@ for scaler in scalers:
 sns.set(font_scale=1.5)
 sns.set_style("white")
 sns.set_palette("colorblind")
-mean_df = results_df.groupby(["explainer", "n_keep", "scaler"]).aggregate("mean").unstack(level=0)
-std_df = results_df.groupby(["explainer", "n_keep", "scaler"]).aggregate("std").unstack(level=0)
-min_df = results_df.groupby(["explainer", "n_keep", "scaler"]).aggregate("min").unstack(level=0)
-max_df = results_df.groupby(["explainer", "n_keep", "scaler"]).aggregate("max").unstack(level=0)
-q1_df = results_df.groupby(["explainer", "n_keep", "scaler"]).quantile(0.25).unstack(level=0)
-q3_df = results_df.groupby(["explainer", "n_keep", "scaler"]).quantile(0.75).unstack(level=0)
+# mean_df = results_df.groupby(["explainer", "n_keep", "scaler"]).aggregate("mean").unstack(level=0)
+# std_df = results_df.groupby(["explainer", "n_keep", "scaler"]).aggregate("std").unstack(level=0)
+# min_df = results_df.groupby(["explainer", "n_keep", "scaler"]).aggregate("min").unstack(level=0)
+# max_df = results_df.groupby(["explainer", "n_keep", "scaler"]).aggregate("max").unstack(level=0)
+# q1_df = results_df.groupby(["explainer", "n_keep", "scaler"]).quantile(0.25).unstack(level=0)
+# q3_df = results_df.groupby(["explainer", "n_keep", "scaler"]).quantile(0.75).unstack(level=0)
 
-print(results_df.loc[(results_df['explainer'] == 'simplex') & \
-                     (results_df['n_keep'] == 5) & \
-                     (results_df['scaler'] == 1.0)])
-exit()
+# print(results_df.loc[(results_df['explainer'] == 'simplex') & \
+#                      (results_df['n_keep'] == 5) & \
+#                      (results_df['scaler'] == 1.0)])
 
+################## WORKING ########################################
+# TODO: make a boxplot with 3 groups (K) of ascending scalers (5)
 for m, metric_name in enumerate(metric_names):
     for explainer_name in explainer_names:
         plt.figure(m + 1) # I want a seperate plot for each explainer AND metric
-        for scaler in scalers:
-            ################## WORKING ########################################
-            # TODO: make a boxplot with 3 groups (K) of ascending scalers (5)
-
-            plt.plot(
-                n_keep_list,
-                mean_df[metric_name, explainer_name],
-                line_styles[explainer_name],
-                label=names_dict[explainer_name],
-            )
-            plt.fill_between(
-                n_keep_list,
-                mean_df[metric_name, explainer_name] - std_df[metric_name, explainer_name],
-                mean_df[metric_name, explainer_name] + std_df[metric_name, explainer_name],
-                alpha=0.2,
-            )
+        data = []
+        input = []
+        for k, K in enumerate(n_keep_list):
+            data.append([])
+            input.append([K])
+            for scaler in scalers:
+                temp_data = results_df.loc[(results_df['explainer'] == explainer_name) & \
+                                           (results_df['n_keep'] == K) & \
+                                           (results_df['scaler'] == scaler)]
+                data[k].append(temp_data[metric_name]) # Maybe this is wrong..?
+                input[k].append(scaler)
+        # plt.boxplot(data)
+        print(data)
+        print(input)
+        exit()
 
 plt.figure(1)
 plt.xlabel(r"$K$")
