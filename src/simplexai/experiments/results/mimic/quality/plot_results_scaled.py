@@ -158,8 +158,8 @@ for m, metric_name in enumerate(metric_names):
                                            (results_df['scaler'] == scaler)]
                 data[k].append(temp_data[metric_name]) # Maybe this is wrong..?
                 input[k].append(scaler)
-        plt.boxplot(data[0][0])
-        plt.ylim(-1, 1)
+        plt.boxplot(data)
+        plt.ylim(0, 1)
         plt.savefig('test.jpg')
         print(data)
         print(input)
