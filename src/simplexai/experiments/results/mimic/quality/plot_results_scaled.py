@@ -161,7 +161,7 @@ for m, metric_name in enumerate(metric_names):
             plt.boxplot(data[k],
                         positions=np.array(range(len(data[k])))*5.0-0.4 + k,
                         widths=0.6)
-        plt.ylim(-0.5, 1)
+        plt.ylim(-1.5, 1)
         plt.xticks(range(0, len(n_keep_list) * 5, 5), n_keep_list)
         plt.legend()
         plt.tight_layout()
