@@ -159,10 +159,10 @@ for m, metric_name in enumerate(metric_names):
                                            (results_df['scaler'] == scaler)]
                 data[k].append(temp_data[metric_name]) # Maybe this is wrong..?
                 input[k].append(scaler)
-
             plt.boxplot(data[k],
                         positions=np.array(range(len(data[k])))*5.0-0.4 + k,
                         widths=0.6)
+        print(titles[-1])
 
 safe_path = load_path / 'plots/'
 if not os.path.exists(safe_path):
