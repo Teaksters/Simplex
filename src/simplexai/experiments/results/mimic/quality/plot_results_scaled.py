@@ -148,11 +148,10 @@ for m, metric_name in enumerate(metric_names):
         data = []
         input = []
         Ks = []
-        for k, K in enumerate(n_keep_list):
+        for k, scaler in enumerate(scalers):
             data.append([])
             input.append([])
-            Ks.append(K)
-            for scaler in scalers:
+            for K in n_keep_list:
                 temp_data = results_df.loc[(results_df['explainer'] == explainer_name) & \
                                            (results_df['n_keep'] == K) & \
                                            (results_df['scaler'] == scaler)]
