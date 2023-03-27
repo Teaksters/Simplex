@@ -160,7 +160,7 @@ for m, metric_name in enumerate(metric_names):
                 input[k].append(scaler)
 
             plt.boxplot(data[k],
-                        positions=np.array(xrange(len(data[k])))*5.0-0.4,
+                        positions=np.array(range(len(data[k])))*5.0-0.4,
                         widths=0.6,
                         label=n_keep_list[k])
         plt.ylim(0, 1)
