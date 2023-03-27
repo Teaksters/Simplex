@@ -158,37 +158,73 @@ for m, metric_name in enumerate(metric_names):
                                            (results_df['scaler'] == scaler)]
                 data[k].append(temp_data[metric_name]) # Maybe this is wrong..?
                 input[k].append(scaler)
-        plt.boxplot(data)
+
+            plt.boxplot(data[k],
+                        positions=np.array(xrange(len(data[k])))*5.0-0.4,
+                        widths=0.6,
+                        label=n_keep_list[k])
         plt.ylim(0, 1)
+        plt.xticks(xrange(0, len(n_keep_list) * 5, 5), n_keep_list)
+        plt.legend()
+        plt.tight_layout()
         plt.savefig('test.jpg')
         print(data)
         print(input)
         exit()
 
-plt.figure(1)
-plt.xlabel(r"$K$")
-plt.ylabel(r"$R^2_{\mathcal{H}}$")
-plt.ylim(top=1.0)
-plt.legend()
-plt.savefig(load_path / "r2_latent.pdf", bbox_inches="tight")
-plt.figure(2)
-plt.xlabel(r"$K$")
-plt.ylabel(r"$R^2_{\mathcal{Y}}$")
-plt.ylim(top=1.0)
-plt.legend()
-plt.savefig(load_path / "r2_output.pdf", bbox_inches="tight")
-plt.figure(3)
-plt.xlabel(r"$K$")
-plt.ylabel(r"$\| \hat{\boldsymbol{h}} - \boldsymbol{h} \| $")
-plt.legend()
-plt.savefig(load_path / "residual_latent.pdf", bbox_inches="tight")
-plt.figure(4)
-plt.xlabel(r"$K$")
-plt.ylabel(r"$\| \hat{\boldsymbol{y}} - \boldsymbol{y} \| $")
-plt.legend()
-plt.savefig(load_path / "residual_output.pdf", bbox_inches="tight")
+# data_a = [[1,2,5], [5,7,2,2,5], [7,2,5]]
+# data_b = [[6,4,2], [1,2,5,3,2], [2,3,5,1]]
 
-print(
-    f"Representer metrics: r2_output = {representer_metrics[0].mean():.2g} +/- {representer_metrics[0].std():.2g}"
-    f" ; residual_output = {representer_metrics[1].mean():.2g} +/- {representer_metrics[1].std():.2g}"
-)
+# ticks = ['A', 'B', 'C']
+
+# def set_box_color(bp, color):
+#     plt.setp(bp['boxes'], color=color)
+#     plt.setp(bp['whiskers'], color=color)
+#     plt.setp(bp['caps'], color=color)
+#     plt.setp(bp['medians'], color=color)
+
+# plt.figure()
+#
+# bpl = plt.boxplot(data_a, positions=np.array(xrange(len(data_a)))*2.0-0.4, sym='', widths=0.6)
+# bpr = plt.boxplot(data_b, positions=np.array(xrange(len(data_b)))*2.0+0.4, sym='', widths=0.6)
+# set_box_color(bpl, '#D7191C') # colors are from http://colorbrewer2.org/
+# set_box_color(bpr, '#2C7BB6')
+
+# draw temporary red and blue lines and use them to create a legend
+# plt.plot([], c='#D7191C', label='Apples')
+# plt.plot([], c='#2C7BB6', label='Oranges')
+# plt.legend()
+#
+# plt.xticks(xrange(0, len(ticks) * 2, 2), ticks)
+# plt.xlim(-2, len(ticks)*2)
+# plt.ylim(0, 8)
+# plt.tight_layout()
+# plt.savefig('boxcompare.png')
+
+# plt.figure(1)
+# plt.xlabel(r"$K$")
+# plt.ylabel(r"$R^2_{\mathcal{H}}$")
+# plt.ylim(top=1.0)
+# plt.legend()
+# plt.savefig(load_path / "r2_latent.pdf", bbox_inches="tight")
+# plt.figure(2)
+# plt.xlabel(r"$K$")
+# plt.ylabel(r"$R^2_{\mathcal{Y}}$")
+# plt.ylim(top=1.0)
+# plt.legend()
+# plt.savefig(load_path / "r2_output.pdf", bbox_inches="tight")
+# plt.figure(3)
+# plt.xlabel(r"$K$")
+# plt.ylabel(r"$\| \hat{\boldsymbol{h}} - \boldsymbol{h} \| $")
+# plt.legend()
+# plt.savefig(load_path / "residual_latent.pdf", bbox_inches="tight")
+# plt.figure(4)
+# plt.xlabel(r"$K$")
+# plt.ylabel(r"$\| \hat{\boldsymbol{y}} - \boldsymbol{y} \| $")
+# plt.legend()
+# plt.savefig(load_path / "residual_output.pdf", bbox_inches="tight")
+#
+# print(
+#     f"Representer metrics: r2_output = {representer_metrics[0].mean():.2g} +/- {representer_metrics[0].std():.2g}"
+#     f" ; residual_output = {representer_metrics[1].mean():.2g} +/- {representer_metrics[1].std():.2g}"
+# )
