@@ -142,12 +142,13 @@ sns.set_palette("colorblind")
 
 ################## WORKING ########################################
 # TODO: make a boxplot with 3 groups (K) of ascending scalers (5)
+titles = []
 for m, metric_name in enumerate(metric_names):
     for explainer_name in explainer_names:
         plt.figure(m + 1) # I want a seperate plot for each explainer AND metric
         data = []
         input = []
-        Ks = []
+        titles.append(metric_name + '_' + explainer_name)
         for k, scaler in enumerate(scalers):
             data.append([])
             input.append([])
@@ -161,68 +162,87 @@ for m, metric_name in enumerate(metric_names):
             plt.boxplot(data[k],
                         positions=np.array(range(len(data[k])))*5.0-0.4 + k,
                         widths=0.6)
-        plt.ylim(-2.5, 1)
-        plt.xticks(range(3, len(n_keep_list) * 5 + 3, 5), n_keep_list)
-        plt.legend()
-        plt.tight_layout()
-        plt.savefig('test.jpg')
-        print(data)
-        print(input)
-        exit()
 
-# data_a = [[1,2,5], [5,7,2,2,5], [7,2,5]]
-# data_b = [[6,4,2], [1,2,5,3,2], [2,3,5,1]]
+plt.figure(1)
+plt.ylim(-2.5, 1)
+plt.xticks(range(2, len(n_keep_list) * 5 + 2, 5), n_keep_list)
+plt.title(titles[0])
+plt.tight_layout()
+plt.savefig(titles[0] + '.jpg')
 
-# ticks = ['A', 'B', 'C']
+plt.figure(2)
+plt.ylim(-2.5, 1)
+plt.xticks(range(2, len(n_keep_list) * 5 + 2, 5), n_keep_list)
+plt.title(titles[2])
+plt.tight_layout()
+plt.savefig(titles[1] + '.jpg')
 
-# def set_box_color(bp, color):
-#     plt.setp(bp['boxes'], color=color)
-#     plt.setp(bp['whiskers'], color=color)
-#     plt.setp(bp['caps'], color=color)
-#     plt.setp(bp['medians'], color=color)
+plt.figure(3)
+plt.ylim(-2.5, 1)
+plt.xticks(range(2, len(n_keep_list) * 5 + 2, 5), n_keep_list)
+plt.title(titles[2])
+plt.tight_layout()
+plt.savefig(titles[2] + '.jpg')
 
-# plt.figure()
-#
-# bpl = plt.boxplot(data_a, positions=np.array(xrange(len(data_a)))*2.0-0.4, sym='', widths=0.6)
-# bpr = plt.boxplot(data_b, positions=np.array(xrange(len(data_b)))*2.0+0.4, sym='', widths=0.6)
-# set_box_color(bpl, '#D7191C') # colors are from http://colorbrewer2.org/
-# set_box_color(bpr, '#2C7BB6')
+plt.figure(4)
+plt.ylim(-2.5, 1)
+plt.xticks(range(2, len(n_keep_list) * 5 + 2, 5), n_keep_list)
+plt.title(titles[3])
+plt.tight_layout()
+plt.savefig(titles[3] + '.jpg')
 
-# draw temporary red and blue lines and use them to create a legend
-# plt.plot([], c='#D7191C', label='Apples')
-# plt.plot([], c='#2C7BB6', label='Oranges')
-# plt.legend()
-#
-# plt.xticks(xrange(0, len(ticks) * 2, 2), ticks)
-# plt.xlim(-2, len(ticks)*2)
-# plt.ylim(0, 8)
-# plt.tight_layout()
-# plt.savefig('boxcompare.png')
+plt.figure(5)
+plt.ylim(-2.5, 1)
+plt.xticks(range(2, len(n_keep_list) * 5 + 2, 5), n_keep_list)
+plt.title(titles[4])
+plt.tight_layout()
+plt.savefig(titles[4] + '.jpg')
 
-# plt.figure(1)
-# plt.xlabel(r"$K$")
-# plt.ylabel(r"$R^2_{\mathcal{H}}$")
-# plt.ylim(top=1.0)
-# plt.legend()
-# plt.savefig(load_path / "r2_latent.pdf", bbox_inches="tight")
-# plt.figure(2)
-# plt.xlabel(r"$K$")
-# plt.ylabel(r"$R^2_{\mathcal{Y}}$")
-# plt.ylim(top=1.0)
-# plt.legend()
-# plt.savefig(load_path / "r2_output.pdf", bbox_inches="tight")
-# plt.figure(3)
-# plt.xlabel(r"$K$")
-# plt.ylabel(r"$\| \hat{\boldsymbol{h}} - \boldsymbol{h} \| $")
-# plt.legend()
-# plt.savefig(load_path / "residual_latent.pdf", bbox_inches="tight")
-# plt.figure(4)
-# plt.xlabel(r"$K$")
-# plt.ylabel(r"$\| \hat{\boldsymbol{y}} - \boldsymbol{y} \| $")
-# plt.legend()
-# plt.savefig(load_path / "residual_output.pdf", bbox_inches="tight")
-#
-# print(
-#     f"Representer metrics: r2_output = {representer_metrics[0].mean():.2g} +/- {representer_metrics[0].std():.2g}"
-#     f" ; residual_output = {representer_metrics[1].mean():.2g} +/- {representer_metrics[1].std():.2g}"
-# )
+plt.figure(6)
+plt.ylim(-2.5, 1)
+plt.xticks(range(2, len(n_keep_list) * 5 + 2, 5), n_keep_list)
+plt.title(titles[5])
+plt.tight_layout()
+plt.savefig(titles[5] + '.jpg')
+
+plt.figure(7)
+plt.ylim(-2.5, 1)
+plt.xticks(range(2, len(n_keep_list) * 5 + 2, 5), n_keep_list)
+plt.title(titles[6])
+plt.tight_layout()
+plt.savefig(titles[6] + '.jpg')
+
+plt.figure(8)
+plt.ylim(-2.5, 1)
+plt.xticks(range(2, len(n_keep_list) * 5 + 2, 5), n_keep_list)
+plt.title(titles[7])
+plt.tight_layout()
+plt.savefig(titles[7] + '.jpg')
+
+plt.figure(9)
+plt.ylim(-2.5, 1)
+plt.xticks(range(2, len(n_keep_list) * 5 + 2, 5), n_keep_list)
+plt.title(titles[8])
+plt.tight_layout()
+plt.savefig(titles[8] + '.jpg')
+
+plt.figure(10)
+plt.ylim(-2.5, 1)
+plt.xticks(range(2, len(n_keep_list) * 5 + 2, 5), n_keep_list)
+plt.title(titles[9])
+plt.tight_layout()
+plt.savefig(titles[9] + '.jpg')
+
+plt.figure(11)
+plt.ylim(-2.5, 1)
+plt.xticks(range(2, len(n_keep_list) * 5 + 2, 5), n_keep_list)
+plt.title(titles[10])
+plt.tight_layout()
+plt.savefig(titles[10] + '.jpg')
+
+plt.figure(12)
+plt.ylim(-2.5, 1)
+plt.xticks(range(2, len(n_keep_list) * 5 + 2, 5), n_keep_list)
+plt.title(titles[11])
+plt.tight_layout()
+plt.savefig(titles[11] + '.jpg')
