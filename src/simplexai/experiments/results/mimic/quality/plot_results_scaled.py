@@ -8,6 +8,7 @@ import pandas as pd
 import seaborn as sns
 import sklearn.metrics
 import torch
+import os
 
 from simplexai.models.tabular_data import MortalityPredictor
 
@@ -164,6 +165,9 @@ for m, metric_name in enumerate(metric_names):
                         widths=0.6)
 
 safe_path = load_path / 'plots/'
+if not os.path.exists(safe_path):
+    os.makedirs(safe_path)
+
 plt.figure(1)
 plt.ylim(-2.5, 1)
 plt.xticks(range(2, len(n_keep_list) * 5 + 2, 5), n_keep_list)
