@@ -26,9 +26,18 @@ parser.add_argument(
     help="The list of active corpus members considered",
     type=int,
 )
+parser.add_argument(
+    "-age_scalers",
+    nargs='*',
+    type=float,
+    default=[1.0, 1.25, 1.5, 2.0, 5.0],
+    help="Scaling variable for sample ages"
+)
+
 args = parser.parse_args()
 cv_list = args.cv_list
 n_keep_list = args.k_list
+scalers = args.age_scalers
 explainer_names = ["simplex", "nn_uniform", "nn_dist"]
 names_dict = {
     "simplex": "SimplEx",
@@ -127,14 +136,16 @@ q3_df = results_df.groupby(["explainer", "scaler"]).quantile(0.75).unstack(level
 for m, metric_name in enumerate(metric_names):
     plt.figure(m + 1)
     # for explainer_name in explainer_names: # Only need simplex
+    print(scalers,
+          mean_df[metric_name, "simplex"])
     plt.plot(
-        n_keep_list,
+        scalers,
         mean_df[metric_name, "simplex"],
         line_styles["simplex"],
         label=names_dict["simplex"],
     )
     plt.fill_between(
-        n_keep_list,
+        scalers,
         mean_df[metric_name, "simplex"] - std_df[metric_name, "simplex"],
         mean_df[metric_name, "simplex"] + std_df[metric_name, "simplex"],
         alpha=0.2,
