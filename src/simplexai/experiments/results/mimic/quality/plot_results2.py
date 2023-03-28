@@ -16,7 +16,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     "-cv_list",
     nargs="+",
-    default=[0, 1, 2, 3, 4],
+    default=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
     help="The list of experiment cv identifiers to plot",
     type=int,
 )
