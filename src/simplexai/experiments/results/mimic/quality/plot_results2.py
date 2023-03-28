@@ -134,9 +134,6 @@ max_df = results_df.groupby(["explainer", "scaler"]).aggregate("max").unstack(le
 q1_df = results_df.groupby(["explainer", "scaler"]).quantile(0.25).unstack(level=0)
 q3_df = results_df.groupby(["explainer", "scaler"]).quantile(0.75).unstack(level=0)
 
-print(mean_df)
-exit()
-
 for m, metric_name in enumerate(metric_names):
     plt.figure(m + 1)
     # for explainer_name in explainer_names: # Only need simplex
