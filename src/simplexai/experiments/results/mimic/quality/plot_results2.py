@@ -55,7 +55,7 @@ params = {"text.latex.preamble": r"\usepackage{amsmath}"}
 plt.rcParams.update(params)
 representer_metrics = np.zeros((2, len(cv_list)))
 current_path = Path.cwd()
-load_path = current_path / "experiments/results/mimic/quality"
+load_path = current_path / "experiments/results/mimic/quality" / 'scaled' / 'plots2'
 
 for scaler in scalers:
     for cv in cv_list:
@@ -156,7 +156,7 @@ plt.figure(3)
 plt.xlabel(r"$K$")
 plt.ylabel(r"$\| \hat{\boldsymbol{h}} - \boldsymbol{h} \| $")
 plt.legend()
-plt.savefig(load_path / "residual_latent.pdf", bbox_inches="tight")
+plt.savefig(load_path /'"residual_latent.pdf", bbox_inches="tight")
 plt.figure(4)
 plt.xlabel(r"$K$")
 plt.ylabel(r"$\| \hat{\boldsymbol{y}} - \boldsymbol{y} \| $")
