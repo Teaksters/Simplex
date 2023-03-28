@@ -64,7 +64,7 @@ params = {"text.latex.preamble": r"\usepackage{amsmath}"}
 plt.rcParams.update(params)
 representer_metrics = np.zeros((2, len(cv_list)))
 current_path = Path.cwd()
-load_path = current_path / "experiments/results/mimic/quality" / 'scaled' / 'plots2'
+load_path = current_path / "experiments/results/mimic/quality" / 'scaled'
 
 for scaler in scalers:
     for cv in cv_list:
@@ -150,6 +150,8 @@ for m, metric_name in enumerate(metric_names):
         mean_df[metric_name, "simplex"] + std_df[metric_name, "simplex"],
         alpha=0.2,
     )
+
+load_path = load_path  / 'plots2'
 
 plt.figure(1)
 plt.xlabel(r"$K$")
