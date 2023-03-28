@@ -105,6 +105,7 @@ for scaler in scalers:
                                 "r2_output": [output_r2_score],
                                 "residual_latent": [residual_latent],
                                 "residual_output": [residual_output],
+                                "scaler": [scaler],
                             }
                         ),
                     ],
