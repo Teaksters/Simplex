@@ -45,7 +45,7 @@ results_df = pd.DataFrame(
         "r2_latent",
         "r2_output",
         "residual_latent",
-        "residual_output",,
+        "residual_output",
         "scaler",
     ]
 )
