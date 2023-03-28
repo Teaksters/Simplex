@@ -74,7 +74,7 @@ for scaler in scalers:
         classifier.eval()
         for n_keep in n_keep_list:
             for explainer_name in explainer_names:
-                with open(load_path / f"{explainer_name}_cv{cv}_n{n_keep}.pkl", "rb") as f:
+                with open(load_path / str(scaler) / f"{explainer_name}_cv{cv}_n{n_keep}.pkl", "rb") as f:
                     explainer = pkl.load(f)
                 explainer.to(device)
                 latent_rep_approx = explainer.latent_approx()
@@ -110,7 +110,7 @@ for scaler in scalers:
                     ],
                     ignore_index=True,
                 )
-        with open(load_path / f"representer_cv{cv}.pkl", "rb") as f:
+        with open(load_path / str(scaler) / f"representer_cv{cv}.pkl", "rb") as f:
             representer = pkl.load(f)
         representer.to(device)
         latent_rep_true = representer.test_latent_reps
