@@ -152,30 +152,32 @@ for m, metric_name in enumerate(metric_names):
         alpha=0.2,
     )
 
-load_path = load_path  / 'plots2'
+safe_path = load_path / 'plots2/'
+if not os.path.exists(safe_path):
+    os.makedirs(safe_path)
 
 plt.figure(1)
 plt.xlabel(r"$K$")
 plt.ylabel(r"$R^2_{\mathcal{H}}$")
 plt.ylim(top=1.0)
 plt.legend()
-plt.savefig(load_path / "r2_latent.pdf", bbox_inches="tight")
+plt.savefig(safe_path / "r2_latent.pdf", bbox_inches="tight")
 plt.figure(2)
 plt.xlabel(r"$K$")
 plt.ylabel(r"$R^2_{\mathcal{Y}}$")
 plt.ylim(top=1.0)
 plt.legend()
-plt.savefig(load_path / "r2_output.pdf", bbox_inches="tight")
+plt.savefig(safe_path / "r2_output.pdf", bbox_inches="tight")
 plt.figure(3)
 plt.xlabel(r"$K$")
 plt.ylabel(r"$\| \hat{\boldsymbol{h}} - \boldsymbol{h} \| $")
 plt.legend()
-plt.savefig(load_path / "residual_latent.pdf", bbox_inches="tight")
+plt.savefig(safe_path / "residual_latent.pdf", bbox_inches="tight")
 plt.figure(4)
 plt.xlabel(r"$K$")
 plt.ylabel(r"$\| \hat{\boldsymbol{y}} - \boldsymbol{y} \| $")
 plt.legend()
-plt.savefig(load_path / "residual_output.pdf", bbox_inches="tight")
+plt.savefig(safe_path / "residual_output.pdf", bbox_inches="tight")
 
 print(
     f"Representer metrics: r2_output = {representer_metrics[0].mean():.2g} +/- {representer_metrics[0].std():.2g}"
