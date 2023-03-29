@@ -137,9 +137,7 @@ for m, metric_name in enumerate(metric_names):
                                    (results_df['n_keep'] == 10) & \
                                    (results_df['scaler'] == scaler)]
         data.append(list(temp_data[metric_name])) # Maybe this is wrong..?
-    plt.boxplot(data,
-                positions=np.array(range(len(data[k])))*5.0-0.4 + k,
-                widths=0.6)
+    plt.boxplot(data)
     plt.xticks([i for i in range(1, len(scalers))], scalers)
 
 safe_path = load_path / 'plots3/'
