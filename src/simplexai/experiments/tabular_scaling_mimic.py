@@ -52,7 +52,7 @@ def approximation_quality(
     weight_decay = 1e-5
     corpus_size = 100
     test_size = 100
-    n_keep_list = [5, 10, 15]  # NEED TO PICK A SUITABLE K
+    n_keep_list = [10]  # NEED TO PICK A SUITABLE K
     reg_factor_init = 0.01
     reg_factor_final = 1.0
     n_epoch_simplex = 10000
