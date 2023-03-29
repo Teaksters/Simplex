@@ -128,30 +128,21 @@ for scaler in scalers:
 sns.set(font_scale=1.5)
 sns.set_style("white")
 sns.set_palette("colorblind")
-mean_df = results_df.groupby(["explainer", "scaler"]).aggregate("mean").unstack(level=0)
-std_df = results_df.groupby(["explainer", "scaler"]).aggregate("std").unstack(level=0)
-min_df = results_df.groupby(["explainer", "scaler"]).aggregate("min").unstack(level=0)
-max_df = results_df.groupby(["explainer", "scaler"]).aggregate("max").unstack(level=0)
-q1_df = results_df.groupby(["explainer", "scaler"]).quantile(0.25).unstack(level=0)
-q3_df = results_df.groupby(["explainer", "scaler"]).quantile(0.75).unstack(level=0)
 
 for m, metric_name in enumerate(metric_names):
     plt.figure(m + 1)
-    # for explainer_name in explainer_names: # Only need simplex
-    plt.plot(
-        scalers,
-        mean_df[metric_name, "simplex"],
-        line_styles["simplex"],
-        label=names_dict["simplex"],
-    )
-    plt.fill_between(
-        scalers,
-        mean_df[metric_name, "simplex"] - std_df[metric_name, "simplex"],
-        mean_df[metric_name, "simplex"] + std_df[metric_name, "simplex"],
-        alpha=0.2,
-    )
+    data = []
+    for scaler in scalers: # Only need simplex
+        temp_data = results_df.loc[(results_df['explainer'] == "simplex") & \
+                                   (results_df['n_keep'] == 10) & \
+                                   (results_df['scaler'] == scaler)]
+        data.append(list(temp_data[metric_name])) # Maybe this is wrong..?
+    plt.boxplot(data,
+                positions=np.array(range(len(data[k])))*5.0-0.4 + k,
+                widths=0.6)
+    plt.xticks([i for i in range(1, len(scalers))], scalers)
 
-safe_path = load_path / 'plots2/'
+safe_path = load_path / 'plots3/'
 if not os.path.exists(safe_path):
     os.makedirs(safe_path)
 
