@@ -139,6 +139,8 @@ for m, metric_name in enumerate(metric_names):
         data.append(list(temp_data[metric_name])) # Maybe this is wrong..?
     plt.boxplot(data)
     plt.xticks([i for i in range(1, len(scalers) + 1)], scalers)
+    plt.set_yscale('log')
+    plt.set_xscale('log')
 
 safe_path = load_path / 'plots3/'
 if not os.path.exists(safe_path):
@@ -147,27 +149,23 @@ if not os.path.exists(safe_path):
 plt.figure(1)
 plt.xlabel(r"$age scaling factor$")
 plt.ylabel(r"$R^2_{\mathcal{H}}$")
-plt.set_yscale('log')
 plt.ylim(top=1.0)
 plt.legend()
 plt.savefig(safe_path / "r2_latent.pdf", bbox_inches="tight")
 plt.figure(2)
 plt.xlabel(r"$age scaling factor$")
 plt.ylabel(r"$R^2_{\mathcal{Y}}$")
-plt.set_yscale('log')
 plt.ylim(top=1.0)
 plt.legend()
 plt.savefig(safe_path / "r2_output.pdf", bbox_inches="tight")
 plt.figure(3)
 plt.xlabel(r"$age scaling factor$")
 plt.ylabel(r"$\| \hat{\boldsymbol{h}} - \boldsymbol{h} \| $")
-plt.set_yscale('log')
 plt.legend()
 plt.savefig(safe_path / "residual_latent.pdf", bbox_inches="tight")
 plt.figure(4)
 plt.xlabel(r"$age scaling factor$")
 plt.ylabel(r"$\| \hat{\boldsymbol{y}} - \boldsymbol{y} \| $")
-plt.set_yscale('log')
 plt.legend()
 plt.savefig(safe_path / "residual_output.pdf", bbox_inches="tight")
 
