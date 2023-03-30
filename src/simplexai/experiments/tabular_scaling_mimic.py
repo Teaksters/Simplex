@@ -413,7 +413,7 @@ def outlier_detection(
     # Add scaling to test_data age here
     print(test_data)
     OOD_data = copy.copy(test_data)
-    OOD_data[:, 0] = OOD_data[:, 0] * age_scaler
+    # OOD_data[:, 0] = OOD_data[:, 0] * age_scaler
     print(test_data)
     print(OOD_data)
     exit()
