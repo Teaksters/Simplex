@@ -10,6 +10,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, Dataset
+import copy
 
 from simplexai.explainers.nearest_neighbours import NearNeighLatent
 from simplexai.explainers.representer import Representer
@@ -410,7 +411,12 @@ def outlier_detection(
     corpus_loader = DataLoader(train_data, batch_size=corpus_size, shuffle=True)
     ID_loader = DataLoader(test_data, batch_size=test_size, shuffle=True)
     # Add scaling to test_data age here
-    OOD_data = test_data[:, 0] = test_data[:, 0] * age_scaler
+    print(test_data[:5])
+    OOD_data = copy.copy(test_data)
+    OOD_data[:, 0] = OOD_data[:, 0] * age_scaler
+    print(test_data[:5])
+    print(OOD_data[:5])
+    exit()
     OOD_loader = DataLoader(OOD_data, batch_size=test_size, shuffle=True)
     ###########################################################################
 
