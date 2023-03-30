@@ -413,7 +413,7 @@ def outlier_detection(
     # Add scaling to test_data age here
     OOD_test = copy.copy(X_test)
     print(OOD_test)
-    OOD_test[:, 0] = OOD_test[:, 0] * age_scaler
+    OOD_test['AGE'] = OOD_test['AGE'].apply(lambda x: x * age_scaler)
     OOD_data = MimicDataset(OOD_test, y_test)
     print(OOD_test)
     exit()
