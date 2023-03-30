@@ -43,6 +43,7 @@ def load_from_preprocessed(dir):
     return df
 
 def load_age(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
+    pd.options.mode.chained_assignment = None  # default='warn'
     drop_cols = ['HADM_ID', 'ICUSTAY_ID', 'LAST_CAREUNIT', 'DBSOURCE', 'INTIME',
                  'OUTTIME', 'LOS', 'ADMITTIME', 'DISCHTIME', 'DEATHTIME',
                  'ETHNICITY', 'DIAGNOSIS', 'GENDER', 'DOB', 'DOD',

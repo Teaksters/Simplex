@@ -412,7 +412,7 @@ def outlier_detection(
     ID_loader = DataLoader(test_data, batch_size=test_size, shuffle=True)
 
     # Add scaling to test_data age here
-    OOD_test = copy.copy(X_test)
+    OOD_test = copy.deepcopy(X_test)
     OOD_test['AGE'] = OOD_test['AGE'].apply(lambda x: x * age_scaler)
     OOD_data = MimicDataset(OOD_test, y_test)
     OOD_loader = DataLoader(OOD_data, batch_size=test_size, shuffle=True)
@@ -482,6 +482,200 @@ def outlier_detection(
         print(f"Saving nn_uniform decomposition in {explainer_path}.")
         pkl.dump(nn_uniform, f)
  ###############################################################################
+
+def outlier_detection2(
+    cv: int = 0,
+    random_seed: int = 42,
+    save_path: str = "experiments/results/mimic/outlier/scaled2/",
+    train_model: bool = True,
+    age_scaler: float=1.,
+) -> None:
+    torch.random.manual_seed(random_seed + cv)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(
+        100 * "-"
+        + "\n"
+        + "Welcome in the outlier detection experiment for Prostate Cancer. \n"
+        f"Settings: random_seed = {random_seed} ; cv = {cv} ; device = {device}.\n"
+        + 100 * "-"
+    )
+
+    # Create saving directory if inexistent
+    current_path = Path.cwd()
+    save_path = current_path / save_path / str(age_scaler)
+    if not save_path.exists():
+        print(f"Creating the saving directory {save_path}")
+        os.makedirs(save_path)
+
+    # Define parameters
+    n_epoch_model = 5
+    log_interval = 100
+    weight_decay = 1e-5
+    corpus_size = 100
+    test_size = 100
+    n_epoch_simplex = 10000
+    n_keep_list = [10]  # NEED TO PICK A SUITABLE K
+
+    # Load the data
+    X, y = load_tabular_mimic(random_seed=random_seed + cv)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.15, random_state=random_seed + cv, stratify=y
+    )
+    train_data = MimicDataset(X_train, y_train)
+    train_loader = DataLoader(train_data, batch_size=50, shuffle=True)
+    test_data = MimicDataset(X_test, y_test)
+    test_loader = DataLoader(test_data, batch_size=50, shuffle=True)
+    # X_cutract, y_cutract = load_cutract(random_seed=random_seed + cv)
+    # cutract_data = MimicDataset(X_cutract, y_cutract)
+    # cutract_loader = DataLoader(cutract_data, batch_size=test_size, shuffle=True)
+
+    # Training a model, save it
+    if train_model:
+        # Create the model
+        classifier = MortalityPredictor(n_cont=1, input_feature_num=26)
+        classifier.to(device)
+        optimizer = optim.Adam(classifier.parameters(), weight_decay=weight_decay)
+        # Train the model
+        print(100 * "-" + "\n" + "Now fitting the model. \n" + 100 * "-")
+        train_losses = []
+        train_counter = []
+        test_losses = []
+
+        def train(epoch):
+            classifier.train()
+            for batch_idx, (data, target) in enumerate(train_loader):
+                data = data.to(device)
+                target = target.type(torch.LongTensor)
+                target = target.to(device)
+                optimizer.zero_grad()
+                output = classifier(data)
+                loss = F.nll_loss(output, target)
+                loss.backward()
+                optimizer.step()
+                if batch_idx % log_interval == 0:
+                    print(
+                        f"Train Epoch: {epoch} [{batch_idx * len(data)}/{len(train_loader.dataset)}"
+                        f" ({100. * batch_idx / len(train_loader):.0f}%)]\tLoss: {loss.item():.6f}"
+                    )
+                    train_losses.append(loss.item())
+                    train_counter.append(
+                        (batch_idx * 128) + ((epoch - 1) * len(train_loader.dataset))
+                    )
+                    torch.save(classifier.state_dict(), save_path / f"model_cv{cv}.pth")
+                    torch.save(
+                        optimizer.state_dict(), save_path / f"optimizer_cv{cv}.pth"
+                    )
+
+        def test():
+            classifier.eval()
+            test_loss = 0
+            correct = 0
+            with torch.no_grad():
+                for data, target in test_loader:
+                    data = data.to(device)
+                    target = target.type(torch.LongTensor)
+                    target = target.to(device)
+                    output = classifier(data)
+                    test_loss += F.nll_loss(output, target, reduction="sum").item()
+                    pred = output.data.max(1, keepdim=True)[1]
+                    correct += pred.eq(target.data.view_as(pred)).sum()
+            test_loss /= len(test_loader.dataset)
+            test_losses.append(test_loss)
+            print(
+                f"\nTest set: Avg. loss: {test_loss:.4f}, Accuracy: {correct}/{len(test_loader.dataset)}"
+                f"({100. * correct / len(test_loader.dataset):.0f}%)\n"
+            )
+
+        test()
+        for epoch in range(1, n_epoch_model + 1):
+            train(epoch)
+            test()
+        torch.save(classifier.state_dict(), save_path / f"model_cv{cv}.pth")
+        torch.save(optimizer.state_dict(), save_path / f"optimizer_cv{cv}.pth")
+
+    # Load model:
+    classifier = MortalityPredictor(n_cont=1, input_feature_num=26)
+    classifier.load_state_dict(torch.load(save_path / f"model_cv{cv}.pth"))
+    classifier.to(device)
+    classifier.eval()
+
+    # Load data for the explainers
+    print(100 * "-" + "\n" + "Now fitting the explainer. \n" + 100 * "-")
+
+    ################ NEEDS TO BE UPDATED WITH SCALING #########################
+    corpus_loader = DataLoader(train_data, batch_size=corpus_size, shuffle=True)
+    ID_loader = DataLoader(test_data, batch_size=test_size, shuffle=True)
+
+    # Add scaling to test_data age here
+    OOD_test = copy.deepcopy(X_test)
+    OOD_test['AGE'] = OOD_test['AGE'].apply(lambda x: x * age_scaler)
+    OOD_data = MimicDataset(OOD_test, y_test)
+    OOD_loader = DataLoader(OOD_data, batch_size=test_size, shuffle=True)
+    ###########################################################################
+
+    corpus_examples = enumerate(corpus_loader)
+    seer_examples = enumerate(ID_loader)
+    cutract_examples = enumerate(OOD_loader)
+    _, (corpus_features, corpus_target) = next(corpus_examples)
+    _, (seer_features, seer_targets) = next(seer_examples)
+    _, (cutract_features, cutract_targets) = next(cutract_examples)
+    corpus_features = corpus_features.to(device).detach()
+    seer_features = seer_features.to(device).detach()
+    cutract_features = cutract_features.to(device).detach()
+    test_features = torch.cat([seer_features, cutract_features], dim=0)
+    test_targets = torch.cat([seer_targets, cutract_targets], dim=0)
+    corpus_latent_reps = classifier.latent_representation(corpus_features).detach()
+    corpus_probas = classifier.probabilities(corpus_features).detach()
+    corpus_true_classes = torch.zeros(corpus_probas.shape, device=device)
+    corpus_true_classes[
+        torch.arange(corpus_size), corpus_target.type(torch.LongTensor)
+    ] = 1
+    test_latent_reps = classifier.latent_representation(test_features).detach()
+
+    # Save data:
+    corpus_data_path = save_path / f"corpus_data_cv{cv}.pkl"
+    with open(corpus_data_path, "wb") as f:
+        print(f"Saving corpus data in {corpus_data_path}.")
+        pkl.dump([corpus_latent_reps, corpus_probas, corpus_true_classes], f)
+    test_data_path = save_path / f"test_data_cv{cv}.pkl"
+    with open(test_data_path, "wb") as f:
+        print(f"Saving test data in {test_data_path}.")
+        pkl.dump([test_latent_reps, test_targets], f)
+
+    # Fit explainers:
+    simplex = Simplex(
+        corpus_examples=corpus_features, corpus_latent_reps=corpus_latent_reps
+    )
+    simplex.fit(
+        test_examples=test_features,
+        test_latent_reps=test_latent_reps,
+        n_epoch=n_epoch_simplex,
+        reg_factor=0,
+        n_keep=corpus_features.shape[0],
+    )
+    explainer_path = save_path / f"simplex_cv{cv}.pkl"
+    with open(explainer_path, "wb") as f:
+        print(f"Saving simplex decomposition in {explainer_path}.")
+        pkl.dump(simplex, f)
+
+    nn_uniform = NearNeighLatent(
+        corpus_examples=corpus_features, corpus_latent_reps=corpus_latent_reps
+    )
+    nn_uniform.fit(test_features, test_latent_reps, n_keep=7)
+    nn_dist = NearNeighLatent(
+        corpus_examples=corpus_features,
+        corpus_latent_reps=corpus_latent_reps,
+        weights_type="distance",
+    )
+    nn_dist.fit(test_features, test_latent_reps, n_keep=7)
+    explainer_path = save_path / f"nn_dist_cv{cv}.pkl"
+    with open(explainer_path, "wb") as f:
+        print(f"Saving nn_dist decomposition in {explainer_path}.")
+        pkl.dump(nn_dist, f)
+    explainer_path = save_path / f"nn_uniform_cv{cv}.pkl"
+    with open(explainer_path, "wb") as f:
+        print(f"Saving nn_uniform decomposition in {explainer_path}.")
+        pkl.dump(nn_uniform, f)
 
 ########################## HAVEN'T TESTED FUNCTIONALITY ########################
 def corpus_size_effect(random_seed: int = 42) -> None:
