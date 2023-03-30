@@ -139,8 +139,6 @@ for m, metric_name in enumerate(metric_names):
         data.append(list(temp_data[metric_name])) # Maybe this is wrong..?
     plt.boxplot(data)
     plt.xticks(scalers)
-    plt.set_yscale('log')
-    plt.set_xscale('log')
 
 safe_path = load_path / 'plots3/'
 if not os.path.exists(safe_path):

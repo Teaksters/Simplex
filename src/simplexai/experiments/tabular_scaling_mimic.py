@@ -289,9 +289,11 @@ def approximation_quality(
 ########################## HAVEN'T TESTED FUNCTIONALITY ########################
 def outlier_detection(
     cv: int = 0,
+    age_scaler: float=1.,
     random_seed: int = 42,
-    save_path: str = "experiments/results/prostate/outlier/",
+    save_path: str = "experiments/results/mimic/outlier/scaled/",
     train_model: bool = True,
+    age_scaler: float=1.,
 ) -> None:
     torch.random.manual_seed(random_seed + cv)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -305,7 +307,7 @@ def outlier_detection(
 
     # Create saving directory if inexistent
     current_path = Path.cwd()
-    save_path = current_path / save_path
+    save_path = current_path / save_path / str(age_scaler)
     if not save_path.exists():
         print(f"Creating the saving directory {save_path}")
         os.makedirs(save_path)
@@ -317,6 +319,7 @@ def outlier_detection(
     corpus_size = 100
     test_size = 100
     n_epoch_simplex = 10000
+    n_keep_list = [10]  # NEED TO PICK A SUITABLE K
 
     # Load the data
     X, y = load_tabular_mimic(random_seed=random_seed + cv)
@@ -327,9 +330,9 @@ def outlier_detection(
     train_loader = DataLoader(train_data, batch_size=50, shuffle=True)
     test_data = MimicDataset(X_test, y_test)
     test_loader = DataLoader(test_data, batch_size=50, shuffle=True)
-    X_cutract, y_cutract = load_cutract(random_seed=random_seed + cv)
-    cutract_data = MimicDataset(X_cutract, y_cutract)
-    cutract_loader = DataLoader(cutract_data, batch_size=test_size, shuffle=True)
+    # X_cutract, y_cutract = load_cutract(random_seed=random_seed + cv)
+    # cutract_data = MimicDataset(X_cutract, y_cutract)
+    # cutract_loader = DataLoader(cutract_data, batch_size=test_size, shuffle=True)
 
     # Training a model, save it
     if train_model:
@@ -404,12 +407,17 @@ def outlier_detection(
     # Load data for the explainers
     print(100 * "-" + "\n" + "Now fitting the explainer. \n" + 100 * "-")
 
+    ################ NEEDS TO BE UPDATED WITH SCALING #########################
     corpus_loader = DataLoader(train_data, batch_size=corpus_size, shuffle=True)
-    seer_loader = DataLoader(test_data, batch_size=test_size, shuffle=True)
+    ID_loader = DataLoader(test_data, batch_size=test_size, shuffle=True)
+    # Add scaling to test_data age here
+    OOD_data = test_data[:, 0] = test_data[:, 0] * age_scaler
+    OOD_loader = DataLoader(OOD_data, batch_size=test_size, shuffle=True)
+    ###########################################################################
 
     corpus_examples = enumerate(corpus_loader)
-    seer_examples = enumerate(seer_loader)
-    cutract_examples = enumerate(cutract_loader)
+    seer_examples = enumerate(ID_loader)
+    cutract_examples = enumerate(OOD_loader)
     _, (corpus_features, corpus_target) = next(corpus_examples)
     _, (seer_features, seer_targets) = next(seer_examples)
     _, (cutract_features, cutract_targets) = next(cutract_examples)
@@ -545,8 +553,8 @@ def main(experiment: str = "approximation_quality", cv: int = 0, age_scaler: flo
     if experiment == "approximation_quality":
 
         approximation_quality(cv=cv, age_scaler=age_scaler)
-    elif experiment == "outlier_detection": # TODO
-        outlier_detection(cv=cv)
+    elif experiment == "outlier_detection": # BUSY
+        outlier_detection(cv=cv, age_scaler=age_scaler)
     elif experiment == "corpus_size": #TODO
         corpus_size_effect()
     else:
