@@ -503,7 +503,7 @@ def outlier_detection2(
 
     # Create saving directory if inexistent
     current_path = Path.cwd()
-    save_path = current_path / save_path / str(age_scaler)
+    save_path = current_path / save_path / str(age_scaler) / str(corpus_scaler)
     if not save_path.exists():
         print(f"Creating the saving directory {save_path}")
         os.makedirs(save_path)
