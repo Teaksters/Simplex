@@ -489,6 +489,7 @@ def outlier_detection2(
     save_path: str = "experiments/results/mimic/outlier/scaled2/",
     train_model: bool = True,
     age_scaler: float=1.,
+    corpus_scaler: float=1.,
 ) -> None:
     torch.random.manual_seed(random_seed + cv)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -602,15 +603,21 @@ def outlier_detection2(
     # Load data for the explainers
     print(100 * "-" + "\n" + "Now fitting the explainer. \n" + 100 * "-")
 
-    ################ NEEDS TO BE UPDATED WITH SCALING #########################
-    corpus_loader = DataLoader(train_data, batch_size=corpus_size, shuffle=True)
-    ID_loader = DataLoader(test_data, batch_size=test_size, shuffle=True)
+    ######################### IS UPDATED WITH SCALING #########################
+    # Scale corpus' ages
+    OOD_corpus = copy.deepcopy(X_train)
+    OOD_corpus['AGE'] = OOD_corpus['AGE'].apply(lambda x: x * corpus_scaler)
+    OOD_corpus = MimicDataset(OOD_corpus, y_train)
+    corpus_loader = DataLoader(OOD_corpus, batch_size=corpus_size, shuffle=True)
 
-    # Add scaling to test_data age here
+    # Scale OOD sample's ages
     OOD_test = copy.deepcopy(X_test)
     OOD_test['AGE'] = OOD_test['AGE'].apply(lambda x: x * age_scaler)
     OOD_data = MimicDataset(OOD_test, y_test)
     OOD_loader = DataLoader(OOD_data, batch_size=test_size, shuffle=True)
+
+    # Load in distribution samples
+    ID_loader = DataLoader(test_data, batch_size=test_size, shuffle=True)
     ###########################################################################
 
     corpus_examples = enumerate(corpus_loader)
@@ -746,12 +753,18 @@ def corpus_size_effect(random_seed: int = 42) -> None:
     print(residuals.std(dim=-1))
 ################################################################################
 
-def main(experiment: str = "approximation_quality", cv: int = 0, age_scaler: float = 1.) -> None:
+def main(experiment: str = "approximation_quality",
+         cv: int = 0,
+         age_scaler: float = 1.,
+         corpus_scaler: float = 1.) -> None:
     if experiment == "approximation_quality":
 
         approximation_quality(cv=cv, age_scaler=age_scaler)
     elif experiment == "outlier_detection": # BUSY
         outlier_detection(cv=cv, age_scaler=age_scaler)
+    elif experiment == "outlier_detection2": # BUSY
+        outlier_detection2(cv=cv, age_scaler=age_scaler,
+                          corpus_scaler=corpus_scaler)
     elif experiment == "corpus_size": #TODO
         corpus_size_effect()
     else:
@@ -771,6 +784,8 @@ if __name__ == "__main__":
     )
     parser.add_argument("-cv", type=int, default=0, help="Cross validation parameter")
     parser.add_argument("-age_scalers", nargs='*', type=float, default=[1.], help="Scaling variable for sample ages")
+    parser.add_argument("-corpus_scalers", nargs='*', type=float, default=[1.], help="Scaling variable for corpus ages")
     args = parser.parse_args()
     for age_scaler in args.age_scalers:
-        main(args.experiment, args.cv, age_scaler)
+        for corpus_scaler in args.corpus_scalers:
+            main(args.experiment, args.cv, age_scaler, corpus_scaler)
