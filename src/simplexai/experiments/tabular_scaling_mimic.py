@@ -410,14 +410,11 @@ def outlier_detection(
     ################ NEEDS TO BE UPDATED WITH SCALING #########################
     corpus_loader = DataLoader(train_data, batch_size=corpus_size, shuffle=True)
     ID_loader = DataLoader(test_data, batch_size=test_size, shuffle=True)
+
     # Add scaling to test_data age here
     OOD_test = copy.copy(X_test)
-    print(OOD_test)
-    print(age_scaler)
     OOD_test['AGE'] = OOD_test['AGE'].apply(lambda x: x * age_scaler)
     OOD_data = MimicDataset(OOD_test, y_test)
-    print(OOD_test)
-    exit()
     OOD_loader = DataLoader(OOD_data, batch_size=test_size, shuffle=True)
     ###########################################################################
 
