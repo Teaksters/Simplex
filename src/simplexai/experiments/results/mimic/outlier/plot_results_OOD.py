@@ -143,8 +143,12 @@ sns.set(font_scale=1.5)
 sns.set_style("white")
 sns.set_palette("colorblind")
 
-plt.plot(n_inspected, means[0], "-", label="Age x" + str(OOD_scalers[0]))
-plt.fill_between(n_inspected, means[0] - stds[0], means[0] + stds[0], alpha=0.3)
+print(means)
+print(stds)
+print(OOD_scalers)
+
+# plt.plot(n_inspected, means[0], "-", label="Age x" + str(OOD_scalers[0]))
+# plt.fill_between(n_inspected, means[0] - stds[0], means[0] + stds[0], alpha=0.3)
 
 plt.plot(n_inspected, means[1], "-", label="Age x" + str(OOD_scalers[1]))
 plt.fill_between(n_inspected, means[1] - stds[1], means[1] + stds[1], alpha=0.3)
