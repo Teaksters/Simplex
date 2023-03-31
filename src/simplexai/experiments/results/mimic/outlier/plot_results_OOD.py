@@ -35,12 +35,13 @@ plt.rc("text", usetex=True)
 params = {"text.latex.preamble": r"\usepackage{amsmath}"}
 plt.rcParams.update(params)
 test_size = 200
-metrics = np.zeros((4, test_size, len(cv_list)))
-accuracies = np.zeros((4, test_size, len(cv_list)))
 n_inspected = [n for n in range(test_size)]
 load_path = current_path / "experiments/results/mimic/outlier/scaled"
 
 for scaler in OOD_scalers:
+    metrics = np.zeros((4, test_size, len(cv_list)))
+    accuracies = np.zeros((4, test_size, len(cv_list)))
+    
     current_path = load_path / str(scaler)
     for cv in cv_list:
         classifier = MortalityPredictor(n_cont=1, input_feature_num=26)
