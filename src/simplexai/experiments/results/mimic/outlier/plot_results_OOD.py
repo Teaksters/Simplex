@@ -133,6 +133,7 @@ for scaler in OOD_scalers:
     counts_ideal = [
         n if n < int(test_size / 2) else int(test_size / 2) for n in range(test_size)
     ]
+    print("Age x" + str(scaler), metrics[0].mean(axis=-1))
     plt.plot(n_inspected, metrics[0].mean(axis=-1), "-", label="Age x" + str(scaler))
     plt.fill_between(
         n_inspected,
@@ -140,6 +141,7 @@ for scaler in OOD_scalers:
         metrics[0].mean(axis=-1) + metrics[0].std(axis=-1),
         alpha=0.3,
     )
+    print('plot performed')
 
 plt.plot(n_inspected, metrics[3].mean(axis=-1), "-.", label="Random")
 plt.fill_between(
