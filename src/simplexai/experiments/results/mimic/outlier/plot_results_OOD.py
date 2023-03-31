@@ -40,7 +40,7 @@ accuracies = np.zeros((4, test_size, len(cv_list)))
 n_inspected = [n for n in range(test_size)]
 load_path = current_path / "experiments/results/mimic/outlier/scaled"
 
-
+plt.figure()
 sns.set(font_scale=1.5)
 sns.set_style("white")
 sns.set_palette("colorblind")
@@ -140,7 +140,6 @@ for scaler in OOD_scalers:
         metrics[0].mean(axis=-1) + metrics[0].std(axis=-1),
         alpha=0.3,
     )
-    print(scaler, metrics[0].mean(axis=-1), n_inspected)
 
 plt.plot(n_inspected, metrics[3].mean(axis=-1), "-.", label="Random")
 plt.fill_between(
