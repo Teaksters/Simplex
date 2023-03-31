@@ -150,4 +150,9 @@ plt.plot(n_inspected, counts_ideal, label="Maximal")
 plt.xlabel("Number of samples inspected")
 plt.ylabel("Number of outliers detected")
 plt.legend()
-plt.savefig(load_path / 'plots' / "outlier.pdf", bbox_inches="tight")
+
+safe_path = load_path / 'plots' / "outlier.pdf"
+if not os.path.exists(safe_path):
+    os.makedirs(safe_path)
+
+plt.savefig(safe_path, bbox_inches="tight")
