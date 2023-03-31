@@ -138,7 +138,7 @@ for scaler in OOD_scalers:
         metrics[0].mean(axis=-1) + metrics[0].std(axis=-1),
         alpha=0.3,
     )
-    print(scaler, metrics[0].mean(axis=-1))
+    print(scaler, metrics[0].mean(axis=-1), n_inspected)
 
 plt.plot(n_inspected, metrics[3].mean(axis=-1), "-.", label="Random")
 plt.fill_between(
