@@ -151,8 +151,8 @@ plt.xlabel("Number of samples inspected")
 plt.ylabel("Number of outliers detected")
 plt.legend()
 
-safe_path = load_path / 'plots' / "outlier.pdf"
+safe_path = load_path / 'plots'
 if not os.path.exists(safe_path):
     os.makedirs(safe_path)
 
-plt.savefig(safe_path, bbox_inches="tight")
+plt.savefig(safe_path / "outlier.pdf", bbox_inches="tight")
