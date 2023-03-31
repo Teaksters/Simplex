@@ -43,7 +43,7 @@ load_path = current_path / "experiments/results/mimic/outlier/scaled"
 for scaler in OOD_scalers:
     current_path = load_path / str(scaler)
     for cv in cv_list:
-        classifier = MortalityPredictor(n_cont=3)
+        classifier = MortalityPredictor(n_cont=1, input_feature_num=26)
         classifier.load_state_dict(torch.load(current_path / f"model_cv{cv}.pth"))
         classifier.to(device)
         classifier.eval()
