@@ -143,10 +143,6 @@ sns.set(font_scale=1.5)
 sns.set_style("white")
 sns.set_palette("colorblind")
 
-print(means)
-print(stds)
-print(OOD_scalers)
-
 plt.plot(n_inspected, counts_ideal, label="Maximal")
 
 plt.plot(n_inspected, means[0], "-", label="Age x" + str(OOD_scalers[0]))
