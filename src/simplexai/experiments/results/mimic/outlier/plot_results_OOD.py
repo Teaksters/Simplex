@@ -147,16 +147,18 @@ print(means)
 print(stds)
 print(OOD_scalers)
 
-# plt.plot(n_inspected, means[0], "-", label="Age x" + str(OOD_scalers[0]))
-# plt.fill_between(n_inspected, means[0] - stds[0], means[0] + stds[0], alpha=0.3)
+plt.plot(n_inspected, counts_ideal, label="Maximal")
 
-plt.plot(n_inspected, means[1], "-", label="Age x" + str(OOD_scalers[1]))
+plt.plot(n_inspected, means[0], "-", label="Age x" + str(OOD_scalers[0]))
+plt.fill_between(n_inspected, means[0] - stds[0], means[0] + stds[0], alpha=0.3)
+
+plt.plot(n_inspected, means[1], ".", label="Age x" + str(OOD_scalers[1]))
 plt.fill_between(n_inspected, means[1] - stds[1], means[1] + stds[1], alpha=0.3)
 
-plt.plot(n_inspected, means[2], "-", label="Age x" + str(OOD_scalers[2]))
+plt.plot(n_inspected, means[2], "--", label="Age x" + str(OOD_scalers[2]))
 plt.fill_between(n_inspected, means[2] - stds[2], means[2] + stds[2], alpha=0.3)
 
-plt.plot(n_inspected, means[3], "-", label="Age x" + str(OOD_scalers[3]))
+plt.plot(n_inspected, means[3], "-.", label="Age x" + str(OOD_scalers[3]))
 plt.fill_between(n_inspected, means[3] - stds[3], means[3] + stds[3], alpha=0.3)
 
 plt.plot(n_inspected, metrics[3].mean(axis=-1), "-.", label="Random")
@@ -166,7 +168,6 @@ plt.fill_between(
     metrics[3].mean(axis=-1) + metrics[3].std(axis=-1),
     alpha=0.3,
 )
-plt.plot(n_inspected, counts_ideal, label="Maximal")
 plt.xlabel("Number of samples inspected")
 plt.ylabel("Number of outliers detected")
 plt.legend()
