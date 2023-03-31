@@ -35,16 +35,18 @@ plt.rc("text", usetex=True)
 params = {"text.latex.preamble": r"\usepackage{amsmath}"}
 plt.rcParams.update(params)
 test_size = 200
+
 metrics = np.zeros((4, test_size, len(cv_list)))
 accuracies = np.zeros((4, test_size, len(cv_list)))
 n_inspected = [n for n in range(test_size)]
+
 load_path = current_path / "experiments/results/mimic/outlier/scaled"
+safe_path = load_path / 'plots'
+if not os.path.exists(safe_path):
+    os.makedirs(safe_path)
 
-plt.figure()
-sns.set(font_scale=1.5)
-sns.set_style("white")
-sns.set_palette("colorblind")
-
+means = []
+stds = []
 for scaler in OOD_scalers:
     current_path = load_path / str(scaler)
     for cv in cv_list:
@@ -133,19 +135,25 @@ for scaler in OOD_scalers:
     counts_ideal = [
         n if n < int(test_size / 2) else int(test_size / 2) for n in range(test_size)
     ]
-    print("Age x" + str(scaler), len(metrics[0].mean(axis=-1)), len(n_inspected))
-    plt.plot(n_inspected, metrics[0].mean(axis=-1), "-", label="Age x" + str(scaler))
-    plt.fill_between(
-        n_inspected,
-        metrics[0].mean(axis=-1) - metrics[0].std(axis=-1),
-        metrics[0].mean(axis=-1) + metrics[0].std(axis=-1),
-        alpha=0.3,
-    )
-    print('plot performed')
+    means.append(metrics[0].mean(axis=-1))
+    stds.append(metrics[0].std(axis=-1))
 
-safe_path = load_path / 'plots'
-if not os.path.exists(safe_path):
-    os.makedirs(safe_path)
+
+sns.set(font_scale=1.5)
+sns.set_style("white")
+sns.set_palette("colorblind")
+
+plt.plot(n_inspected, means[0], "-", label="Age x" + str(OOD_scalers[0]))
+plt.fill_between(n_inspected, means[0] - stds[0], means[0] + stds[0], alpha=0.3)
+
+plt.plot(n_inspected, means[1], "-", label="Age x" + str(OOD_scalers[1]))
+plt.fill_between(n_inspected, means[1] - stds[1], means[1] + stds[1], alpha=0.3)
+
+plt.plot(n_inspected, means[2], "-", label="Age x" + str(OOD_scalers[2]))
+plt.fill_between(n_inspected, means[2] - stds[2], means[2] + stds[2], alpha=0.3)
+
+plt.plot(n_inspected, means[3], "-", label="Age x" + str(OOD_scalers[3]))
+plt.fill_between(n_inspected, means[3] - stds[3], means[3] + stds[3], alpha=0.3)
 
 plt.plot(n_inspected, metrics[3].mean(axis=-1), "-.", label="Random")
 plt.fill_between(
