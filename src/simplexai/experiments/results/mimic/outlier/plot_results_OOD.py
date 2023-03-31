@@ -40,6 +40,11 @@ accuracies = np.zeros((4, test_size, len(cv_list)))
 n_inspected = [n for n in range(test_size)]
 load_path = current_path / "experiments/results/mimic/outlier/scaled"
 
+
+sns.set(font_scale=1.5)
+sns.set_style("white")
+sns.set_palette("colorblind")
+
 for scaler in OOD_scalers:
     current_path = load_path / str(scaler)
     for cv in cv_list:
@@ -128,9 +133,6 @@ for scaler in OOD_scalers:
     counts_ideal = [
         n if n < int(test_size / 2) else int(test_size / 2) for n in range(test_size)
     ]
-    sns.set(font_scale=1.5)
-    sns.set_style("white")
-    sns.set_palette("colorblind")
     plt.plot(n_inspected, metrics[0].mean(axis=-1), "-", label="Age x" + str(scaler))
     plt.fill_between(
         n_inspected,
