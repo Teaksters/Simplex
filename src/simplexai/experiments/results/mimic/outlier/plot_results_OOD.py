@@ -133,7 +133,7 @@ for scaler in OOD_scalers:
     counts_ideal = [
         n if n < int(test_size / 2) else int(test_size / 2) for n in range(test_size)
     ]
-    print("Age x" + str(scaler), metrics[0].mean(axis=-1))
+    print("Age x" + str(scaler), len(metrics[0].mean(axis=-1)), len(n_inspected))
     plt.plot(n_inspected, metrics[0].mean(axis=-1), "-", label="Age x" + str(scaler))
     plt.fill_between(
         n_inspected,
@@ -142,6 +142,10 @@ for scaler in OOD_scalers:
         alpha=0.3,
     )
     print('plot performed')
+
+safe_path = load_path / 'plots'
+if not os.path.exists(safe_path):
+    os.makedirs(safe_path)
 
 plt.plot(n_inspected, metrics[3].mean(axis=-1), "-.", label="Random")
 plt.fill_between(
@@ -154,9 +158,5 @@ plt.plot(n_inspected, counts_ideal, label="Maximal")
 plt.xlabel("Number of samples inspected")
 plt.ylabel("Number of outliers detected")
 plt.legend()
-
-safe_path = load_path / 'plots'
-if not os.path.exists(safe_path):
-    os.makedirs(safe_path)
 
 plt.savefig(safe_path / "outlier.pdf", bbox_inches="tight")
