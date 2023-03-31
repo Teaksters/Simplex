@@ -35,13 +35,12 @@ plt.rc("text", usetex=True)
 params = {"text.latex.preamble": r"\usepackage{amsmath}"}
 plt.rcParams.update(params)
 test_size = 200
+metrics = np.zeros((4, test_size, len(cv_list)))
+accuracies = np.zeros((4, test_size, len(cv_list)))
 n_inspected = [n for n in range(test_size)]
 load_path = current_path / "experiments/results/mimic/outlier/scaled"
 
 for scaler in OOD_scalers:
-    metrics = np.zeros((4, test_size, len(cv_list)))
-    accuracies = np.zeros((4, test_size, len(cv_list)))
-    
     current_path = load_path / str(scaler)
     for cv in cv_list:
         classifier = MortalityPredictor(n_cont=1, input_feature_num=26)
@@ -139,6 +138,7 @@ for scaler in OOD_scalers:
         metrics[0].mean(axis=-1) + metrics[0].std(axis=-1),
         alpha=0.3,
     )
+    print(scaler, metrics[0].mean(axis=-1))
 
 plt.plot(n_inspected, metrics[3].mean(axis=-1), "-.", label="Random")
 plt.fill_between(
