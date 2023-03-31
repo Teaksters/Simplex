@@ -22,7 +22,7 @@ parser.add_argument(
 parser.add_argument(
     "-OOD_scalers",
     nargs="*",
-    default=[1.0, 10.0, 100.0, 200.0],
+    default=[1.0, 2.0, 3.0, 4.0, 5.0],
     help="The scalars used to rescale outliers to be OOD.",
     type=float,
 )
@@ -156,6 +156,9 @@ plt.fill_between(n_inspected, means[2] - stds[2], means[2] + stds[2], alpha=0.3)
 
 plt.plot(n_inspected, means[3], "-.", label="Age x" + str(OOD_scalers[3]))
 plt.fill_between(n_inspected, means[3] - stds[3], means[3] + stds[3], alpha=0.3)
+
+plt.plot(n_inspected, means[4], "-.", label="Age x" + str(OOD_scalers[4]))
+plt.fill_between(n_inspected, means[4] - stds[4], means[4] + stds[4], alpha=0.3)
 
 plt.plot(n_inspected, metrics[3].mean(axis=-1), "-.", label="Random")
 plt.fill_between(
