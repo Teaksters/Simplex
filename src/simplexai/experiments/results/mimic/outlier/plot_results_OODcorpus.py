@@ -184,3 +184,5 @@ plt.ylabel("Number of outliers detected")
 plt.legend()
 
 plt.savefig(safe_path / "outlier.pdf", bbox_inches="tight")
+
+print('succesfully saved plot at:\n', safe_path)
