@@ -181,7 +181,7 @@ plt.fill_between(
 )
 plt.xlabel("Number of samples inspected")
 plt.ylabel("Number of outliers detected")
-plt.legend()
+plt.legend(fontsize='small')
 
 plt.savefig(safe_path / "outlier2.pdf", bbox_inches="tight")
 
