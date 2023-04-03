@@ -138,34 +138,35 @@ for scaler in OOD_scalers:
     means.append(metrics[0].mean(axis=-1))
     stds.append(metrics[0].std(axis=-1))
 
-
+colors = ['#b2182b','#ef8a62','#fddbc7','#d1e5f0','#67a9cf','#2166ac']
 sns.set(font_scale=1.5)
 sns.set_style("white")
 sns.set_palette("colorblind")
 
-plt.plot(n_inspected, counts_ideal, label="Maximal")
+plt.plot(n_inspected, counts_ideal, label="Maximal", color=colors[-1])
 
-plt.plot(n_inspected, means[0], "-", label="Age x" + str(OOD_scalers[0]))
-plt.fill_between(n_inspected, means[0] - stds[0], means[0] + stds[0], alpha=0.3)
+plt.plot(n_inspected, means[0], "-", label="Age x" + str(OOD_scalers[0]), color=colors[1])
+plt.fill_between(n_inspected, means[0] - stds[0], means[0] + stds[0], alpha=0.3, color=colors[1])
 
-plt.plot(n_inspected, means[1], ".", label="Age x" + str(OOD_scalers[1]))
-plt.fill_between(n_inspected, means[1] - stds[1], means[1] + stds[1], alpha=0.3)
+plt.plot(n_inspected, means[1], "-", label="Age x" + str(OOD_scalers[1]), color=colors[2])
+plt.fill_between(n_inspected, means[1] - stds[1], means[1] + stds[1], alpha=0.3, color=colors[2])
 
-plt.plot(n_inspected, means[2], "--", label="Age x" + str(OOD_scalers[2]))
-plt.fill_between(n_inspected, means[2] - stds[2], means[2] + stds[2], alpha=0.3)
+plt.plot(n_inspected, means[2], "-", label="Age x" + str(OOD_scalers[2]), color=colors[3])
+plt.fill_between(n_inspected, means[2] - stds[2], means[2] + stds[2], alpha=0.3, color=colors[3])
 
-plt.plot(n_inspected, means[3], "-.", label="Age x" + str(OOD_scalers[3]))
-plt.fill_between(n_inspected, means[3] - stds[3], means[3] + stds[3], alpha=0.3)
+plt.plot(n_inspected, means[3], "-", label="Age x" + str(OOD_scalers[3]), color=colors[4])
+plt.fill_between(n_inspected, means[3] - stds[3], means[3] + stds[3], alpha=0.3, color=colors[4])
 
-plt.plot(n_inspected, means[4], "-.", label="Age x" + str(OOD_scalers[4]))
-plt.fill_between(n_inspected, means[4] - stds[4], means[4] + stds[4], alpha=0.3)
+plt.plot(n_inspected, means[4], "-", label="Age x" + str(OOD_scalers[4]), color=colors[5])
+plt.fill_between(n_inspected, means[4] - stds[4], means[4] + stds[4], alpha=0.3, color=colors[5])
 
-plt.plot(n_inspected, metrics[3].mean(axis=-1), "-.", label="Random")
+plt.plot(n_inspected, metrics[3].mean(axis=-1), "-.", label="Random", color=colors[0])
 plt.fill_between(
     n_inspected,
     metrics[3].mean(axis=-1) - metrics[3].std(axis=-1),
     metrics[3].mean(axis=-1) + metrics[3].std(axis=-1),
     alpha=0.3,
+    color=colors[0]
 )
 plt.xlabel("Number of samples inspected")
 plt.ylabel("Number of outliers detected")

@@ -49,7 +49,7 @@ metrics = np.zeros((4, test_size, len(cv_list)))
 accuracies = np.zeros((4, test_size, len(cv_list)))
 n_inspected = [n for n in range(test_size)]
 
-load_path = current_path / "experiments/results/mimic/outlier/scaled"
+load_path = current_path / "experiments/results/mimic/outlier/scaled2"
 safe_path = load_path / 'plots'
 if not os.path.exists(safe_path):
     os.makedirs(safe_path)
