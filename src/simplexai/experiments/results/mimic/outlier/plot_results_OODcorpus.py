@@ -161,6 +161,7 @@ plt.fill_between(n_inspected, means[0] - stds[0], means[0] + stds[0], alpha=0.3,
 plt.plot(n_inspected, means[1], "-", label="corpus Age x" + str(OOD_scalers[1]), color=colors[2])
 plt.fill_between(n_inspected, means[1] - stds[1], means[1] + stds[1], alpha=0.3, color=colors[2])
 
+print(means, colors)
 plt.plot(n_inspected, means[2], "-", label="corpus Age x" + str(OOD_scalers[2]), color=colors[3])
 plt.fill_between(n_inspected, means[2] - stds[2], means[2] + stds[2], alpha=0.3, color=colors[3])
 
