@@ -156,17 +156,17 @@ sns.set_palette("colorblind")
 
 plt.plot(n_inspected, counts_ideal, label="Maximal", color=colors[-1])
 
-plt.plot(n_inspected, means[0], "-", label="corpus Age x" + str(corpus_scalers[0]), color=colors[1])
+plt.plot(n_inspected, means[0], "-", label="Familiar Corpus")
 plt.fill_between(n_inspected, means[0] - stds[0], means[0] + stds[0], alpha=0.3, color=colors[1])
 
 plt.plot(n_inspected, means[1], "-", label="corpus Age x" + str(corpus_scalers[1]), color=colors[2])
 plt.fill_between(n_inspected, means[1] - stds[1], means[1] + stds[1], alpha=0.3, color=colors[2])
 
-plt.plot(n_inspected, means[2], "-", label="corpus Age x" + str(corpus_scalers[2]), color=colors[3])
-plt.fill_between(n_inspected, means[2] - stds[2], means[2] + stds[2], alpha=0.3, color=colors[3])
+# plt.plot(n_inspected, means[2], "-", label="corpus Age x" + str(corpus_scalers[2]), color=colors[3])
+# plt.fill_between(n_inspected, means[2] - stds[2], means[2] + stds[2], alpha=0.3, color=colors[3])
 
-plt.plot(n_inspected, means[3], "-", label="corpus Age x" + str(corpus_scalers[3]), color=colors[4])
-plt.fill_between(n_inspected, means[3] - stds[3], means[3] + stds[3], alpha=0.3, color=colors[4])
+# plt.plot(n_inspected, means[3], "-", label="corpus Age x" + str(corpus_scalers[3]), color=colors[4])
+# plt.fill_between(n_inspected, means[3] - stds[3], means[3] + stds[3], alpha=0.3, color=colors[4])
 
 plt.plot(n_inspected, means[4], "-", label="corpus Age x" + str(corpus_scalers[4]), color=colors[5])
 plt.fill_between(n_inspected, means[4] - stds[4], means[4] + stds[4], alpha=0.3, color=colors[5])
