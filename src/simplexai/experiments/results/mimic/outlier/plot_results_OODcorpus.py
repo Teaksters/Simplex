@@ -149,7 +149,6 @@ for scaler in OOD_scalers:
         stds.append(metrics[0].std(axis=-1))
 
 colors = ['#b2182b','#ef8a62','#fddbc7','#d1e5f0','#67a9cf','#2166ac']
-print(means, colors)
 
 sns.set(font_scale=1.5)
 sns.set_style("white")
