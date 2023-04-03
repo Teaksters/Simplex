@@ -149,6 +149,8 @@ for scaler in OOD_scalers:
         stds.append(metrics[0].std(axis=-1))
 
 colors = ['#b2182b','#ef8a62','#fddbc7','#d1e5f0','#67a9cf','#2166ac']
+print(means, colors)
+
 sns.set(font_scale=1.5)
 sns.set_style("white")
 sns.set_palette("colorblind")
@@ -161,7 +163,6 @@ plt.fill_between(n_inspected, means[0] - stds[0], means[0] + stds[0], alpha=0.3,
 plt.plot(n_inspected, means[1], "-", label="corpus Age x" + str(OOD_scalers[1]), color=colors[2])
 plt.fill_between(n_inspected, means[1] - stds[1], means[1] + stds[1], alpha=0.3, color=colors[2])
 
-print(means, colors)
 plt.plot(n_inspected, means[2], "-", label="corpus Age x" + str(OOD_scalers[2]), color=colors[3])
 plt.fill_between(n_inspected, means[2] - stds[2], means[2] + stds[2], alpha=0.3, color=colors[3])
 
