@@ -147,17 +147,9 @@ def approximation_quality(
         performance_data = [train_losses, train_counter , test_losses, test_accs]
         pkl.dump(performance_data, save_path / f"performance_cv{cv}.pkl")
 
-def main(args,
-         experiment: str = "approximation_quality",
-         ) -> None:
-    if experiment == "approximation_quality":
-        for epoch in args.epochs:
-            approximation_quality(args, cv=cv, epochs=epoch)
-    else:
-        raise ValueError(
-            "The name of the experiment is not valid. "
-            "Valid names are: approximation_quality , outlier_detection , outlier_detection2 , corpus_size.  "
-        )
+def main(args) -> None:
+    for epoch in args.epochs:
+        approximation_quality(args, cv=cv, epochs=epoch)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -175,4 +167,4 @@ if __name__ == "__main__":
     # parser.add_argument("-Ks", nargs='*', type=int, default=[10], help="Corpus size.")
     args = parser.parse_args()
 
-    main(args.experiment, args)
+    main(args)
