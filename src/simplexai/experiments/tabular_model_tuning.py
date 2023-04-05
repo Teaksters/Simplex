@@ -149,7 +149,7 @@ def approximation_quality(
 
 def main(args) -> None:
     for epoch in args.epochs:
-        approximation_quality(args, cv=cv, epochs=epoch)
+        approximation_quality(args, cv=args.cv, epochs=epoch)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
