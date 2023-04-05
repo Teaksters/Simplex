@@ -144,11 +144,12 @@ def approximation_quality(
         torch.save(optimizer.state_dict(), save_path / f"optimizer_cv{cv}.pth")
 
         # Store losses for tuning purposes
-        performance_data = [train_losses, train_counter , test_losses, results]
+        performance_data = [train_losses, train_counter , test_losses, test_accs]
         pkl.dump(performance_data, save_path / f"performance_cv{cv}.pkl")
 
-def main(experiment: str = "approximation_quality",
-         args) -> None:
+def main(args,
+         experiment: str = "approximation_quality",
+         ) -> None:
     if experiment == "approximation_quality":
         for epoch in args.epochs:
             approximation_quality(args, cv=cv, epochs=epoch)
@@ -163,7 +164,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-experiment",
         type=str,
-        default="outlier_detection",
+        default="approximation_quality",
         help="Experiment to perform",
     )
     parser.add_argument("-cv", type=int, default=0, help="Cross validation parameter")
