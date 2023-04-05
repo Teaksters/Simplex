@@ -87,7 +87,7 @@ def approximation_quality(
         train_losses = []
         train_counter = []
         test_losses = []
-        results = []
+        test_accs = []
 
         def train(epoch):
             classifier.train()
@@ -129,7 +129,7 @@ def approximation_quality(
                     correct += pred.eq(target.data.view_as(pred)).sum()
             test_loss /= len(test_loader.dataset)
             test_losses.append(test_loss)
-            results = [correct / len(test_loader.dataset),
+            test_accs = [correct / len(test_loader.dataset),
                        100. * correct / len(test_loader.dataset)]
             print(
                 f"\nTest set: Avg. loss: {test_loss:.4f}, Accuracy: {correct}/{len(test_loader.dataset)}"
