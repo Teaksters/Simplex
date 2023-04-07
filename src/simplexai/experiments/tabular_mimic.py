@@ -90,15 +90,15 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
     ##################### OPTIONAL ######################################
     ### Balance data set for even amount of survivors and mortalities ###
     #####################################################################
-    # mask = data_df[label] is True
-    # df_dead = data_df[mask]
-    # df_survive = data_df[~mask]
-    # data_df = pd.concat(
-    #     [
-    #         df_dead.sample(2500, random_state=random_seed),
-    #         df_survive.sample(2500, random_state=random_seed),
-    #     ]
-    # )
+    mask = data_df[label] is True
+    df_dead = data_df[mask]
+    df_survive = data_df[~mask]
+    data_df = pd.concat(
+        [
+            df_dead.sample(2500, random_state=random_seed),
+            df_survive.sample(2500, random_state=random_seed),
+        ]
+    )
     ############################################################################
 
     df = sklearn.utils.shuffle(data_df, random_state=random_seed)
