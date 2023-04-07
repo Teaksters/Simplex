@@ -105,7 +105,7 @@ def approximation_quality(
                         f"Train Epoch: {epoch} [{batch_idx * len(data)}/{len(train_loader.dataset)}"
                         f" ({100. * batch_idx / len(train_loader):.0f}%)]\tLoss: {loss.item():.6f}"
                     )
-                    train_losses.append(loss.item().detach())
+                    train_losses.append(loss.item())
                     train_counter.append(
                         (batch_idx * 128) + ((epoch - 1) * len(train_loader.dataset))
                     )
@@ -128,7 +128,7 @@ def approximation_quality(
                     pred = output.data.max(1, keepdim=True)[1]
                     correct += pred.eq(target.data.view_as(pred)).sum()
             test_loss /= len(test_loader.dataset)
-            test_losses.append(test_loss.detach())
+            test_losses.append(test_loss)
             test_accs = [correct / len(test_loader.dataset)]
             print(
                 f"\nTest set: Avg. loss: {test_loss:.4f}, Accuracy: {correct}/{len(test_loader.dataset)}"
