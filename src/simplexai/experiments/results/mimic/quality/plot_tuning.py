@@ -11,6 +11,8 @@ import torch
 
 from simplexai.models.tabular_data import MortalityPredictor
 
+
+current_path = Path.cwd()
 load_path = current_path / "experiments/results/mimic/quality/tuning/epochs"
 
 for epoch_path in os.listdir(load_path):
