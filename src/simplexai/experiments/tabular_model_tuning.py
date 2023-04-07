@@ -129,17 +129,17 @@ def approximation_quality(
                     correct += pred.eq(target.data.view_as(pred)).sum()
             test_loss /= len(test_loader.dataset)
             test_losses.append(test_loss)
-            test_accs = [correct / len(test_loader.dataset),
-                       100. * correct / len(test_loader.dataset)]
+            test_accs = [correct / len(test_loader.dataset)]
             print(
                 f"\nTest set: Avg. loss: {test_loss:.4f}, Accuracy: {correct}/{len(test_loader.dataset)}"
                 f"({100. * correct / len(test_loader.dataset):.0f}%)\n"
             )
+            return test_accs
 
-        test()
+        test_accs = test()
         for epoch in range(1, n_epoch_model + 1):
             train(epoch)
-            test()
+            test_accs = test()
         torch.save(classifier.state_dict(), save_path / f"model_cv{cv}.pth")
         torch.save(optimizer.state_dict(), save_path / f"optimizer_cv{cv}.pth")
 
