@@ -32,6 +32,10 @@ for epoch_path in os.listdir(load_path):
             test_losses.append(data[2])
             test_accs.append(data[3])
 
+train_losses = np.array(train_losses)
+test_losses = np.array(test_losses)
+test_accs = np.array(test_accs)
+
 print('train_losses:\n', train_losses)
 print('test_losses:\n', test_losses)
 print('test_accs:\n', test_accs)
