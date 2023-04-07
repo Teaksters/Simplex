@@ -27,6 +27,7 @@ for epoch_path in os.listdir(load_path):
         if data_path[-4:] == '.pkl':
             temp_path = temp_path / data_path
             file = open(temp_path, 'rb')
+            print(temp_path)
             data = pkl.load(file)
             train_losses.append(data[0])
             test_losses.append(data[2])
