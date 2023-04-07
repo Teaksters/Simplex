@@ -91,8 +91,8 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
     ### Balance data set for even amount of survivors and mortalities ###
     #####################################################################
     mask = data_df['y_true'] is True
-    df_dead = data_df[mask]
-    df_survive = data_df[~mask]
+    df_dead = data_df.loc[data_df['y_true'] == True]
+    df_survive = data_df.loc[data_df['y_true'] == False]
     data_df = pd.concat(
         [
             df_dead.sample(2500, random_state=random_seed),
