@@ -19,7 +19,7 @@ load_path = current_path / "experiments/results/mimic/quality/tuning/epochs"
 for epoch_path in os.listdir(load_path):
     temp_path = load_path / epoch_path
     for data_path in os.listdir(temp_path):
-        if data[-4:] == '.pkl':
+        if data_path[-4:] == '.pkl':
             temp_path = temp_path / data_path
             file = open(temp_path, 'rb')
             data = pkl.load(file)
