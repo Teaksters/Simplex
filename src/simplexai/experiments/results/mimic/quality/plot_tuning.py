@@ -14,7 +14,7 @@ from simplexai.models.tabular_data import MortalityPredictor
 
 
 current_path = Path.cwd()
-load_path = current_path / "experiments/results/mimic/quality/tuning/epochs"
+load_path = "experiments/results/mimic/quality/tuning/epochs"
 
 train_losses = []
 test_losses = []
