@@ -13,7 +13,7 @@ import torch
 from simplexai.models.tabular_data import MortalityPredictor
 
 
-class CPU_Unpickler(pickle.Unpickler):
+class CPU_Unpickler(pkl.Unpickler):
     def find_class(self, module, name):
         if module == 'torch.storage' and name == '_load_from_bytes':
             return lambda b: torch.load(io.BytesIO(b), map_location='cpu')
