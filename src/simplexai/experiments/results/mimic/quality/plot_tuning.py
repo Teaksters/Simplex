@@ -41,11 +41,16 @@ for epoch_path in os.listdir(load_path):
             test_losses.append(data[2])
             test_accs.append(data[3][0].item())
 
-    train_losses = np.array(train_losses)
-    test_losses = np.array(test_losses)
-    test_accs = np.array(test_accs)
+train_losses = np.array(train_losses)
+test_losses = np.array(test_losses)
+test_accs = np.array(test_accs)
 
-    print('xxxxxxxxxxxxxxxxxxEPOCH: ', epoch_path, 'xxxxxxxxxxxxxxx')
-    print('train_losses:\n', train_losses)
-    print('test_losses:\n', test_losses)
-    print('test_accs:\n', test_accs)
+train_mean = train_losses.mean(axis=1)
+train_std = train_losses.std(axis=1)
+test_mean = train_losses.mean(axis=1)
+test_std = train_losses.std(axis=1)
+
+print('xxxxxxxxxxxxxxxxxxEPOCH: ', epoch_path, 'xxxxxxxxxxxxxxx')
+print('train_losses:\n', train_mean, train_std)
+print('test_losses:\n', test_mean, test_std)
+print('test_accs:\n', test_accs)
