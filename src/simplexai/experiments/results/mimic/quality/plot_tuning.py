@@ -38,7 +38,7 @@ for epoch_path in os.listdir(load_path):
             data = CPU_Unpickler(file).load()
             train_losses.append(data[0])
             test_losses.append(data[2])
-            test_accs.append(data[3])
+            test_accs.append(data[3][0].item())
 
 # train_losses = np.array(train_losses)
 # test_losses = np.array(test_losses)
