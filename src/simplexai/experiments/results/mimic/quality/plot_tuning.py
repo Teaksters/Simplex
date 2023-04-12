@@ -14,7 +14,7 @@ from simplexai.models.tabular_data import MortalityPredictor
 
 
 current_path = Path.cwd()
-load_path = "experiments/results/mimic/quality/tuning/epochs"
+load_path = current_path / "experiments/results/mimic/quality/tuning/epochs"
 
 train_losses = []
 test_losses = []
@@ -27,7 +27,6 @@ for epoch_path in os.listdir(load_path):
         if data_path[-4:] == '.pkl':
             temp_path = temp_path / data_path
             file = open(temp_path, 'rb')
-            print(temp_path)
             data = pkl.load(file)
             train_losses.append(data[0])
             test_losses.append(data[2])
