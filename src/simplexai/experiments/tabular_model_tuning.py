@@ -164,7 +164,7 @@ if __name__ == "__main__":
     )
     parser.add_argument("-cv", type=int, default=0, help="Cross validation parameter")
     parser.add_argument("-epochs", nargs='*', type=int, default=[5], help="Scaling variable for corpus ages")
-    parser.add_argument("-log_interval", type=int, default=100, help="Train performance logging intervals.")
+    parser.add_argument("-log_interval", type=int, default=10, help="Train performance logging intervals.")
     parser.add_argument("-weight_decay", type=float, default=1e-5, help="Weight decay used for training the model.")
     # parser.add_argument("-simplex_epochs", type=int, default=10000, help="Epochs to train simplex.")
     # parser.add_argument("-Ks", nargs='*', type=int, default=[10], help="Corpus size.")
