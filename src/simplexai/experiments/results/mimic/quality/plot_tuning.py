@@ -30,10 +30,10 @@ test_accs = []
 epochs = []
 for epoch_path in os.listdir(load_path):
     epochs.append(int(epoch_path))
-    temp_path = load_path / epoch_path
-    for data_path in os.listdir(temp_path):
+    cur_path = load_path / epoch_path
+    for data_path in os.listdir(cur_path):
         if data_path[-4:] == '.pkl':
-            temp_path = temp_path / data_path
+            temp_path = cur_path / data_path
             file = open(temp_path, 'rb')
             data = CPU_Unpickler(file).load()
             train_losses.append(data[0])
