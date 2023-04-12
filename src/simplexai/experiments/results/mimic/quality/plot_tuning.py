@@ -29,6 +29,7 @@ test_losses = []
 test_accs = []
 epochs = []
 for epoch_path in os.listdir(load_path):
+    if epoch_path != '20': continue
     epochs.append(int(epoch_path))
     cur_path = load_path / epoch_path
     for data_path in os.listdir(cur_path):
