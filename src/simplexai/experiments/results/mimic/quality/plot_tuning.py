@@ -26,11 +26,12 @@ for epoch_path in os.listdir(load_path):
     for data_path in os.listdir(temp_path):
         if data_path[-4:] == '.pkl':
             temp_path = temp_path / data_path
-            file = open(temp_path, 'rb')
-            data = pkl.load(file)
-            train_losses.append(data[0])
-            test_losses.append(data[2])
-            test_accs.append(data[3])
+            with torch.loading_context(map_location='cpu'):
+                file = open(temp_path, 'rb')
+                data = pkl.load(file)
+                train_losses.append(data[0])
+                test_losses.append(data[2])
+                test_accs.append(data[3])
 
 train_losses = np.array(train_losses)
 test_losses = np.array(test_losses)
