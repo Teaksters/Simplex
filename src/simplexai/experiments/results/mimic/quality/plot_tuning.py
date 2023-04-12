@@ -39,7 +39,7 @@ for epoch_path in os.listdir(load_path):
             file = open(temp_path, 'rb')
             data = CPU_Unpickler(file).load()
             train_losses.append(data[0])
-            train_counter.append(data[1])
+            train_counter = data[1]
             test_losses.append(data[2])
             test_accs.append(data[3][0].item())
 
@@ -58,7 +58,8 @@ print('train_losses:\n', train_mean, train_std)
 print('test_losses:\n', test_mean, test_std)
 print('test_accs:\n', test_accs.mean(), "+- (", test_accs.std(), ')')
 
-plt.plot(train_mean, label='train loss')
+plt.figure(1)
+plt.plot(train_counter, train_mean, label='train loss')
 plt.fill_between(train_mean - train_std, train_mean + train_std)
 plt.plot(test_mean, label='test loss')
 plt.fill_between(test_mean - test_std, test_mean + test_std)
