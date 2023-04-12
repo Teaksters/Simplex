@@ -136,10 +136,12 @@ def approximation_quality(
             )
             return test_accs
 
-        test_accs = test()
+        test_acc = test()
+        test_accs.append([test_acc[0].item()])
         for epoch in range(1, n_epoch_model + 1):
             train(epoch)
-            test_accs = test()
+            test_acc = test()
+            test_accs[-1].append(test_acc[0].item())
         torch.save(classifier.state_dict(), save_path / f"model_cv{cv}.pth")
         torch.save(optimizer.state_dict(), save_path / f"optimizer_cv{cv}.pth")
 
