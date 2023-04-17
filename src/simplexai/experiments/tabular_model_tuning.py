@@ -135,9 +135,8 @@ def approximation_quality(
 
             probas = torch.cat(probas, 0)
             probas = probas.cpu().detach().numpy()
-            print(preds)
             preds = torch.cat(preds, 0)
-            preds = preds.cpu().detach().numpy()
+            preds = preds.cpu().detach().numpy().flatten()
             print(preds)
             exit()
             # sklearn.metrics.auc()
