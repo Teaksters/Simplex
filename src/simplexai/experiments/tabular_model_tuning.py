@@ -132,7 +132,7 @@ def approximation_quality(
                     probas.append(probs)
 
             print(probas)
-            probas = torch.stack(probas, -1)
+            probas = torch.cat(probas, 0)
             print(probas)
             exit()
 
