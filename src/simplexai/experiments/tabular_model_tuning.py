@@ -155,7 +155,7 @@ def approximation_quality(
         test_accs.append([test_acc[0].item()])
         test_aucs.append(auc_score)
         for epoch in range(1, n_epoch_model + 1):
-            train(epoch)
+            train(epoch) # writes to performance data (bad coding practice I know..)
             test_acc, auc_score = test()
             test_accs[-1].append(test_acc[0].item())
             test_aucs.append(auc_score)
