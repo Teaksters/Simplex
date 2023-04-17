@@ -139,10 +139,7 @@ def approximation_quality(
             labels = torch.cat(labels, 0)
             labels = labels.cpu().detach().numpy().flatten()
 
-            print(probas)
-            probas = probas[:, 1]
-            print(probas)
-            # probas = [probas[i, labels[i]] for i in range(len(labels))]
+            probas = probas[:, 1] # Needs to provide the proba with the class with the greater label
             auc_score = sklearn.metrics.roc_auc_score(labels, probas)
 
             test_loss /= len(test_loader.dataset)
