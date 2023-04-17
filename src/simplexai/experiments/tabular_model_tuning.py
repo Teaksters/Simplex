@@ -119,7 +119,7 @@ def approximation_quality(
             test_loss = 0
             correct = 0
             probas = []
-            preds = []
+            labels = []
             with torch.no_grad():
                 for data, target in test_loader:
                     data = data.to(device)
@@ -131,15 +131,15 @@ def approximation_quality(
                     pred = output.data.max(1, keepdim=True)[1]
                     correct += pred.eq(target.data.view_as(pred)).sum()
                     probas.append(probs)
-                    preds.append(pred)
+                    labels.append(target)
 
             probas = torch.cat(probas, 0)
             probas = probas.cpu().detach().numpy()
-            preds = torch.cat(preds, 0)
-            preds = preds.cpu().detach().numpy().flatten()
-            preds[-1] = 1
-            probas = [probas[i, preds[i]] for i in range(len(preds))]
-            print(preds, probas)
+            labels = torch.cat(preds, 0)
+            labels = labels.cpu().detach().numpy().flatten()
+            print(labels)
+            probas = [probas[i, labels[i]] for i in range(len(labels))]
+            print(probas, labels)
             auc_score = sklearn.metrics.roc_auc_score(preds, probas)
             print(auc_score)
             exit()
