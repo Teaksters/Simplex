@@ -38,6 +38,7 @@ for epoch_path in os.listdir(load_path):
             temp_path = cur_path / data_path
             file = open(temp_path, 'rb')
             data = CPU_Unpickler(file).load()
+            print(data)
             train_losses.append(data[0])
             train_counter = data[1]
             test_losses.append(data[2])
