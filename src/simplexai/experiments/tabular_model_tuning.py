@@ -164,7 +164,6 @@ def approximation_quality(
 
         # Store losses for tuning purposes
         performance_data = [train_losses, train_counter , test_losses, test_accs, test_aucs]
-        print(performance_data)
         file = open(save_path / f"performance_cv{cv}.pkl", 'wb')
         pkl.dump(performance_data, file)
 
