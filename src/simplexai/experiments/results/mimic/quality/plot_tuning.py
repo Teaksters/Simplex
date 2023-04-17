@@ -56,7 +56,7 @@ test_std = train_losses.std(axis=0)
 print('xxxxxxxxxxxxxxxxxxEPOCH: ', epoch_path, 'xxxxxxxxxxxxxxx')
 print('train_losses:\n', train_mean, train_std)
 print('test_losses:\n', test_mean, test_std)
-print('test_accs:\n', test_accs.mean(), "+- (", test_accs.std(), ')')
+print('test_accs:\n', test_AUCs.mean(), "+- (", test_AUCs.std(), ')')
 
 plt.figure(1)
 plt.plot(train_counter, train_mean, label='train loss')
