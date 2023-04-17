@@ -26,7 +26,7 @@ load_path = current_path / "experiments/results/mimic/quality/tuning/epochs"
 
 train_losses = []
 test_losses = []
-test_accs = []
+test_AUCs = []
 train_counter = []
 epochs = []
 for epoch_path in os.listdir(load_path):
@@ -38,11 +38,10 @@ for epoch_path in os.listdir(load_path):
             temp_path = cur_path / data_path
             file = open(temp_path, 'rb')
             data = CPU_Unpickler(file).load()
-            print(data)
             train_losses.append(data[0])
             train_counter = data[1]
             test_losses.append(data[2])
-            test_accs.append(data[3][0].item())
+            test_AUCs.append(data[-1])
 
 train_losses = np.array(train_losses)
 test_losses = np.array(test_losses)
