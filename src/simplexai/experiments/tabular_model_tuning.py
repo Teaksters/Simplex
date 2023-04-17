@@ -131,7 +131,7 @@ def approximation_quality(
                     correct += pred.eq(target.data.view_as(pred)).sum()
                     probas.append(probs)
 
-            probas = torch.cat(probas, 0)
+            probas = torch.stack(probas, 0)
             print(probas)
             exit()
 
