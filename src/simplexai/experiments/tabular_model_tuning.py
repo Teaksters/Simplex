@@ -149,7 +149,7 @@ def approximation_quality(
                 f"\nTest set: Avg. loss: {test_loss:.4f}, Accuracy: {correct}/{len(test_loader.dataset)}, AUC: {auc_score:.4f}"
                 f"({100. * correct / len(test_loader.dataset):.0f}%)\n"
             )
-            return test_accs, test_auc_score
+            return test_accs, auc_score
 
         test_acc, auc_score = test()
         test_accs.append([test_acc[0].item()])
