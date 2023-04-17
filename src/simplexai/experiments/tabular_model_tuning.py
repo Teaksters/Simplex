@@ -140,7 +140,7 @@ def approximation_quality(
             print(labels)
             probas = [probas[i, labels[i]] for i in range(len(labels))]
             print(probas, labels)
-            auc_score = sklearn.metrics.roc_auc_score(preds, probas)
+            auc_score = sklearn.metrics.roc_auc_score(labels, probas)
             print(auc_score)
             exit()
 
