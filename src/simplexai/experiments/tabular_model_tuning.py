@@ -88,6 +88,7 @@ def approximation_quality(
         train_counter = []
         test_losses = []
         test_accs = []
+        test_aucs = []
 
         def train(epoch):
             classifier.train()
@@ -137,33 +138,33 @@ def approximation_quality(
             probas = probas.cpu().detach().numpy()
             labels = torch.cat(labels, 0)
             labels = labels.cpu().detach().numpy().flatten()
-            print(labels)
+
             probas = [probas[i, labels[i]] for i in range(len(labels))]
-            print(probas, labels)
             auc_score = sklearn.metrics.roc_auc_score(labels, probas)
-            print('AUC score: ', auc_score)
-            exit()
 
             test_loss /= len(test_loader.dataset)
             test_losses.append(test_loss)
             test_accs = [correct / len(test_loader.dataset)]
             print(
-                f"\nTest set: Avg. loss: {test_loss:.4f}, Accuracy: {correct}/{len(test_loader.dataset)}"
+                f"\nTest set: Avg. loss: {test_loss:.4f}, Accuracy: {correct}/{len(test_loader.dataset)}, AUC: {auc_score:.4f}"
                 f"({100. * correct / len(test_loader.dataset):.0f}%)\n"
             )
-            return test_accs
+            return test_accs, test_auc_score
 
-        test_acc = test()
+        test_acc, auc_score = test()
         test_accs.append([test_acc[0].item()])
+        test_aucs.append(auc_score)
         for epoch in range(1, n_epoch_model + 1):
             train(epoch)
-            test_acc = test()
+            test_acc, auc_score = test()
             test_accs[-1].append(test_acc[0].item())
+            test_aucs.append(auc_score)
         torch.save(classifier.state_dict(), save_path / f"model_cv{cv}.pth")
         torch.save(optimizer.state_dict(), save_path / f"optimizer_cv{cv}.pth")
 
         # Store losses for tuning purposes
-        performance_data = [train_losses, train_counter , test_losses, test_accs]
+        performance_data = [train_losses, train_counter , test_losses, test_accs, test_aucs]
+        print(performance_data)
         file = open(save_path / f"performance_cv{cv}.pkl", 'wb')
         pkl.dump(performance_data, file)
 
