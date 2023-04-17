@@ -118,15 +118,22 @@ def approximation_quality(
             classifier.eval()
             test_loss = 0
             correct = 0
+            probas = []
             with torch.no_grad():
                 for data, target in test_loader:
                     data = data.to(device)
                     target = target.type(torch.LongTensor)
                     target = target.to(device)
                     output = classifier(data)
+                    probs = classifier.probabilities(data)
                     test_loss += F.nll_loss(output, target, reduction="sum").item()
                     pred = output.data.max(1, keepdim=True)[1]
                     correct += pred.eq(target.data.view_as(pred)).sum()
+                    probas.append(probs)
+
+            print(probas)
+            exit()
+
             test_loss /= len(test_loader.dataset)
             test_losses.append(test_loss)
             test_accs = [correct / len(test_loader.dataset)]
