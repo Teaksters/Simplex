@@ -138,7 +138,7 @@ def approximation_quality(
             labels = torch.cat(labels, 0)
             labels = labels.cpu().detach().numpy().flatten()
             print(labels)
-            probas = [probas[i, labels[i]] for i in range(len(labels))]
+            # probas = [probas[i, labels[i]] for i in range(len(labels))]
             print(probas, labels)
             auc_score = sklearn.metrics.roc_auc_score(labels, probas)
             print(auc_score)
