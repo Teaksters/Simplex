@@ -135,7 +135,7 @@ def approximation_quality(
 
             probas = torch.cat(probas, 0)
             probas = probas.cpu().detach().numpy()
-            labels = torch.cat(preds, 0)
+            labels = torch.cat(labels, 0)
             labels = labels.cpu().detach().numpy().flatten()
             print(labels)
             probas = [probas[i, labels[i]] for i in range(len(labels))]
