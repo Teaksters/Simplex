@@ -118,7 +118,7 @@ def approximation_quality(
             classifier.eval()
             test_loss = 0
             correct = 0
-            probas = torch.empty()
+            probas = torch.empty((0, 0))
             with torch.no_grad():
                 for data, target in test_loader:
                     data = data.to(device)
