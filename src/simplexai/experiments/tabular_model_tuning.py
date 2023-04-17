@@ -118,7 +118,7 @@ def approximation_quality(
             classifier.eval()
             test_loss = 0
             correct = 0
-            probas = torch.empty((0, 0))
+            probas = []]
             with torch.no_grad():
                 for data, target in test_loader:
                     data = data.to(device)
@@ -129,8 +129,9 @@ def approximation_quality(
                     test_loss += F.nll_loss(output, target, reduction="sum").item()
                     pred = output.data.max(1, keepdim=True)[1]
                     correct += pred.eq(target.data.view_as(pred)).sum()
-                    probas = torch.stack((probas, probs), 0)
+                    probas.append(probs)
 
+            probas = torch.cat(probas, -1)
             print(probas)
             exit()
 
