@@ -72,8 +72,8 @@ print(logit_norms.shape)
 for i_scale in range(len(data)):
     for i_cv in range(len(data[0])):
         logit_norms[i_scale, i_cv] = np.linalg.norm(data[i_scale, i_cv])
-        print(logit_norms[i_scale, i_cv])
-        exit()
+    print(logit_norms[i_scale])
+    exit()
 print(data, data.shape)
 exit()
 
