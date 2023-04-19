@@ -67,11 +67,12 @@ data = np.array(data)
 print(data.shape)
 
 # Reduce logits to the vector length
+logit_norms = np.empty(data.shape[:2])
+print(logit_norms.shape)
 for i_scale in range(len(data)):
     for i_cv in range(len(data[0])):
-        print(data[i_scale, i_cv], np.linalg.norm(data[i_scale, i_cv]))
-        data[i_scale, i_cv] = np.linalg.norm(data[i_scale, i_cv])
-        print(data[i_scale, i_cv])
+        logit_norms[i_scale, i_cv] = np.linalg.norm(data[i_scale, i_cv])
+        print(logit_norms[i_scale, i_cv])
         exit()
 print(data, data.shape)
 exit()
