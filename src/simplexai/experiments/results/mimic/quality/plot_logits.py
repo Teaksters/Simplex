@@ -74,7 +74,7 @@ for scaler in scalers:
             corpus_data = CPU_Unpickler(f).load()
         logits = corpus_data[0]
         data[-1].append(logits)
-        print(logits)
+    print(data[-1])
 print(data)
 
 
