@@ -68,7 +68,6 @@ for scaler in scalers:
         logits = corpus_data[0]
         data[-1].append(logits)
         print(logits)
-    data[-1] = data[-1].flatten()
 print(data)
 
 
