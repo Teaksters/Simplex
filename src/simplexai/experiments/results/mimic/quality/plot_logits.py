@@ -71,7 +71,7 @@ logit_norms = np.empty(data.shape[:2])
 for i_scale in range(len(data)):
     for i_cv in range(len(data[0])):
         logit_norms[i_scale, i_cv] = np.linalg.norm(data[i_scale, i_cv])
-print(logit_norms, logit_norms.shape)
+print(np.mean(logit_norms, axis=-1))
 exit()
 
 for i, logit in enumerate(data):
