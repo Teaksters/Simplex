@@ -77,5 +77,5 @@ if not os.path.exists('experiments/results/mimic/quality/logits/plots'):
 
 safe_path = 'experiments/results/mimic/quality/logits/plots/logit_boxplot.png'
 plt.figure(1)
-plt.boxplot(logit)
+plt.boxplot(logit_norms)
 plt.savefig(safe_path)
