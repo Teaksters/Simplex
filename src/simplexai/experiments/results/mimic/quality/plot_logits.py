@@ -9,6 +9,7 @@ import seaborn as sns
 import sklearn.metrics
 import torch
 import os
+import io
 
 from simplexai.models.tabular_data import MortalityPredictor
 
