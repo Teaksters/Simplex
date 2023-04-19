@@ -75,8 +75,7 @@ for i_scale in range(len(data)):
 if not os.path.exists('experiments/results/mimic/quality/logits/plots'):
     os.makedirs('experiments/results/mimic/quality/logits/plots')
 
-safe_path = 'experiments/results/mimic/quality/logits/plots/histogram.png'
+safe_path = 'experiments/results/mimic/quality/logits/plots/logit_boxplot.png'
 plt.figure(1)
-for i, logit in enumerate(data):
-    plt.hist(logit, label=scalers[i], alpha=0.3)
+plt.boxplot(logit)
 plt.savefig(safe_path)
