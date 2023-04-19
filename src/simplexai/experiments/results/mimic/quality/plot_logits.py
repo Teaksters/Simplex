@@ -64,26 +64,18 @@ for scaler in scalers:
         data[-1].append(logits)
     data[-1] = [logit.numpy() for l in data[-1] for logit in l]
 data = np.array(data)
-print(data.shape)
 
 # Reduce logits to their vector length (norms)
 logit_norms = np.empty(data.shape[:2])
 for i_scale in range(len(data)):
     for i_cv in range(len(data[0])):
         logit_norms[i_scale, i_cv] = np.linalg.norm(data[i_scale, i_cv])
-print(np.mean(logit_norms, axis=-1))
-exit()
 
 # plot logit norms into a histogram
+if not os.path.exists('experiments/results/mimic/quality/logits/plots'):
+    os.makedirs(safe_path)
+safe_path = 'experiments/results/mimic/quality/logits/plots/histogram.png'
+plt.figure(1)
 for i, logit in enumerate(data):
     plt.hist(logit, label=scalers[i], alpha=0.3)
-plt.savefig(...)
-
-
-################## WORKING ########################################
-# TODO: make histogram from differently scaled logits
-
-
-safe_path = load_path / 'logits' / 'plots'
-if not os.path.exists(safe_path):
-    os.makedirs(safe_path)
+plt.savefig(safe_path)
