@@ -75,6 +75,9 @@ for scaler in scalers:
         logits = corpus_data[0]
         data[-1].append(logits)
     print(data[-1])
+    data[-1] = [logit for l in data[-1] for logit in l]
+    print(data[-1])
+    exit()
 print(data)
 
 
