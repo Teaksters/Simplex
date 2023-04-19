@@ -55,7 +55,6 @@ load_path = current_path / "experiments" / "results" / "mimic" / "quality" / "sc
 
 data = []
 print(scalers, cv_list)
-exit()
 for scaler in scalers:
     data.append([])
     for cv in cv_list:
