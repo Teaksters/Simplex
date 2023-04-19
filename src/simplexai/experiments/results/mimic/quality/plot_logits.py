@@ -57,7 +57,6 @@ data = []
 print(scalers, cv_list)
 exit()
 for scaler in scalers:
-    scalers.append(scaler)
     data.append([])
     for cv in cv_list:
         corpus_data_path = load_path / str(scaler) / f"corpus_data_cv{cv}.pkl"
@@ -66,11 +65,11 @@ for scaler in scalers:
         logits = corpus_data[0]
         data[-1].append(logits)
     data[-1] = [logit.numpy() for l in data[-1] for logit in l]
+
 data = np.array(data)
 print(data.shape)
-
-
 exit()
+
 for i, logit in enumerate(data):
     plt.hist(logit, label=scalers[i], alpha=0.3)
 plt.savefig(...)
