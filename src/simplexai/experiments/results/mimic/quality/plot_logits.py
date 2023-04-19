@@ -61,7 +61,7 @@ for scaler in scalers:
     scalers.append(scaler)
     data.append([])
     for cv in cv_list:
-        corpus_data_path = load_path / str(scaler) / f"corpus_data_cv{cv}.pth"
+        corpus_data_path = load_path / str(scaler) / f"corpus_data_cv{cv}.pkl"
         with open(corpus_data_path, "rb") as f:
             corpus_data = pickle.load(f)
         logits = corpus_data[0]
