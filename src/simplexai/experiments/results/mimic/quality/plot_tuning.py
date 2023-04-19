@@ -45,8 +45,7 @@ for epoch_path in os.listdir(load_path):
 
 train_losses = np.array(train_losses)
 test_losses = np.array(test_losses)
-test_accs = np.array(test_accs)
-print(train_counter)
+test_AUCs = np.array(test_AUCs)
 
 train_mean = train_losses.mean(axis=0)
 train_std = train_losses.std(axis=0)
@@ -56,7 +55,7 @@ test_std = train_losses.std(axis=0)
 print('xxxxxxxxxxxxxxxxxxEPOCH: ', epoch_path, 'xxxxxxxxxxxxxxx')
 print('train_losses:\n', train_mean, train_std)
 print('test_losses:\n', test_mean, test_std)
-print('test_accs:\n', test_AUCs.mean(), "+- (", test_AUCs.std(), ')')
+print('test_AUCs:\n', test_AUCs.mean(), "+- (", test_AUCs.std(), ')')
 
 plt.figure(1)
 plt.plot(train_counter, train_mean, label='train loss')

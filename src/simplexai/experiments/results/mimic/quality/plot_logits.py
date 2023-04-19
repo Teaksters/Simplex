@@ -46,16 +46,6 @@ names_dict = {
 line_styles = {"simplex": "-", "nn_uniform": "--", "nn_dist": ":"}
 # MAYBE NEED COLORS HERE
 
-metric_names = ["r2_latent", "r2_output", "residual_latent", "residual_output"]
-results_df = pd.DataFrame(
-    columns=[
-        "explainer",
-        "n_keep",
-        "cv",
-        "scaler",
-        "logit",
-    ]
-)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 plt.rc("text", usetex=True)
 params = {"text.latex.preamble": r"\usepackage{amsmath}"}
@@ -64,38 +54,29 @@ representer_metrics = np.zeros((2, len(cv_list)))
 current_path = Path.cwd()
 load_path = current_path / "experiments/results/mimic/quality/scaled/"
 
-for scaler in scalers:
-    for cv in cv_list:
-        classifier = MortalityPredictor(n_cont=1, input_feature_num=26)
-        classifier.load_state_dict(torch.load(load_path / str(scaler) / f"model_cv{cv}.pth"))
-        classifier.to(device)
-        classifier.eval()
-        for n_keep in n_keep_list:
-            for explainer_name in explainer_names:
-                with open(load_path / str(scaler) / f"{explainer_name}_cv{cv}_n{n_keep}.pkl", "rb") as f:
-                    explainer = pkl.load(f)
-                explainer.to(device)
-                corpus_logits = explainer.corpus_latent_reps
-                corpus_logits = corpus_logits.norm(dim=1, p=0) # TODO: check if dimensionality is correct
-                results_df = pd.concat(
-                    [
-                        results_df,
-                        pd.DataFrame.from_dict(
-                            {
-                                "explainer": [explainer_name],
-                                "n_keep": [n_keep],
-                                "cv": [cv],
-                                "scaler": [scaler],
-                                "logit": [corpus_logits],
-                            }
-                        ),
-                    ],
-                    ignore_index=True,
-                )
+########### NEED TO TEST FROM HERE!!!!!!!!!!!!!!!!!!!!!!!!! ################
 
-# print(results_df.loc[(results_df['explainer'] == 'simplex') & \
-#                      (results_df['n_keep'] == 5) & \
-#                      (results_df['scaler'] == 1.0)])
+data = []
+scalers = []
+for scaler in scalers:
+    scalers.append(scaler)
+    data.append([])
+    for cv in cv_list:
+        corpus_data_path = load_path / str(scaler) / f"corpus_data_cv{cv}.pth"
+        with open(corpus_data_path, "rb") as f:
+            corpus_data = pickle.load(f)
+        logits = corpus_data[0]
+        data[-1].append(logits)
+        print(logits)
+    data[-1] = data[-1].flatten()
+print(data)
+
+
+exit()
+for i, logit in enumerate(data):
+    plt.hist(logit, label=scalers[i], alpha=0.3)
+plt.savefig(...)
+
 
 ################## WORKING ########################################
 # TODO: make histogram from differently scaled logits
