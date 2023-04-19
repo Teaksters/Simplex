@@ -73,7 +73,8 @@ for i_scale in range(len(data)):
 
 # plot logit norms into a histogram
 if not os.path.exists('experiments/results/mimic/quality/logits/plots'):
-    os.makedirs(safe_path)
+    os.makedirs('experiments/results/mimic/quality/logits/plots')
+
 safe_path = 'experiments/results/mimic/quality/logits/plots/histogram.png'
 plt.figure(1)
 for i, logit in enumerate(data):
