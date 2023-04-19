@@ -55,6 +55,7 @@ load_path = current_path / "experiments" / "results" / "mimic" / "quality" / "sc
 
 data = []
 print(scalers, cv_list)
+exit()
 for scaler in scalers:
     scalers.append(scaler)
     data.append([])
@@ -64,10 +65,7 @@ for scaler in scalers:
             corpus_data = CPU_Unpickler(f).load()
         logits = corpus_data[0]
         data[-1].append(logits)
-        print(cv)
     data[-1] = [logit.numpy() for l in data[-1] for logit in l]
-    print('gathering: ', scaler)
-print('doneee')
 data = np.array(data)
 print(data.shape)
 
