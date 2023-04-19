@@ -32,7 +32,7 @@ parser.add_argument(
     "-age_scalers",
     nargs='*',
     type=float,
-    default=[1.0, 1.5, 2.0, 3.0, 5.0, 10.0, 20.0, 50.0, 100.0],
+    default=[1.0, 1.25, 1.5, 2.0, 5.0, 10.0, 20.0, 50.0, 100.0],
     help="Scaling variable for sample ages"
 )
 args = parser.parse_args()
