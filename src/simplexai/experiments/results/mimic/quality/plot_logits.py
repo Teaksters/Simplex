@@ -52,7 +52,7 @@ params = {"text.latex.preamble": r"\usepackage{amsmath}"}
 plt.rcParams.update(params)
 representer_metrics = np.zeros((2, len(cv_list)))
 current_path = Path.cwd()
-load_path = current_path / "experiments/results/mimic/quality/scaled/"
+load_path = current_path / "experiments" / "results" / "mimic" / "quality" / "scaled"
 
 ########### NEED TO TEST FROM HERE!!!!!!!!!!!!!!!!!!!!!!!!! ################
 
