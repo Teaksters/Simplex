@@ -12,6 +12,13 @@ import os
 
 from simplexai.models.tabular_data import MortalityPredictor
 
+
+class CPU_Unpickler(pkl.Unpickler):
+    def find_class(self, module, name):
+        if module == 'torch.storage' and name == '_load_from_bytes':
+            return lambda b: torch.load(io.BytesIO(b), map_location='cpu')
+        else: return super().find_class(module, name)
+
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "-cv_list",
@@ -63,7 +70,7 @@ for scaler in scalers:
     for cv in cv_list:
         corpus_data_path = load_path / str(scaler) / f"corpus_data_cv{cv}.pkl"
         with open(corpus_data_path, "rb") as f:
-            corpus_data = pkl.load(f)
+            corpus_data = CPU_Unpickler(f).load()
         logits = corpus_data[0]
         data[-1].append(logits)
         print(logits)
