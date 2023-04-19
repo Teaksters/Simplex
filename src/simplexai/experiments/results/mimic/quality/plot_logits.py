@@ -29,22 +29,14 @@ parser.add_argument(
     type=int,
 )
 parser.add_argument(
-    "-k_list",
-    nargs="+",
-    default=[5, 10, 15],
-    help="The list of active corpus members considered",
-    type=int,
-)
-parser.add_argument(
     "-age_scalers",
     nargs='*',
     type=float,
     default=[1.0, 1.25, 1.5, 2.0, 5.0],
-    help="Scaling variable for sample ages")
-
+    help="Scaling variable for sample ages"
+)
 args = parser.parse_args()
 cv_list = args.cv_list
-n_keep_list = args.k_list
 scalers = args.age_scalers
 explainer_names = ["simplex"]
 names_dict = {
