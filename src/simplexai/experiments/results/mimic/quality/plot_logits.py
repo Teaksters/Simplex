@@ -63,9 +63,14 @@ for scaler in scalers:
         logits = corpus_data[0]
         data[-1].append(logits)
     data[-1] = [logit.numpy() for l in data[-1] for logit in l]
-
 data = np.array(data)
-print(data)
+print(data.shape)
+
+# Reduce logits to the vector length
+for i_scale in range(len(data)):
+    for i_cv in range(len(data[0])):
+        data[i_scale, i_cv] = np.linalg.norm(data[i_scale, i_cv])
+print(data, data.shape)
 exit()
 
 for i, logit in enumerate(data):
