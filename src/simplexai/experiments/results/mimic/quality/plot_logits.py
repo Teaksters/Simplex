@@ -75,9 +75,8 @@ for i_scale in range(len(data)):
 if not os.path.exists('experiments/results/mimic/quality/logits/plots'):
     os.makedirs('experiments/results/mimic/quality/logits/plots')
 
-print(logit_norms, logit_norms.shape)
-
 safe_path = 'experiments/results/mimic/quality/logits/plots/logit_boxplot.png'
 plt.figure(1)
-plt.boxplot(logit_norms)
+plt.boxplot(logit_norms.T)
+plt.xticks(scalers)
 plt.savefig(safe_path)
