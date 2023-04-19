@@ -57,7 +57,6 @@ load_path = current_path / "experiments/results/mimic/quality/scaled/"
 ########### NEED TO TEST FROM HERE!!!!!!!!!!!!!!!!!!!!!!!!! ################
 
 data = []
-scalers = []
 for scaler in scalers:
     scalers.append(scaler)
     data.append([])
