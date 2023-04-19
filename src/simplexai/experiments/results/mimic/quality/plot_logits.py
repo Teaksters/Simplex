@@ -75,7 +75,8 @@ for scaler in scalers:
         logits = corpus_data[0]
         data[-1].append(logits)
     data[-1] = [logit.numpy() for l in data[-1] for logit in l]
-
+    print('gathering: ', scaler)
+print('doneee')
 data = np.array(data)
 print(data.shape)
 
