@@ -51,8 +51,7 @@ representer_metrics = np.zeros((2, len(cv_list)))
 current_path = Path.cwd()
 load_path = current_path / "experiments" / "results" / "mimic" / "quality" / "scaled"
 
-########### NEED TO TEST FROM HERE!!!!!!!!!!!!!!!!!!!!!!!!! ################
-
+# Collect logit data
 data = []
 print(scalers, cv_list)
 for scaler in scalers:
@@ -66,7 +65,7 @@ for scaler in scalers:
     data[-1] = [logit.numpy() for l in data[-1] for logit in l]
 
 data = np.array(data)
-print(data.shape)
+print(data)
 exit()
 
 for i, logit in enumerate(data):
