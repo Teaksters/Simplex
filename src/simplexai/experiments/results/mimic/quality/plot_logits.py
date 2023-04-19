@@ -71,6 +71,7 @@ for i_scale in range(len(data)):
     for i_cv in range(len(data[0])):
         print(data[i_scale, i_cv], np.linalg.norm(data[i_scale, i_cv]))
         data[i_scale, i_cv] = np.linalg.norm(data[i_scale, i_cv])
+        print(data[i_scale, i_cv])
         exit()
 print(data, data.shape)
 exit()
