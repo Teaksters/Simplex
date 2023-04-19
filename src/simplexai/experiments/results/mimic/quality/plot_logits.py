@@ -32,7 +32,7 @@ parser.add_argument(
     "-age_scalers",
     nargs='*',
     type=float,
-    default=[1.0, 1.25, 1.5, 2.0, 5.0],
+    default=[1.0, 2.0, 3.0, 4.0, 5.0],
     help="Scaling variable for sample ages"
 )
 args = parser.parse_args()
@@ -42,9 +42,6 @@ explainer_names = ["simplex"]
 names_dict = {
     "simplex": "SimplEx"
 }
-
-line_styles = {"simplex": "-", "nn_uniform": "--", "nn_dist": ":"}
-# MAYBE NEED COLORS HERE
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 plt.rc("text", usetex=True)
@@ -57,6 +54,7 @@ load_path = current_path / "experiments" / "results" / "mimic" / "quality" / "sc
 ########### NEED TO TEST FROM HERE!!!!!!!!!!!!!!!!!!!!!!!!! ################
 
 data = []
+print(scalers, cv_list)
 for scaler in scalers:
     scalers.append(scaler)
     data.append([])
@@ -66,6 +64,7 @@ for scaler in scalers:
             corpus_data = CPU_Unpickler(f).load()
         logits = corpus_data[0]
         data[-1].append(logits)
+        print(cv)
     data[-1] = [logit.numpy() for l in data[-1] for logit in l]
     print('gathering: ', scaler)
 print('doneee')
