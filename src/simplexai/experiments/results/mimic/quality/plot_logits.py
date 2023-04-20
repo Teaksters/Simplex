@@ -81,5 +81,5 @@ for i, scaler in enumerate(scalers):
 print(plot_dict)
 
 safe_path = 'experiments/results/mimic/quality/logits/plots/logit_boxplot.png'
-plt.boxplot(logit_norms.T, labels=scalers)
+plt.boxplot(plot_dict.values(), labels=plot_dict.keys())
 plt.savefig(safe_path)
