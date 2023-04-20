@@ -66,10 +66,17 @@ for scaler in scalers:
     data[-1] = [logit.numpy() for l in data[-1] for logit in l]
 data = np.array(data)
 
-# Reduce logits to their vector length (norms)
-df = pd.DataFrame()
+data_dict = {'logits': [],
+             'scalers': []}
+for i, scaler in enumerate(scalers):
+    data_dict['logits'] += list(data[i])
+    data_dict['scaler'] += [scaler] * data.shape[1]
+df = pd.DataFrame(data_dict)
+print(df)
+exit()
+# Reduce logits to 2 dimensional space using tSNE reduction
+tsne = TSNE(n_components=2, verbose=1, random_state=42)
 for i_scaler, z in enumerate(data):
-    tsne = TSNE(n_components=2, verbose=1, random_state=42)
     tsne_z = tsne.fit_transform(z)
     scaler = np.array([scalers[i_scaler]] * data.shape[1])
     print(tsne_z.shape, scaler.shape)
