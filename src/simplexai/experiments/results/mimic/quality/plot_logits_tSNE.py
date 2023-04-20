@@ -70,7 +70,7 @@ data_dict = {'logits': [],
              'scalers': []}
 for i, scaler in enumerate(scalers):
     data_dict['logits'] += list(data[i])
-    data_dict['scaler'] += [scaler] * data.shape[1]
+    data_dict['scalers'] += [scaler] * data.shape[1]
 df = pd.DataFrame(data_dict)
 print(df)
 exit()
