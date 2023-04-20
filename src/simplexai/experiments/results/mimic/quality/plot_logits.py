@@ -80,5 +80,5 @@ print(logit_norms.shape, logit_norms.T.shape)
 
 
 safe_path = 'experiments/results/mimic/quality/logits/plots/logit_boxplot.png'
-plt.boxplot(logit_norms, labels=scalers)
+plt.boxplot(logit_norms.T, labels=scalers)
 plt.savefig(safe_path)
