@@ -21,6 +21,12 @@ class CPU_Unpickler(pkl.Unpickler):
             return lambda b: torch.load(io.BytesIO(b), map_location='cpu')
         else: return super().find_class(module, name)
 
+def clean_alt_list(list_):
+    list_ = list_.replace(', ', '","')
+    list_ = list_.replace('[', '["')
+    list_ = list_.replace(']', '"]')
+    return list_
+
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "-cv_list",
@@ -72,12 +78,13 @@ for i, scaler in enumerate(scalers):
     data_dict['logits'] += list(data[i])
     data_dict['scalers'] += [scaler] * data.shape[1]
 df = pd.DataFrame(data_dict)
+df['logits'].apply(clean_alt_list)
+
 print(df)
 
 # Reduce logits to 2 dimensional space using tSNE reduction
 tsne = TSNE(n_components=2, verbose=1, random_state=42)
-print(np.array(df['logits']).shape)
-tsne_z = tsne.fit_transform(list(df['logits']))
+tsne_z = tsne.fit_transform(df['logits'])
 df['z'] = tsne_z
 print(df)
 
