@@ -75,9 +75,10 @@ for i_scale in range(len(data)):
 if not os.path.exists('experiments/results/mimic/quality/logits/plots'):
     os.makedirs('experiments/results/mimic/quality/logits/plots')
 
-
-print(logit_norms.shape, logit_norms.T.shape)
-
+plot_dict = {}
+for i, scaler in enumerate(scalers):
+    plot_dict[scaler] = list(logit_norms[i])
+print(plot_dict)
 
 safe_path = 'experiments/results/mimic/quality/logits/plots/logit_boxplot.png'
 plt.boxplot(logit_norms.T, labels=scalers)
