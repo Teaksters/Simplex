@@ -75,6 +75,7 @@ df = pd.DataFrame(data_dict)
 
 # Reduce logits to 2 dimensional space using tSNE reduction
 tsne = TSNE(n_components=2, verbose=1, random_state=42)
+print(df['logits'].shape, df['logits'].numpy())
 tsne_z = tsne.fit_transform(df['logits'])
 df['z'] = tsne_z
 print(df)
