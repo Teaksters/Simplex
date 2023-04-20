@@ -66,11 +66,13 @@ for scaler in scalers:
     data[-1] = [logit.numpy() for l in data[-1] for logit in l]
 data = np.array(data)
 
-print(data.shape)
-exit()
-
 # Reduce logits to their vector length (norms)
-tsne = TSNE(n_components=2, verbose=1, random_state=42)
+df = pd.DataFrame()
+for i_scaler, z in enumerate(data):
+    tsne = TSNE(n_components=2, verbose=1, random_state=42)
+    tsne_z = tsne.fit_transform(z)
+    scaler = np.array([scalers[i_scaler]] * data.shape[1])
+    print(tsne_z.shape, scaler.shape)
 
 # plot logit norms into a histogram
 if not os.path.exists('experiments/results/mimic/quality/logits/plots'):
