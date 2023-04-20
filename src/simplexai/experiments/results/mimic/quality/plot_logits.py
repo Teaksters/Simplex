@@ -80,6 +80,6 @@ for i, scaler in enumerate(scalers):
     plot_dict[scaler] = list(logit_norms[i])
 df = pd.DataFrame(plot_dict)
 print(df)
-df.boxplot(column=['1.0', '1.5', '2.0', '5.0', '10.0'])
+df.boxplot(column=[1.0, 1.5, 2.0, 5.0, 10.0])
 safe_path = 'experiments/results/mimic/quality/logits/plots/logit_boxplot.png'
 plt.savefig(safe_path)
