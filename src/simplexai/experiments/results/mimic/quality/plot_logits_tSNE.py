@@ -78,7 +78,7 @@ for i, scaler in enumerate(scalers):
     data_dict['logits'] += list(data[i])
     data_dict['scalers'] += [scaler] * len(data[0])
 df = pd.DataFrame(data_dict)
-df['logits'].apply(clean_alt_list)
+# df['logits'].apply(clean_alt_list)
 
 print(df)
 
