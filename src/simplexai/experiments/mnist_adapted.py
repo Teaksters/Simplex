@@ -484,7 +484,7 @@ def influence_function(
 def outlier_detection(
     cv: int = 0,
     random_seed: int = 42,
-    save_path: str = "experiments/results/mnist/outlier/",
+    save_path: str = "experiments/results/mnist/outlier/OOD_corpus",
     train: bool = True,
 ) -> None:
     torch.random.manual_seed(random_seed + cv)
@@ -521,7 +521,7 @@ def outlier_detection(
     classifier.eval()
 
     # Load data:
-    corpus_loader = load_mnist(batch_size=1000, train=True)
+    corpus_loader = load_emnist(batch_size=1000, train=True) # Altered corpus loader here
     mnist_test_loader = load_mnist(batch_size=100, train=False)
     emnist_test_loader = load_emnist(batch_size=100, train=True)
     corpus_examples = enumerate(corpus_loader)
