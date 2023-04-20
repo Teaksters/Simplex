@@ -81,5 +81,5 @@ for i, scaler in enumerate(scalers):
 df = pd.DataFrame(plot_dict)
 print(df)
 df.boxplot(column=[1.0, 1.5, 2.0, 5.0, 10.0])
-safe_path = 'experiments/results/mimic/quality/logits/plots/logit_boxplot.png'
+safe_path = 'experiments/results/mimic/quality/logits/plots/logit_boxplot2.png'
 plt.savefig(safe_path)
