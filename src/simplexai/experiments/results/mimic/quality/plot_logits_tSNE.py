@@ -72,14 +72,12 @@ for i, scaler in enumerate(scalers):
     data_dict['logits'] += list(data[i])
     data_dict['scalers'] += [scaler] * data.shape[1]
 df = pd.DataFrame(data_dict)
-print(df)
-exit()
+
 # Reduce logits to 2 dimensional space using tSNE reduction
 tsne = TSNE(n_components=2, verbose=1, random_state=42)
-for i_scaler, z in enumerate(data):
-    tsne_z = tsne.fit_transform(z)
-    scaler = np.array([scalers[i_scaler]] * data.shape[1])
-    print(tsne_z.shape, scaler.shape)
+tsne_z = tsne.fit_transform(df['logits'])
+df['z'] = tsne_z
+print(df)
 
 # plot logit norms into a histogram
 if not os.path.exists('experiments/results/mimic/quality/logits/plots'):
