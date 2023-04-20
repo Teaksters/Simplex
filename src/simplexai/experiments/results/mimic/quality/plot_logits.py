@@ -79,6 +79,7 @@ plot_dict = {}
 for i, scaler in enumerate(scalers):
     plot_dict[scaler] = list(logit_norms[i])
 df = pd.DataFrame(plot_dict)
+print(df)
 df.plot(kind='box')
 safe_path = 'experiments/results/mimic/quality/logits/plots/logit_boxplot.png'
 plt.savefig(safe_path)
