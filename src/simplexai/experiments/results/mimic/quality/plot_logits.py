@@ -78,7 +78,9 @@ if not os.path.exists('experiments/results/mimic/quality/logits/plots'):
 plot_dict = {}
 for i, scaler in enumerate(scalers):
     plot_dict[scaler] = list(logit_norms[i])
-print(plot_dict)
+df = pd.DataFrame(plot_dict)
+df.plot(kind='box');
+print(df)
 
 safe_path = 'experiments/results/mimic/quality/logits/plots/logit_boxplot.png'
 plt.boxplot(plot_dict.values(), labels=plot_dict.keys())
