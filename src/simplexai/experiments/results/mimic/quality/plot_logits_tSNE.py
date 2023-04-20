@@ -76,7 +76,7 @@ logits = []
 ys = []
 for i, scaler in enumerate(scalers):
     logits += list(data[i])
-    ys += [scaler] * len(data[i])
+    ys += [i] * len(data[i])
 
 # Reduce logits to 2 dimensional space using tSNE reduction
 tsne = TSNE(n_components=2, verbose=1, random_state=42)
