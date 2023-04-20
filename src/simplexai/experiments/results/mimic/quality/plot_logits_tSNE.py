@@ -81,7 +81,7 @@ for i, scaler in enumerate(scalers):
 print(np.array(ys), np.array(logits))
 # Reduce logits to 2 dimensional space using tSNE reduction
 tsne = TSNE(n_components=2, verbose=1, random_state=42)
-tsne_z = tsne.fit_transform(logits)
+tsne_z = tsne.fit_transform(np.array(logits))
 print(tsne_z, ys, logits)
 
 # plot logit norms into a histogram
