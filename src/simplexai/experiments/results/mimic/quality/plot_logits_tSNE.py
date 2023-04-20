@@ -67,6 +67,8 @@ for scaler in scalers:
 data = np.array(data)
 
 print(data.shape)
+exit()
+
 # Reduce logits to their vector length (norms)
 tsne = TSNE(n_components=2, verbose=1, random_state=42)
 
