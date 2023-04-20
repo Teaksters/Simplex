@@ -72,6 +72,7 @@ for i, scaler in enumerate(scalers):
     data_dict['logits'] += list(data[i])
     data_dict['scalers'] += [scaler] * data.shape[1]
 df = pd.DataFrame(data_dict)
+print(df)
 
 # Reduce logits to 2 dimensional space using tSNE reduction
 tsne = TSNE(n_components=2, verbose=1, random_state=42)
