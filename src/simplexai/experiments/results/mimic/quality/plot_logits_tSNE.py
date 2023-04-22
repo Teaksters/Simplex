@@ -94,7 +94,8 @@ if not os.path.exists('experiments/results/mimic/quality/logits/plots'):
     os.makedirs('experiments/results/mimic/quality/logits/plots')
 
 # https://www.datatechnotes.com/2020/11/tsne-visualization-example-in-python.html
-sns.scatterplot(x=0, y=1, palette=sns.color_palette("hls", len(scalers)),
-               data=tsne_z).set(title='tSNE projection logits with different scalers')
+sns.scatterplot(x='x1', y='x2', hue=df.y.tolist(),
+                palette=sns.color_palette("hls", len(scalers)),
+               data=df).set(title='tSNE projection logits with different scalers')
 safe_path = 'experiments/results/mimic/quality/logits/plots/logit_tSNE.png'
 plt.savefig(safe_path)
