@@ -88,7 +88,7 @@ df['x1'] = tsne_z[:, 0]
 df['x2'] = tsne_z[:, 1]
 
 # Only take the wanted scalers
-plotted_scalers = [1.0, 2.0, 5.0, 100.0]
+plotted_scalers = [1.0, 100.0]
 df = df[df['y'].isin(plotted_scalers)]
 
 # plot tSNE projection as scatterplot
