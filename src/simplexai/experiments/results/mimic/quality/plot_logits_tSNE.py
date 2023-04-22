@@ -89,7 +89,7 @@ df['x2'] = tsne_z[:, 1]
 
 print(df)
 plotted_scalers = [1.0, 2.0, 5.0, 10.0, 20.0, 100.0]
-df = df[df['y'] in plotted_scalers]
+df = df[df['y'].isin(plotted_scalers)]
 print(df)
 
 # plot tSNE projection as scatterplot
