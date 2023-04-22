@@ -87,7 +87,6 @@ df['y'] = ys
 df['x1'] = tsne_z[:, 0]
 df['x2'] = tsne_z[:, 1]
 print(df)
-exit()
 
 # plot tSNE projection as scatterplot
 if not os.path.exists('experiments/results/mimic/quality/logits/plots'):
@@ -96,6 +95,6 @@ if not os.path.exists('experiments/results/mimic/quality/logits/plots'):
 # https://www.datatechnotes.com/2020/11/tsne-visualization-example-in-python.html
 sns.scatterplot(x='x1', y='x2', hue=df.y.tolist(),
                 palette=sns.color_palette("hls", len(scalers)),
-               data=df).set(title='tSNE projection logits')
+                data=df).set(title='tSNE projection logits')
 safe_path = 'experiments/results/mimic/quality/logits/plots/logit_tSNE.png'
 plt.savefig(safe_path)
