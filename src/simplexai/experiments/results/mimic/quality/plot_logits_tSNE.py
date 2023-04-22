@@ -78,15 +78,16 @@ for i, scaler in enumerate(scalers):
     logits += list(data[i])
     ys += [scaler] * len(data[i])
 
-df = pd.DataFrame()
-df['y'] = ys
-df['x1'] = logits[:][0]
-df['x2'] = logits[:][1]
-print(df)
-exit()
 # Reduce logits to 2 dimensional space using tSNE reduction
 tsne = TSNE(n_components=2, verbose=1, random_state=42)
 tsne_z = tsne.fit_transform(np.array(logits))
+
+df = pd.DataFrame()
+df['y'] = ys
+df['x1'] = tsne_z[:, 0]
+df['x2'] = tsne_z[:, 1]
+print(df)
+exit()
 
 # plot tSNE projection as scatterplot
 if not os.path.exists('experiments/results/mimic/quality/logits/plots'):
