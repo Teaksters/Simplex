@@ -79,7 +79,7 @@ for i, scaler in enumerate(scalers):
     ys += [scaler] * len(data[i])
 
 # Reduce logits to 2 dimensional space using tSNE reduction
-tsne = TSNE(n_components=2, verbose=1, random_state=42, perplexity=90.0)
+tsne = TSNE(n_components=2, verbose=1, random_state=42, perplexity=150.0)
 tsne_z = tsne.fit_transform(np.array(logits))
 
 df = pd.DataFrame()
@@ -87,7 +87,7 @@ df['y'] = ys
 df['x1'] = tsne_z[:, 0]
 df['x2'] = tsne_z[:, 1]
 
-# Only take the wanted scalers to plot
+# Only take the wanted scalers
 plotted_scalers = [1.0, 5.0, 10.0, 20.0]
 df = df[df['y'].isin(plotted_scalers)]
 
