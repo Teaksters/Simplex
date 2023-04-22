@@ -88,7 +88,7 @@ df['x1'] = tsne_z[:, 0]
 df['x2'] = tsne_z[:, 1]
 
 print(df)
-plotted_scalers = [1.0, 10.0, 50.0, 100.0]
+plotted_scalers = [1.0, 1.25, 1.5, 2.0]
 df = df[df['y'].isin(plotted_scalers)]
 print(df)
 
