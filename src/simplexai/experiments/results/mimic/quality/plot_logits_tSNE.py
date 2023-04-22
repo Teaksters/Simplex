@@ -79,7 +79,7 @@ for i, scaler in enumerate(scalers):
     ys += [scaler] * len(data[i])
 
 # Reduce logits to 2 dimensional space using tSNE reduction
-tsne = TSNE(n_components=2, verbose=1, random_state=42, perplexity=5.0)
+tsne = TSNE(n_components=2, verbose=1, random_state=42, perplexity=20.0)
 tsne_z = tsne.fit_transform(np.array(logits))
 
 df = pd.DataFrame()
