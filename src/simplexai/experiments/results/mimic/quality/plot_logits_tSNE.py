@@ -87,10 +87,9 @@ df['y'] = ys
 df['x1'] = tsne_z[:, 0]
 df['x2'] = tsne_z[:, 1]
 
-print(df)
+# Only take the wanted scalers to plot
 plotted_scalers = [1.0, 5.0, 10.0, 20.0]
 df = df[df['y'].isin(plotted_scalers)]
-print(df)
 
 # plot tSNE projection as scatterplot
 if not os.path.exists('experiments/results/mimic/quality/logits/plots'):
