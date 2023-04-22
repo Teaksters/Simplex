@@ -78,7 +78,7 @@ for i, scaler in enumerate(scalers):
     logits += list(data[i])
     ys += [scaler] * len(data[i])
 
-df.DataFrame()
+df = pd.DataFrame()
 df['y'] = ys
 df['x1'] = logits[:][0]
 df['x2'] = logits[:][1]
