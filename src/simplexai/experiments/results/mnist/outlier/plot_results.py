@@ -79,20 +79,6 @@ plt.fill_between(
     metrics[0].mean(axis=-1) + metrics[0].std(axis=-1),
     alpha=0.3,
 )
-plt.plot(n_inspected, metrics[1].mean(axis=-1), label="5NN Distance")
-plt.fill_between(
-    n_inspected,
-    metrics[1].mean(axis=-1) - metrics[1].std(axis=-1),
-    metrics[1].mean(axis=-1) + metrics[1].std(axis=-1),
-    alpha=0.3,
-)
-plt.plot(n_inspected, metrics[2].mean(axis=-1), label="5NN Uniform")
-plt.fill_between(
-    n_inspected,
-    metrics[2].mean(axis=-1) - metrics[2].std(axis=-1),
-    metrics[2].mean(axis=-1) + metrics[2].std(axis=-1),
-    alpha=0.3,
-)
 plt.plot(n_inspected, metrics[3].mean(axis=-1), label="Random")
 plt.fill_between(
     n_inspected,
