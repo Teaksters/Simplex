@@ -26,7 +26,7 @@ test_size = 200
 metrics = np.zeros((4, test_size, len(cv_list)))
 n_inspected = [n for n in range(test_size)]
 current_path = Path.cwd()
-load_path = current_path / "experiments/results/mnist/outlier/"
+load_path = current_path / "experiments/results/mnist/outlier/OOD_corpus"
 
 
 for cv in cv_list:
