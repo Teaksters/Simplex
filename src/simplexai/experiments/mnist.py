@@ -654,7 +654,7 @@ def jacobian_corruption(
                 exit()
                 # randoms = torch.cuda.FloatTensor(corpus_inputs.shape, device=device).normal_(mean=0.5, std=1)
                 # corpus_inputs[mask] = randoms[mask]
-                corpus_inputs_pert = corpus_inputs[mask] * corpus_inputs)
+                corpus_inputs_pert = corpus_inputs[mask] * corpus_inputs
 
                 Corpus_inputs_pert[
                     pert_id, lower_id:higher_id
