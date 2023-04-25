@@ -649,7 +649,7 @@ def jacobian_corruption(
                 # Add a percentage of noise to corpus
                 # corpus_inputs needs to be noised an put into corpus_inputs_pert_jp
                 mask = torch.cuda.FloatTensor(corpus_inputs.shape, device=device).uniform_() > n_pert
-                print(corpus_inputs)
+                print(corpus_inputs.unique())
                 exit()
                 # randoms = torch.cuda.FloatTensor(corpus_inputs.shape, device=device).normal_(mean=0.5, std=1)
                 # corpus_inputs[mask] = randoms[mask]
