@@ -583,7 +583,7 @@ def jacobian_corruption(
     test_size=500,
     n_bins=100,
     batch_size=50,
-    train: bool = True,
+    train: bool = False, #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Set back to True later
 ) -> None:
     print(
         100 * "-" + "\n" + "Welcome in the Jacobian Projection check for MNIST. \n"
@@ -648,7 +648,6 @@ def jacobian_corruption(
             for pert_id, n_pert in enumerate(n_pert_list):
                 # Add a percentage of noise to corpus
                 # corpus_inputs needs to be noised an put into corpus_inputs_pert_jp
-                pert_pixels
                 mask = torch.cuda.FloatTensor(corpus_inputs.shape, device=device).uniform_() > n_pert
                 print(corpus_inputs)
                 exit()
