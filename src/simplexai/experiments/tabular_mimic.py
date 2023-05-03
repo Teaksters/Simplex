@@ -138,7 +138,7 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
         pos_sub_sequences = (pos_sub_sequences * episode_df.shape[0]).astype(int)
         neg_sub_sequences = (neg_sub_sequences * episode_df.shape[0]).astype(int)
         print(pos_sub_sequences, neg_sub_sequences)
-        print(episode_df['Diastolic blood pressure'][:10].dropna().astype(int).to_numpy())
+        print(episode_df['Diastolic blood pressure'][:21].dropna().astype(int).to_numpy())
         exit()
 
         # Transpose it into desired tabular format
