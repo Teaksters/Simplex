@@ -128,6 +128,7 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
 
     ###################### FIND SOME WAY TO READ TIMESERIE DATA HERE ###########
     for path in timeserie_paths: # I need stay and episode from here
+        print(path.parts[-2:])
         stay = path.parts[-2:].join('_')
         print(stay)
         exit()
