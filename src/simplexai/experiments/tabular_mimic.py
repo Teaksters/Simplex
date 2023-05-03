@@ -118,7 +118,7 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
 
     paths = [DATA_DIR / path for path in data_folders]
     paths = [folder / sample for folder in paths for sample in os.listdir(folder)]
-    print(paths)
+    # print(paths)
     print(os.listdir(paths[0]))
 
     ###################### FIND SOME WAY TO READ TIMESERIE DATA HERE ###########
