@@ -158,18 +158,12 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
                 episode_dict_col = generate_episode_dict(episode_df, col, slice, partition)
                 episode_dict.update(episode_dict_col)
 
-        if i == 0: final_df = pd.DataFrame(episode_dict, index=[0])
-        else: final_df = pd.concat([final_df, episode_df])
+        if i == 0:
+            final_df = pd.DataFrame(episode_dict, index=[0])
+        else:
+            final_df = pd.concat([final_df, episode_df])
         print(final_df)
-        exit()
-        # insert into pandas dataframe
-        episode_df = pd.DataFrame(episode_dict)
-        episode_df['stay'] = stay
-        print(episode_df)
-        exit()
-
-        # Add it to main data dataframe
-        final_df = pd.concat([final_df, episode_df])
+        if i == 10: exit()
         # TO CHECK HERE: is 'stay' correct, is data correct
     ############################################################################
     return final_df
