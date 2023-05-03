@@ -2,6 +2,7 @@ import argparse
 import os
 import pickle as pkl
 from pathlib import Path
+import numpy as np
 
 import pandas as pd
 import sklearn
