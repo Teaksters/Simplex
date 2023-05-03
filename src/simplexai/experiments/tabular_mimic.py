@@ -159,8 +159,9 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
                 episode_dict.update(episode_dict_col)
 
         if i == 0:
-            final_df = pd.DataFrame(episode_dict, index=[0])
+            final_df = pd.DataFrame(episode_dict, index=[i])
         else:
+            episode_df = pd.DataFrame(episode_dict, index=[i])
             final_df = pd.concat([final_df, episode_df])
         print(final_df)
         if i == 10: exit()
