@@ -116,18 +116,21 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
                     'test']
     final_df = pd.DataFrame(columns=desired_cols2)
 
+    # Generate paths to data
     paths = [DATA_DIR / path for path in data_folders]
     paths = [folder / sample
                 for folder in paths
                     for sample in os.listdir(folder)]
-    paths = [path / file
+    timeserie_paths = [path / file
                 for path in paths
                     for file in os.listdir(path)
                         if file[-14:] == 'timeseries.csv']
-    print(paths[:100])
 
     ###################### FIND SOME WAY TO READ TIMESERIE DATA HERE ###########
-    for patient_id, episode in time_serie_episodes: # I need stay and episode from here
+    for path in timeserie_paths: # I need stay and episode from here
+        stay = path.parts[-2:].join('_')
+        print(stay)
+        exit()
         # Read timeseries data into dataframe
         episode_df = pd.read_csv(os.path.join(DATA_DIR, episode)) # CHECK THIS WHEN CONNECTED
 
