@@ -148,6 +148,7 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
         # Gather statistics on full timeserie
         stay = '_'.join(path.parts[-2:])
         episode_dict = {}
+        episode_dict['stay'] = stay
         for col in desired_cols:
             episode_dict_col = generate_episode_dict(episode_df, col)
             episode_dict.update(episode_dict_col)
