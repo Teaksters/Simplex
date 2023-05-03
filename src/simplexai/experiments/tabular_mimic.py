@@ -135,8 +135,8 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
         # Prepare the subsets of time series for features
         pos_sub_sequences = np.array([0.1, 0.25, 0.5])
         neg_sub_sequences = pos_sub_sequences * -1
-        pos_sub_sequences *= episode_df.shape[0]
-        neg_sub_sequences *= episode_df.shape[0]
+        pos_sub_sequences = (pos_sub_sequences * episode_df.shape[0]).astype(int)
+        neg_sub_sequences = (neg_sub_sequences * episode_df.shape[0]).astype(int)
         print(pos_sub_sequences, neg_sub_sequences)
         print(episode_df['Diastolic blood pressure'][:10].dropna().astype(int).to_numpy())
         exit()
