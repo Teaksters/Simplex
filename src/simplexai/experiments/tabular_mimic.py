@@ -120,7 +120,7 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
     paths = [folder / sample
                 for folder in paths
                     for sample in os.listdir(folder)]
-    print(os.listdir(paths[0])[-14:])
+    print(os.listdir(paths[0])[0][-14:])
     paths = [path / file
                 for path in paths
                     for file in os.listdir(path)
