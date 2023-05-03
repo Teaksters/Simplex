@@ -80,9 +80,9 @@ def generate_episode_dict(df, col, slice=False, partition=1.0):
         episode_dict_min = {col + ' min ' + str(partition): df_col.min()}
         episode_dict_max = {col + ' max ' + str(partition): df_col.max()}
 
-        # TOOK THIS OUT JUST IN CASE IT MIGHT BE TOO EASY
-        # episode_dict_len = {col + ' len ': df_col.size}
-        # episode_dict.update(episode_dict_len)
+        # MIGHT TAKE THIS OUT JUST IN CASE IT MIGHT BE TOO EASY
+        episode_dict_len = {col + ' len ': df_col.size}
+        episode_dict.update(episode_dict_len)
 
     elif slice > 0:
         episode_dict = {col + ' mean ' + str(partition): df_col[slice:].mean()}
