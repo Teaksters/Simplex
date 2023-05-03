@@ -118,36 +118,10 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
                     'Weight',
                     'pH']
 
-    desired_cols2 = ['stay',
-                    'Diastolic blood pressure mean',
-                    'Diastolic blood pressure std'
-                    'Glascow coma scale total mean',
-                    'Glascow coma scale total std',
-                    'Glucose mean',
-                    'Glucose std',
-                    'Heart Rate mean',
-                    'Heart Rate std',
-                    'Height mean',
-                    'Height std',
-                    'Mean Blood Pressure mean',
-                    'Mean Blood Pressure std',
-                    'Oxygen Saturation mean',
-                    'Oxygen Saturation std',
-                    'Respiratory Rate mean',
-                    'Respiratory Rate std',
-                    'Systolic Blood Pressure mean',
-                    'Systolic Blood Pressure std',
-                    'Temperature mean',
-                    'Temperature std',
-                    'Weight mean',
-                    'Weight std',
-                    'pH mean',
-                    'pH std']
-
     data_folders = ['train',
                     'test']
 
-    final_df = pd.DataFrame(columns=desired_cols2)
+    final_df = pd.DataFrame()
     # Generate paths to data
     paths = [DATA_DIR / path for path in data_folders]
     paths = [folder / sample
@@ -162,7 +136,7 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
     sub_sequences = np.array([0.1, 0.25, 0.5])
 
     ###################### FIND SOME WAY TO READ TIMESERIE DATA HERE ###########
-    for path in timeserie_paths:
+    for i, path in enumerate(timeserie_paths):
         # Read timeseries data into dataframe
         episode_df = pd.read_csv(path)
         # mortality pred only up to 48 hours
@@ -182,7 +156,10 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
                 episode_dict.update(episode_dict_col)
                 episode_dict_col = generate_episode_dict(episode_df, col, slice, partition)
                 episode_dict.update(episode_dict_col)
-            print(episode_dict)
+
+        if i == 0:
+            final_df = pd.DataFrame(episode_dict)
+        print(final_df)
         exit()
         # insert into pandas dataframe
         episode_df = pd.DataFrame(episode_dict)
