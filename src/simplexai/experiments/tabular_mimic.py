@@ -120,12 +120,11 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
     paths = [folder / sample
                 for folder in paths
                     for sample in os.listdir(folder)]
-    print(os.listdir(paths[0])[0][-14:])
     paths = [path / file
                 for path in paths
                     for file in os.listdir(path)
                         if file[-14:] == 'timeseries.csv']
-    # print(paths)
+    print(paths[:100])
 
     ###################### FIND SOME WAY TO READ TIMESERIE DATA HERE ###########
     for patient_id, episode in time_serie_episodes: # I need stay and episode from here
