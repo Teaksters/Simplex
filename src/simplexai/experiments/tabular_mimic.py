@@ -117,6 +117,7 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
     final_df = pd.DataFrame(columns=desired_cols2)
 
     paths = [DATA_DIR / path for path in data_folders]
+    paths = [folder / sample for folder in paths for sample in os.listdir(folder)]
     print(paths)
     print(os.listdir(paths[0]))
 
