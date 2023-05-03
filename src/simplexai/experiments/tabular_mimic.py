@@ -161,6 +161,11 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
         episode_df = pd.read_csv(path)
         # mortality pred only up to 48 hours
         episode_df = episode_df[episode_df.Hours < 48.0]
+        # Change Glascow coma scale to workable format
+        print(episode_df['Glascow coma scale total'])
+        print(' '.split(episode_df['Glascow coma scale total']))
+        episode_df = episode_df['Glascow coma scale total']
+        exit()
         print(list(episode_df))
 
         # Prepare the subset slices for episode time serie feature
