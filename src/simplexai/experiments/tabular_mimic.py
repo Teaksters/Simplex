@@ -163,6 +163,7 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
         else:
             episode_df = pd.DataFrame(episode_dict, index=[i])
             final_df = pd.concat([final_df, episode_df])
+        print(i)
     return final_df
 
 
