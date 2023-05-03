@@ -103,7 +103,7 @@ def generate_episode_dict(df, col, slice=False, neg=False, partition=1.0):
 def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
     pd.options.mode.chained_assignment = None  # default='warn'
     desired_cols = ['Diastolic blood pressure',
-                    'Glascow coma scale total',
+                    # 'Glascow coma scale total',
                     'Glucose',
                     'Heart Rate',
                     'Height',
@@ -155,24 +155,23 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
                     for file in os.listdir(path)
                         if file[-14:] == 'timeseries.csv']
 
+    # Prepare the subset slices for episode time serie feature
+    pos_sub_sequences = np.array([0.1, 0.25, 0.5])
+    neg_sub_sequences = pos_sub_sequences * -1
+    pos_slice = (pos_sub_sequences * episode_df.shape[0]).astype(int)
+    neg_slice = (neg_sub_sequences * episode_df.shape[0]).astype(int)
+
     ###################### FIND SOME WAY TO READ TIMESERIE DATA HERE ###########
     for path in timeserie_paths:
         # Read timeseries data into dataframe
         episode_df = pd.read_csv(path)
         # mortality pred only up to 48 hours
         episode_df = episode_df[episode_df.Hours < 48.0]
-        # Change Glascow coma scale to workable format
-        print(episode_df['Glascow coma scale total'])
-        print(' '.split(episode_df['Glascow coma scale total']))
-        episode_df = episode_df['Glascow coma scale total']
-        exit()
-        print(list(episode_df))
-
-        # Prepare the subset slices for episode time serie feature
-        pos_sub_sequences = np.array([0.1, 0.25, 0.5])
-        neg_sub_sequences = pos_sub_sequences * -1
-        pos_slice = (pos_sub_sequences * episode_df.shape[0]).astype(int)
-        neg_slice = (neg_sub_sequences * episode_df.shape[0]).astype(int)
+        # # Change Glascow coma scale to workable format
+        # print(episode_df['Glascow coma scale total'])
+        # print(' '.split(episode_df['Glascow coma scale total']))
+        # episode_df = episode_df['Glascow coma scale total']
+        # exit()
 
         # Gather statistics on full timeserie
         stay = '_'.join(path.parts[-2:])
