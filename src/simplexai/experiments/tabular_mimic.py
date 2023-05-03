@@ -163,10 +163,6 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
         else:
             episode_df = pd.DataFrame(episode_dict, index=[i])
             final_df = pd.concat([final_df, episode_df])
-        print(final_df)
-        if i == 10: exit()
-        # TO CHECK HERE: is 'stay' correct, is data correct
-    ############################################################################
     return final_df
 
 
