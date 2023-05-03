@@ -79,8 +79,10 @@ def generate_episode_dict(df, col, slice=False, neg=False, partition=1.0):
         episode_dict_std = {col + ' std ' + str(partition): df_col.std()}
         episode_dict_min = {col + ' min ' + str(partition): df_col.min()}
         episode_dict_max = {col + ' max ' + str(partition): df_col.max()}
-        episode_dict_len = {col + ' len ': df_col.size}
-        episode_dict.update(episode_dict_len)
+
+        # TOOK THIS OUT JUST IN CASE IT MIGHT BE TOO EASY
+        # episode_dict_len = {col + ' len ': df_col.size}
+        # episode_dict.update(episode_dict_len)
 
     elif neg:
         episode_dict = {col + ' mean ' + str(partition): df_col[slice:].mean()}
@@ -169,8 +171,9 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
 
         # Gather statistics on full timeserie
         stay = '_'.join(path.parts[-2:])
-        episode_dict = generate_episode_dict(episode_df, 'Diastolic blood pressure')
-        print(episode_dict)
+        for col in desired_cols:
+            episode_dict = generate_episode_dict(episode_df, col)
+            print(episode_dict)
         exit()
         # insert into pandas dataframe
         episode_df = pd.DataFrame(episode_dict)
