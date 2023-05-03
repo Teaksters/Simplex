@@ -150,6 +150,7 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
     feature_dir = os.path.join(DATA_DIR, 'phenotyping')
     feature_df = load_from_preprocessed(feature_dir)
     age_df = load_age()
+    print(age_df)
     time_df = load_timeseries()
 
     # Merge data into workable complete format
