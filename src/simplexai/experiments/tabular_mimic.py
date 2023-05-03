@@ -73,7 +73,6 @@ def load_age(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
 
 def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
     pd.options.mode.chained_assignment = None  # default='warn'
-    drop_cols = ["???"]
     desired_cols = ['Diastolic blood pressure',
                     'Glascow coma scale total',
                     'Glucose',
@@ -114,6 +113,9 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
 
     final_df = pd.DataFrame(columns=desired_cols2)
 
+    print(final_df)
+    print(DATA_DIR)
+    print(os.listdir(DATA_DIR))
 
     ###################### FIND SOME WAY TO READ TIMESERIE DATA HERE ###########
     for patient_id, episode in time_serie_episodes: # I need stay and episode from here
