@@ -72,7 +72,7 @@ def load_age(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
     return general_df
 
 ############### WORKINGGGG############
-def generate_episode_dict(df, col, slice=False, neg=False, partition=1.0):
+def generate_episode_dict(df, col, slice=False, partition=1.0):
     df_col = df[col]
     if not slice:
         episode_dict = {col + ' mean ' + str(partition): df_col.mean()}
@@ -84,7 +84,7 @@ def generate_episode_dict(df, col, slice=False, neg=False, partition=1.0):
         # episode_dict_len = {col + ' len ': df_col.size}
         # episode_dict.update(episode_dict_len)
 
-    elif neg:
+    elif slice[0] > 0:
         episode_dict = {col + ' mean ' + str(partition): df_col[slice:].mean()}
         episode_dict_std = {col + ' std ' + str(partition): df_col[slice:].std()}
         episode_dict_min = {col + ' min ' + str(partition): df_col[slice:].min()}
@@ -159,8 +159,7 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
                         if file[-14:] == 'timeseries.csv']
 
     # Prepare the subset for episode time serie feature
-    pos_sub_sequences = np.array([0.1, 0.25, 0.5])
-    neg_sub_sequences = pos_sub_sequences * -1
+    sub_sequences = np.array([0.1, 0.25, 0.5])
 
     ###################### FIND SOME WAY TO READ TIMESERIE DATA HERE ###########
     for path in timeserie_paths:
@@ -170,13 +169,19 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
         episode_df = episode_df[episode_df.Hours < 48.0]
 
         # Prepare the subset slices for episode time serie feature
-        pos_slice = (pos_sub_sequences * episode_df.shape[0]).astype(int)
-        neg_slice = (neg_sub_sequences * episode_df.shape[0]).astype(int)
+        pos_slice = (sub_sequences * episode_df.shape[0]).astype(int)
 
         # Gather statistics on full timeserie
         stay = '_'.join(path.parts[-2:])
+        episode_dict = {}
         for col in desired_cols:
-            episode_dict = generate_episode_dict(episode_df, col)
+            episode_dict_col = generate_episode_dict(episode_df, col)
+            episode_dict.update(episode_dict_col)
+            for slice, partition in zip(pos_slice, sub_sequences):
+                episode_dict_col = generate_episode_dict(episode_df, col, slice, partition)
+                episode_dict.update(episode_dict_col)
+                episode_dict_col = generate_episode_dict(episode_df, col, slice, partition)
+                episode_dict.update(episode_dict_col)
             print(episode_dict)
         exit()
         # insert into pandas dataframe
