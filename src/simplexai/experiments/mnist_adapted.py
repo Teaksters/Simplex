@@ -576,6 +576,7 @@ def outlier_detection(
         pkl.dump(nn_uniform, f)
 
 
+
 def jacobian_corruption(
     random_seed=42,
     save_path="experiments/results/mnist/jacobian_corruption/",
@@ -583,7 +584,7 @@ def jacobian_corruption(
     test_size=500,
     n_bins=100,
     batch_size=50,
-    train: bool = True,
+    train: bool = False, #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Set back to True later
 ) -> None:
     print(
         100 * "-" + "\n" + "Welcome in the Jacobian Projection check for MNIST. \n"
@@ -592,9 +593,9 @@ def jacobian_corruption(
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     torch.random.manual_seed(random_seed)
-    n_pert_list = [1, 5, 10, 50]
+    n_pert_list = [0.25, 0.5, 0.75, 1.0]
     metric_data = []
-    df_columns = ["Method", "N_pert", "Residual Shift"]
+    df_columns = ["Method", "N_pert", "Residual"]
     current_folder = Path.cwd()
     save_path = current_folder / save_path
     # Create saving directory if inexistent
@@ -627,13 +628,7 @@ def jacobian_corruption(
         subset_size=test_size, train=False, batch_size=1, shuffle=False
     )
     Corpus_inputs = torch.zeros((corpus_size, 1, 28, 28), device=device)
-
-    # Prepare the IG baseline
-    ig_explainer = captum.attr.IntegratedGradients(classifier)
-    Corpus_inputs_pert_jp = torch.zeros(
-        (len(n_pert_list), corpus_size, 1, 28, 28), device=device
-    )
-    Corpus_inputs_pert_ig = torch.zeros(
+    Corpus_inputs_pert = torch.zeros(
         (len(n_pert_list), corpus_size, 1, 28, 28), device=device
     )
 
@@ -649,110 +644,42 @@ def jacobian_corruption(
             )
             test_input = test_input.to(device)
             corpus_inputs = corpus_inputs.to(device).requires_grad_()
-            baseline_inputs = -0.4242 * torch.ones(corpus_inputs.shape, device=device)
-            input_shift = corpus_inputs - baseline_inputs
             test_latent = classifier.latent_representation(test_input).detach()
-            baseline_latents = classifier.latent_representation(baseline_inputs)
-            latent_shift = test_latent - baseline_latents
-            latent_shift_sqrdnorm = torch.sum(latent_shift**2, dim=-1, keepdim=True)
-            input_grad = torch.zeros(corpus_inputs.shape, device=corpus_inputs.device)
-            for n in range(1, n_bins + 1):
-                t = n / n_bins
-                inputs = baseline_inputs + t * (corpus_inputs - baseline_inputs)
-                latent_reps = classifier.latent_representation(inputs)
-                latent_reps.backward(gradient=latent_shift / latent_shift_sqrdnorm)
-                input_grad += corpus_inputs.grad
-                corpus_inputs.grad.data.zero_()
-            jacobian_projections = input_shift * input_grad / n_bins
-            integrated_gradients = ig_explainer.attribute(
-                corpus_inputs,
-                baseline_inputs,
-                target=corpus_targets.to(device),
-                n_steps=n_bins,
-            )
-            saliency_jp = torch.abs(jacobian_projections).detach()
-            saliency_ig = torch.abs(integrated_gradients).detach()
-            lower_id = batch_id * batch_size
-            higher_id = lower_id + batch_size
-            Corpus_inputs[lower_id:higher_id] = corpus_inputs.detach()
 
             for pert_id, n_pert in enumerate(n_pert_list):
-                top_pixels_jp = torch.topk(saliency_jp.view(batch_size, -1), k=n_pert)[
-                    1
-                ]
-                top_pixels_ig = torch.topk(saliency_ig.view(batch_size, -1), k=n_pert)[
-                    1
-                ]
-                mask_jp = torch.zeros(corpus_inputs.shape, device=device)
-                mask_ig = torch.zeros(corpus_inputs.shape, device=device)
-                for k in range(n_pert):
-                    mask_jp[
-                        :, 0, top_pixels_jp[:, k] // 28, top_pixels_jp[:, k] % 28
-                    ] = 1
-                    mask_ig[
-                        :, 0, top_pixels_ig[:, k] // 28, top_pixels_ig[:, k] % 28
-                    ] = 1
-                corpus_inputs_pert_jp = (
-                    mask_jp * baseline_inputs + (1 - mask_jp) * corpus_inputs
-                )
-                corpus_inputs_pert_ig = (
-                    mask_ig * baseline_inputs + (1 - mask_ig) * corpus_inputs
-                )
-                Corpus_inputs_pert_jp[
-                    pert_id, lower_id:higher_id
-                ] = corpus_inputs_pert_jp
-                Corpus_inputs_pert_ig[
-                    pert_id, lower_id:higher_id
-                ] = corpus_inputs_pert_ig
+                # Add a percentage of noise to corpus
+                # corpus_inputs needs to be noised an put into corpus_inputs_pert_jp
+                noise = torch.cuda.FloatTensor(corpus_inputs.shape, device=device).uniform_(0, 1)
+                mask = noise > n_pert
+                corpus_inputs_pert = (corpus_inputs * ~mask) + (noise * mask)
 
-        print("Now fitting the uncorrupted SimplEx")
-        test_latent = classifier.latent_representation(test_input).detach().to(device)
-        simplex = Simplex(
-            Corpus_inputs, classifier.latent_representation(Corpus_inputs).detach()
-        )
-        simplex.fit(test_input, test_latent, reg_factor=0)
-        residual = torch.sqrt(torch.sum((test_latent - simplex.latent_approx()) ** 2))
+                Corpus_inputs_pert[
+                    pert_id, lower_id:higher_id
+                ] = corpus_inputs_pert
 
         for pert_id, n_pert in enumerate(n_pert_list):
             print(
-                f"Now fitting the JP-corrupted SimplEx with {n_pert} perturbation(s) per image"
+                f"Now fitting the noise-corrupted SimplEx with {n_pert} perturbation(s) per image"
             )
-            simplex_jp = Simplex(
-                Corpus_inputs_pert_jp[pert_id],
+            simplex = Simplex(
+                Corpus_inputs_pert[pert_id], # this needs to be corpus noised
                 classifier.latent_representation(
-                    Corpus_inputs_pert_jp[pert_id]
+                    Corpus_inputs_pert[pert_id]
                 ).detach(),
             )
-            simplex_jp.fit(test_input, test_latent, reg_factor=0)
-            residual_jp = torch.sqrt(
-                torch.sum((test_latent - simplex_jp.latent_approx()) ** 2)
-            )
-
-            print(
-                f"Now fitting the IG-corrupted SimplEx with {n_pert} perturbation(s) per image"
-            )
-            simplex_ig = Simplex(
-                Corpus_inputs_pert_ig[pert_id],
-                classifier.latent_representation(
-                    Corpus_inputs_pert_ig[pert_id]
-                ).detach(),
-            )
-            simplex_ig.fit(test_input, test_latent, reg_factor=0)
-            residual_ig = torch.sqrt(
-                torch.sum((test_latent - simplex_ig.latent_approx()) ** 2)
+            simplex.fit(test_input, test_latent, reg_factor=0)
+            residual = torch.sqrt(
+                torch.sum((test_latent - simplex.latent_approx()) ** 2)
             )
             metric_data.append(
-                ["SimplEx", n_pert, (residual_jp - residual).cpu().numpy().item()]
-            )
-            metric_data.append(
-                ["IG", n_pert, (residual_ig - residual).cpu().numpy().item()]
+                ["SimplEx", n_pert, residual.cpu().numpy().item()]
             )
 
     metric_df = pd.DataFrame(metric_data, columns=df_columns)
     sns.set_palette("colorblind")
-    sns.boxplot(data=metric_df, x="N_pert", y="Residual Shift", hue="Method")
-    plt.xlabel("Number of pixels perturbed")
-    plt.savefig(save_path / "box_plot.pdf")
+    sns.boxplot(data=metric_df, x="N_pert", y="Residual", hue="Method")
+    plt.xlabel("Percentage of noisy pixels")
+    plt.savefig(save_path / "box_plot.png")
 
 
 def timing_experiment() -> None:

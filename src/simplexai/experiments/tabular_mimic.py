@@ -71,6 +71,69 @@ def load_age(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
     return general_df
 
 
+def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
+    pd.options.mode.chained_assignment = None  # default='warn'
+    drop_cols = ["???"]
+    desired_cols = ['Diastolic blood pressure',
+                    'Glascow coma scale total',
+                    'Glucose',
+                    'Heart Rate',
+                    'Height',
+                    'Mean Blood Pressure',
+                    'Oxygen Saturation',
+                    'Respiratory Rate',
+                    'Systolic Blood Pressure',
+                    'Temperature',
+                    'Weight',
+                    'pH']
+    desired_cols2 = ['stay',
+                    'Diastolic blood pressure mean',
+                    'Diastolic blood pressure std'
+                    'Glascow coma scale total mean',
+                    'Glascow coma scale total std',
+                    'Glucose mean',
+                    'Glucose std',
+                    'Heart Rate mean',
+                    'Heart Rate std',
+                    'Height mean',
+                    'Height std',
+                    'Mean Blood Pressure mean',
+                    'Mean Blood Pressure std',
+                    'Oxygen Saturation mean',
+                    'Oxygen Saturation std',
+                    'Respiratory Rate mean',
+                    'Respiratory Rate std',
+                    'Systolic Blood Pressure mean',
+                    'Systolic Blood Pressure std',
+                    'Temperature mean',
+                    'Temperature std',
+                    'Weight mean',
+                    'Weight std',
+                    'pH mean',
+                    'pH std']
+
+    final_df = pd.DataFrame(columns=desired_cols2)
+
+
+    ###################### FIND SOME WAY TO READ TIMESERIE DATA HERE ###########
+    for patient_id, episode in time_serie_episodes: # I need stay and episode from here
+        # Read timeseries data into dataframe
+        episode_df = pd.read_csv(os.path.join(DATA_DIR, episode)) # CHECK THIS WHEN CONNECTED
+
+        # Transpose it into desired tabular format
+        episode_dict = {col + ' mean': episode_df[col].mean() for col in desired_cols}
+        episode_dict_std = {col + ' std': episode_df[col].std() for col in desired_cols}
+        episode_dict.update(episode_dict_std)
+        episode_df = pd.DataFrame(episode_dict)
+        episode_df['stay'] = patient_id + '_' + episode + '_timeseries' # something like this...?
+
+        # Add it to main data dataframe
+        final_df = pd.concat([final_df, episode_df])
+        # TO CHECK HERE: is 'stay' correct, is data correct
+    ############################################################################
+    return final_df
+
+
 def load_tabular_mimic(random_seed: int = 42) -> tuple:
     # Specify undesired columns
     drop_cols = ['stay', 'period_length']
@@ -81,11 +144,16 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
     feature_dir = os.path.join(DATA_DIR, 'phenotyping')
     feature_df = load_from_preprocessed(feature_dir)
     age_df = load_age()
+    time_df = load_timeseries()
 
     # Merge data into workable complete format
     data_df = pd.merge(label_df, feature_df, on='stay')
+    data_df = pd.merge(time_df, data_df, on='stay')
     data_df = pd.merge(age_df, data_df, on='stay')
     data_df.drop(columns=drop_cols, inplace=True)
+
+    print(data_df) # FINAL CHECK HERE
+    exit()
 
     ##################### OPTIONAL ######################################
     ### Balance data set for even amount of survivors and mortalities ###
