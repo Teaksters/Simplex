@@ -75,23 +75,23 @@ def load_age(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
 def generate_episode_dict(df, col, slice=False, neg=False, partition=1.0):
     df_col = df[col]
     if not slice:
-        episode_dict = {col + ' mean ' + partition: df_col.mean()}
-        episode_dict_std = {col + ' std ' + partition: df_col.std()}
-        episode_dict_min = {col + ' min ' + partition: df_col.min()}
-        episode_dict_max = {col + ' max ' + partition: df_col.max()}
+        episode_dict = {col + ' mean ' + str(partition): df_col.mean()}
+        episode_dict_std = {col + ' std ' + str(partition): df_col.std()}
+        episode_dict_min = {col + ' min ' + str(partition): df_col.min()}
+        episode_dict_max = {col + ' max ' + str(partition): df_col.max()}
         episode_dict_len = {col + ' len ': df_col.size}
         episode_dict.update(episode_dict_len)
 
     elif neg:
-        episode_dict = {col + ' mean ' + partition: df_col[slice:].mean()}
-        episode_dict_std = {col + ' std ' + partition: df_col[slice:].std()}
-        episode_dict_min = {col + ' min ' + partition: df_col[slice:].min()}
-        episode_dict_max = {col + ' max ' + partition: df_col[slice:].max()}
+        episode_dict = {col + ' mean ' + str(partition): df_col[slice:].mean()}
+        episode_dict_std = {col + ' std ' + str(partition): df_col[slice:].std()}
+        episode_dict_min = {col + ' min ' + str(partition): df_col[slice:].min()}
+        episode_dict_max = {col + ' max ' + str(partition): df_col[slice:].max()}
     else:
-        episode_dict = {col + ' mean ' + partition: df_col[:slice].mean()}
-        episode_dict_std = {col + ' std ' + partition: df_col[:slice].std()}
-        episode_dict_min = {col + ' min ' + partition: df_col[:slice].min()}
-        episode_dict_max = {col + ' max ' + partition: df_col[:slice].max()}
+        episode_dict = {col + ' mean ' + str(partition): df_col[:slice].mean()}
+        episode_dict_std = {col + ' std ' + str(partition): df_col[:slice].std()}
+        episode_dict_min = {col + ' min ' + str(partition): df_col[:slice].min()}
+        episode_dict_max = {col + ' max ' + str(partition): df_col[:slice].max()}
 
     episode_dict.update(episode_dict_std)
     episode_dict.update(episode_dict_min)
