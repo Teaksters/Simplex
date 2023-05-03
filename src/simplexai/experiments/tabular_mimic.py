@@ -127,19 +127,21 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
                         if file[-14:] == 'timeseries.csv']
 
     ###################### FIND SOME WAY TO READ TIMESERIE DATA HERE ###########
-    for path in timeserie_paths: # I need stay and episode from here
-        stay = '_'.join(path.parts[-2:])
-        print(stay)
-        exit()
+    for path in timeserie_paths:
         # Read timeseries data into dataframe
         episode_df = pd.read_csv(os.path.join(DATA_DIR, episode)) # CHECK THIS WHEN CONNECTED
 
         # Transpose it into desired tabular format
+        stay = '_'.join(path.parts[-2:])
         episode_dict = {col + ' mean': episode_df[col].mean() for col in desired_cols}
         episode_dict_std = {col + ' std': episode_df[col].std() for col in desired_cols}
+
+        # insert into pandas dataframe
         episode_dict.update(episode_dict_std)
         episode_df = pd.DataFrame(episode_dict)
-        episode_df['stay'] = patient_id + '_' + episode + '_timeseries' # something like this...?
+        episode_df['stay'] = stay
+        print(episode_df)
+        exit()
 
         # Add it to main data dataframe
         final_df = pd.concat([final_df, episode_df])
