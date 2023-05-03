@@ -71,6 +71,32 @@ def load_age(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
     general_df.drop(columns=drop_cols, inplace=True)
     return general_df
 
+############### WORKINGGGG############
+def generate_episode_dict(df_col, slice=False, partition=1.0):
+    if not slice:
+        episode_dict = {col + ' mean ' + partition: df_col.mean()
+                                                        for col in desired_cols}
+        episode_dict_std = {col + ' std ' + partition: df_col.std()
+                                                        for col in desired_cols}
+        episode_dict_min = {col + ' min ' + partition: df_col.min()
+                                                        for col in desired_cols}
+        episode_dict_max = {col + ' max ' + partition: df_col.max()
+                                                        for col in desired_cols}
+
+    else:
+        episode_dict = {col + ' mean ' + partition: episode_df[col].mean()
+                                                        for col in desired_cols}
+        episode_dict_std = {col + ' std ' + partition: episode_df[col].std()
+                                                        for col in desired_cols}
+        episode_dict_min = {col + ' min ' + partition: episode_df[col].min()
+                                                        for col in desired_cols}
+        episode_dict_max = {col + ' max ' + partition: episode_df[col].max()
+                                                        for col in desired_cols}
+
+    episode_dict.update(episode_dict_std)
+    episode_dict.update(episode_dict_min)
+    episode_dict.update(episode_dict_max)
+    return episode_dict
 
 def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
     pd.options.mode.chained_assignment = None  # default='warn'
@@ -115,8 +141,8 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
 
     data_folders = ['train',
                     'test']
-    final_df = pd.DataFrame(columns=desired_cols2)
 
+    final_df = pd.DataFrame(columns=desired_cols2)
     # Generate paths to data
     paths = [DATA_DIR / path for path in data_folders]
     paths = [folder / sample
@@ -132,22 +158,17 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
         # Read timeseries data into dataframe
         episode_df = pd.read_csv(path)
 
-        # Prepare the subsets of time series for features
+        # Prepare the subset slices for episode time serie feature
         pos_sub_sequences = np.array([0.1, 0.25, 0.5])
         neg_sub_sequences = pos_sub_sequences * -1
-        pos_sub_sequences = (pos_sub_sequences * episode_df.shape[0]).astype(int)
-        neg_sub_sequences = (neg_sub_sequences * episode_df.shape[0]).astype(int)
-        print(pos_sub_sequences, neg_sub_sequences)
-        print(episode_df['Diastolic blood pressure'][:21].dropna().astype(int).to_numpy())
-        exit()
+        pos_slice = (pos_sub_sequences * episode_df.shape[0]).astype(int)
+        neg_slice = (neg_sub_sequences * episode_df.shape[0]).astype(int)
 
-        # Transpose it into desired tabular format
+        # Gather statistics on full timeserie
         stay = '_'.join(path.parts[-2:])
-        episode_dict = {col + ' mean': episode_df[col].mean() for col in desired_cols}
-        episode_dict_std = {col + ' std': episode_df[col].std() for col in desired_cols}
+        generate_episode_dict()
 
         # insert into pandas dataframe
-        episode_dict.update(episode_dict_std)
         episode_df = pd.DataFrame(episode_dict)
         episode_df['stay'] = stay
         print(episode_df)
