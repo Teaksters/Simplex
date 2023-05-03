@@ -72,26 +72,25 @@ def load_age(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
     return general_df
 
 ############### WORKINGGGG############
-def generate_episode_dict(df_col, slice=False, partition=1.0):
+def generate_episode_dict(df_col, slice=False, neg=False, partition=1.0):
     if not slice:
-        episode_dict = {col + ' mean ' + partition: df_col.mean()
-                                                        for col in desired_cols}
-        episode_dict_std = {col + ' std ' + partition: df_col.std()
-                                                        for col in desired_cols}
-        episode_dict_min = {col + ' min ' + partition: df_col.min()
-                                                        for col in desired_cols}
-        episode_dict_max = {col + ' max ' + partition: df_col.max()
-                                                        for col in desired_cols}
+        episode_dict = {col + ' mean ' + partition: df_col.mean()}
+        episode_dict_std = {col + ' std ' + partition: df_col.std()}
+        episode_dict_min = {col + ' min ' + partition: df_col.min()}
+        episode_dict_max = {col + ' max ' + partition: df_col.max()}
+        episode_dict_len = {col + ' len ': df_col.size}
+        episode_dict.update(episode_dict_len)
 
+    elif neg:
+        episode_dict = {col + ' mean ' + partition: df_col[slice:].mean()}
+        episode_dict_std = {col + ' std ' + partition: df_col[slice:].std()}
+        episode_dict_min = {col + ' min ' + partition: df_col[slice:].min()}
+        episode_dict_max = {col + ' max ' + partition: df_col[slice:].max()}
     else:
-        episode_dict = {col + ' mean ' + partition: episode_df[col].mean()
-                                                        for col in desired_cols}
-        episode_dict_std = {col + ' std ' + partition: episode_df[col].std()
-                                                        for col in desired_cols}
-        episode_dict_min = {col + ' min ' + partition: episode_df[col].min()
-                                                        for col in desired_cols}
-        episode_dict_max = {col + ' max ' + partition: episode_df[col].max()
-                                                        for col in desired_cols}
+        episode_dict = {col + ' mean ' + partition: df_col[:slice].mean()}
+        episode_dict_std = {col + ' std ' + partition: df_col[:slice].std()}
+        episode_dict_min = {col + ' min ' + partition: df_col[:slice].min()}
+        episode_dict_max = {col + ' max ' + partition: df_col[:slice].max()}
 
     episode_dict.update(episode_dict_std)
     episode_dict.update(episode_dict_min)
@@ -166,8 +165,9 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
 
         # Gather statistics on full timeserie
         stay = '_'.join(path.parts[-2:])
-        generate_episode_dict()
-
+        episode_dict = generate_episode_dict(episode_df['Diastolic blood pressure'])
+        print(episode_dict)
+        exit()
         # insert into pandas dataframe
         episode_df = pd.DataFrame(episode_dict)
         episode_df['stay'] = stay
