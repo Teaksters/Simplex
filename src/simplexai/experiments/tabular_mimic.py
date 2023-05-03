@@ -155,8 +155,11 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
 
     ###################### FIND SOME WAY TO READ TIMESERIE DATA HERE ###########
     for path in timeserie_paths:
-        # Read timeseries data into dataframe
+        # Read timeseries data into dataframe remove any information later than 48 hours after intake
         episode_df = pd.read_csv(path)
+        print(episode_df)
+        exit()
+        episode_df = episode_df[episode_df.Hours]
 
         # Prepare the subset slices for episode time serie feature
         pos_sub_sequences = np.array([0.1, 0.25, 0.5])
