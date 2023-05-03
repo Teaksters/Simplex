@@ -131,6 +131,7 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
         # Read timeseries data into dataframe
         episode_df = pd.read_csv(path)
         print(episode_df.shape)
+        print(episode_df['Diastolic blood pressure'].dropna().astype(int))
         exit()
 
         # Transpose it into desired tabular format
