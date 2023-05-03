@@ -131,7 +131,7 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
         # Read timeseries data into dataframe
         episode_df = pd.read_csv(path)
         print(episode_df.shape)
-        print(episode_df['Diastolic blood pressure'].dropna().astype(int))
+        print(episode_df['Diastolic blood pressure'].dropna().astype(int)).numpy()
         exit()
 
         # Transpose it into desired tabular format
@@ -163,7 +163,6 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
     feature_dir = os.path.join(DATA_DIR, 'phenotyping')
     feature_df = load_from_preprocessed(feature_dir)
     age_df = load_age()
-    print(age_df)
     time_df = load_timeseries()
 
     # Merge data into workable complete format
