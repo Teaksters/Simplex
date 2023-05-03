@@ -18,7 +18,7 @@ from simplexai.models.tabular_data import MortalityPredictor
 from simplexai.utils.schedulers import ExponentialScheduler
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_DIR = PATH('../Data/preprocessed')
+DATA_DIR = Path('../Data/preprocessed')
 
 
 class MimicDataset(Dataset):
