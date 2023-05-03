@@ -72,7 +72,8 @@ def load_age(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
     return general_df
 
 ############### WORKINGGGG############
-def generate_episode_dict(df_col, slice=False, neg=False, partition=1.0):
+def generate_episode_dict(df, col, slice=False, neg=False, partition=1.0):
+    df_col = df[col]
     if not slice:
         episode_dict = {col + ' mean ' + partition: df_col.mean()}
         episode_dict_std = {col + ' std ' + partition: df_col.std()}
@@ -165,7 +166,7 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
 
         # Gather statistics on full timeserie
         stay = '_'.join(path.parts[-2:])
-        episode_dict = generate_episode_dict(episode_df['Diastolic blood pressure'])
+        episode_dict = generate_episode_dict(episode_df, 'Diastolic blood pressure')
         print(episode_dict)
         exit()
         # insert into pandas dataframe
