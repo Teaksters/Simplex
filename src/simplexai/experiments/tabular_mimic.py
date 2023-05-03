@@ -161,7 +161,7 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
         episode_df = pd.read_csv(path)
         # mortality pred only up to 48 hours
         episode_df = episode_df[episode_df.Hours < 48.0]
-        print(episode_df)
+        print(list(episode_df))
 
         # Prepare the subset slices for episode time serie feature
         pos_sub_sequences = np.array([0.1, 0.25, 0.5])
