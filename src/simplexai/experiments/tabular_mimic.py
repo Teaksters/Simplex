@@ -18,7 +18,7 @@ from simplexai.models.tabular_data import MortalityPredictor
 from simplexai.utils.schedulers import ExponentialScheduler
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_DIR = '../Data/preprocessed'
+DATA_DIR = PATH('../Data/preprocessed')
 
 
 class MimicDataset(Dataset):
@@ -85,6 +85,7 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
                     'Temperature',
                     'Weight',
                     'pH']
+
     desired_cols2 = ['stay',
                     'Diastolic blood pressure mean',
                     'Diastolic blood pressure std'
@@ -111,11 +112,13 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
                     'pH mean',
                     'pH std']
 
+    data_folders = ['train',
+                    'test']
     final_df = pd.DataFrame(columns=desired_cols2)
 
-    print(final_df)
-    print(DATA_DIR)
-    print(os.listdir(DATA_DIR))
+    paths = [DATA_DIR / path for path in pathlib]
+    print(paths)
+    print(os.listdir(paths[0]))
 
     ###################### FIND SOME WAY TO READ TIMESERIE DATA HERE ###########
     for patient_id, episode in time_serie_episodes: # I need stay and episode from here
