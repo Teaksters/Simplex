@@ -158,7 +158,7 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
                 episode_dict.update(episode_dict_col)
 
         if i == 0:
-            final_df = pd.DataFrame(episode_dict)
+            final_df = pd.DataFrame(episode_dict, index=[0])
         print(final_df)
         exit()
         # insert into pandas dataframe
