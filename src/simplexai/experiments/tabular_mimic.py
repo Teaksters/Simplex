@@ -84,7 +84,7 @@ def generate_episode_dict(df, col, slice=False, partition=1.0):
         # episode_dict_len = {col + ' len ': df_col.size}
         # episode_dict.update(episode_dict_len)
 
-    elif slice[0] > 0:
+    elif slice > 0:
         episode_dict = {col + ' mean ' + str(partition): df_col[slice:].mean()}
         episode_dict_std = {col + ' std ' + str(partition): df_col[slice:].std()}
         episode_dict_min = {col + ' min ' + str(partition): df_col[slice:].min()}
