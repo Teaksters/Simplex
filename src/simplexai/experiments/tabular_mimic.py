@@ -129,7 +129,9 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
     ###################### FIND SOME WAY TO READ TIMESERIE DATA HERE ###########
     for path in timeserie_paths:
         # Read timeseries data into dataframe
-        episode_df = pd.read_csv(os.path.join(DATA_DIR, episode)) # CHECK THIS WHEN CONNECTED
+        episode_df = pd.read_csv(path)
+        print(episode_df)
+        exit()
 
         # Transpose it into desired tabular format
         stay = '_'.join(path.parts[-2:])
