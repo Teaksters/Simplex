@@ -135,6 +135,7 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
     # Prepare the subset for episode time serie feature
     sub_sequences = np.array([0.1, 0.25, 0.5])
 
+    print('Reading and gathering timeserie data, this can take a while...'')
     ###################### FIND SOME WAY TO READ TIMESERIE DATA HERE ###########
     for i, path in enumerate(timeserie_paths):
         # Read timeseries data into dataframe
@@ -163,44 +164,48 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
         else:
             episode_df = pd.DataFrame(episode_dict, index=[i])
             final_df = pd.concat([final_df, episode_df])
-        print(i)
     return final_df
 
 
 def load_tabular_mimic(random_seed: int = 42) -> tuple:
     # Specify undesired columns
     drop_cols = ['stay', 'period_length']
+    data_df = 0
 
-    # Load MIMIC-III data into panda dataframes
-    label_dir = os.path.join(DATA_DIR, 'in-hospital-mortality')
-    label_df = load_from_preprocessed(label_dir)
-    feature_dir = os.path.join(DATA_DIR, 'phenotyping')
-    feature_df = load_from_preprocessed(feature_dir)
-    age_df = load_age()
-    time_df = load_timeseries()
+    # Prepare data directory
+    pkl_dir = os.path.join(DATA_DIR, 'pickles')
+    if not pkl_dir.exists():
+        print(f"Creating the pickle directory {pkl_dir}")
+        os.makedirs(pkl_dir)
+    data_pickle = 'tab_mort_data.pkl'
+    pickle_path = os.path.join(pkl_dir, data_pickle)
 
-    # Merge data into workable complete format
-    data_df = pd.merge(label_df, feature_df, on='stay')
-    data_df = pd.merge(time_df, data_df, on='stay')
-    data_df = pd.merge(age_df, data_df, on='stay')
-    data_df.drop(columns=drop_cols, inplace=True)
+    # If data is preprocessed load it
+    if pickle_path.exists():
+        with open(pickle_path, "rb") as f:
+            data_df = pkl.load(f)
 
-    print(data_df) # FINAL CHECK HERE
-    exit()
+    # Otherwise preprocess data
+    else:
+        print('preprocessing data, this only happens once!')
+        # Load MIMIC-III data into panda dataframes
+        label_dir = os.path.join(DATA_DIR, 'in-hospital-mortality')
+        label_df = load_from_preprocessed(label_dir)
+        feature_dir = os.path.join(DATA_DIR, 'phenotyping')
+        feature_df = load_from_preprocessed(feature_dir)
+        age_df = load_age()
+        time_df = load_timeseries()
 
-    ##################### OPTIONAL ######################################
-    ### Balance data set for even amount of survivors and mortalities ###
-    #####################################################################
-    # mask = data_df['y_true'] is True
-    # df_dead = data_df.loc[data_df['y_true'] == True]
-    # df_survive = data_df.loc[data_df['y_true'] == False]
-    # data_df = pd.concat(
-    #     [
-    #         df_dead.sample(2500, random_state=random_seed),
-    #         df_survive.sample(2500, random_state=random_seed),
-    #     ]
-    # )
-    ############################################################################
+        # Merge data into workable complete format
+        data_df = pd.merge(label_df, feature_df, on='stay')
+        data_df = pd.merge(time_df, data_df, on='stay')
+        data_df = pd.merge(age_df, data_df, on='stay')
+        data_df.drop(columns=drop_cols, inplace=True)
+
+        # Safe pickle for later use
+        print('Done, storing data for quick retrieval next time.')
+        with open(pickle_path, "wb") as f:
+            pkl.dump(data_df, f)
 
     df = sklearn.utils.shuffle(data_df, random_state=random_seed)
     df = df.reset_index(drop=True)
