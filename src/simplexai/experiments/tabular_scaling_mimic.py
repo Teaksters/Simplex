@@ -151,11 +151,6 @@ def approximation_quality(
 
     explainer_names = ["simplex", "nn_uniform", "nn_dist"]
 
-    ############################################################################
-    ### TODO: take out all new borns and ages non-applicable for scaling ages ##
-    # Update: There is no data point with an age lower then 18 so is not necessary
-    ############################################################################
-
     corpus_loader = DataLoader(train_data, batch_size=corpus_size, shuffle=True)
 
     if train_data_only:
@@ -170,10 +165,6 @@ def approximation_quality(
 
     # Experiment with age scaling
     corpus_data[:, 0] = corpus_data[:, 0] * age_scaler
-
-    # Initial Experiments
-    # corpus_data[:, 0] = -50 # Set age to -50
-    # corpus_data[:, 0] = 1000 # Try setting it to 1000
 
     test_data = test_data.to(device).detach()
     corpus_latent_reps = classifier.latent_representation(corpus_data).detach()

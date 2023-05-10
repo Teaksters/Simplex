@@ -180,6 +180,7 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
     data_pickle = 'tab_mort_data.pkl'
     pickle_path = os.path.join(pkl_dir, data_pickle)
 
+    #################### DOUBLE CHECK HERE ###########################
     # If data is preprocessed load it
     if pickle_path.exists():
         with open(pickle_path, "rb") as f:
@@ -202,10 +203,13 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
         data_df = pd.merge(age_df, data_df, on='stay')
         data_df.drop(columns=drop_cols, inplace=True)
 
+        #################### DOUBLE CHECK HERE ###########################
         # Safe pickle for later use
         print('Done, storing data for quick retrieval next time.')
         with open(pickle_path, "wb") as f:
             pkl.dump(data_df, f)
+
+    print(data_df)
 
     df = sklearn.utils.shuffle(data_df, random_state=random_seed)
     df = df.reset_index(drop=True)

@@ -56,3 +56,12 @@ class MortalityPredictor(BlackBox):
         """
         h = self.lin3(h)
         return h
+
+    def cont_batchnorm_output(self, x: torch.Tensor) -> torch.Tensor:
+        '''
+        Returns the batchnormalization outputs for given input.
+        '''
+        x_cont, x_disc = x[:, : self.n_cont], x[:, self.n_cont :]
+        if self.n_cont > 0:
+            x_cont = self.bn1(x_cont)
+        return x_cont
