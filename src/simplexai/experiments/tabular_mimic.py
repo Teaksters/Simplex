@@ -173,12 +173,12 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
     data_df = 0
 
     # Prepare data directory
-    pkl_dir = os.path.join(DATA_DIR, 'pickles')
+    pkl_dir = DATA_DIR / 'pickles'
     if not pkl_dir.exists():
         print(f"Creating the pickle directory {pkl_dir}")
         os.makedirs(pkl_dir)
     data_pickle = 'tab_mort_data.pkl'
-    pickle_path = Path(os.path.join(pkl_dir, data_pickle))
+    pickle_path = pkl_dir / data_pickle
 
     #################### DOUBLE CHECK HERE ###########################
     # If data is preprocessed load it
