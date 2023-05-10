@@ -60,7 +60,7 @@ for scaler in OOD_scalers:
     for c_scaler in corpus_scalers:
         current_path = load_path / str(scaler) / str(c_scaler)
         for cv in cv_list:
-            classifier = MortalityPredictor(n_cont=1, input_feature_num=26)
+            classifier = MortalityPredictor(n_cont=188, input_feature_num=26)
             classifier.load_state_dict(torch.load(current_path / f"model_cv{cv}.pth"))
             classifier.to(device)
             classifier.eval()

@@ -32,7 +32,7 @@ n_inspected = [n for n in range(test_size)]
 load_path = current_path / "experiments/results/prostate/outlier"
 
 for cv in cv_list:
-    classifier = MortalityPredictor(n_cont=3)
+    classifier = MortalityPredictor(n_cont=188)
     classifier.load_state_dict(torch.load(load_path / f"model_cv{cv}.pth"))
     classifier.to(device)
     classifier.eval()
