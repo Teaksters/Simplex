@@ -68,10 +68,11 @@ def approximation_quality(
     # Load the data and split into train, val and test sets
     X, y = load_tabular_mimic(random_seed=random_seed + cv)
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.3, random_state=random_seed + cv, stratify=y
+        X, y, test_size=0.15, random_state=random_seed + cv, stratify=y
     )
+    # Take the last 15% for the validation set
     X_val, X_test, y_val, y_test = train_test_split(
-        X_test, y_test, test_size=0.5, random_state=random_seed + cv, stratify=y
+        X_test, y_test, test_size=0.176470588, random_state=random_seed + cv, stratify=y
     )
 
     train_data = MimicDataset(X_train, y_train)
