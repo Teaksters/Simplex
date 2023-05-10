@@ -83,7 +83,7 @@ def approximation_quality(
 
     if train_model:
         # Create the model
-        classifier = MortalityPredictor(n_cont=1, input_feature_num=26)
+        classifier = MortalityPredictor(n_cont=188, input_feature_num=26)
         classifier.to(device)
         optimizer = optim.Adam(classifier.parameters(), weight_decay=weight_decay)
 
