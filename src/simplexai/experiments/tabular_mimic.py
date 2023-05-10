@@ -180,9 +180,9 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
     data_pickle = 'tab_mort_data.pkl'
     pickle_path = pkl_dir / data_pickle
 
-    #################### DOUBLE CHECK HERE ###########################
     # If data is preprocessed load it
     if pickle_path.exists():
+        print('loading preprocessed data!')
         with open(pickle_path, "rb") as f:
             data_df = pkl.load(f)
 
@@ -203,68 +203,15 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
         data_df = pd.merge(age_df, data_df, on='stay')
         data_df.drop(columns=drop_cols, inplace=True)
 
-        #################### DOUBLE CHECK HERE ###########################
         # Safe pickle for later use
         print('Done, storing data for quick retrieval next time.')
         with open(pickle_path, "wb") as f:
             pkl.dump(data_df, f)
 
-    print(data_df)
-    exit()
-
     df = sklearn.utils.shuffle(data_df, random_state=random_seed)
     df = df.reset_index(drop=True)
     features, labels = df.loc[:, df.columns != 'y_true'], df['y_true']
     return features, labels
-
-
-def load_cutract(random_seed: int = 42) -> tuple:
-    features = [
-        "age",
-        "psa",
-        "comorbidities",
-        "treatment_CM",
-        "treatment_Primary hormone therapy",
-        "treatment_Radical Therapy-RDx",
-        "treatment_Radical therapy-Sx",
-        "grade_1.0",
-        "grade_2.0",
-        "grade_3.0",
-        "grade_4.0",
-        "grade_5.0",
-        "stage_1",
-        "stage_2",
-        "stage_3",
-        "stage_4",
-        "gleason1_1",
-        "gleason1_2",
-        "gleason1_3",
-        "gleason1_4",
-        "gleason1_5",
-        "gleason2_1",
-        "gleason2_2",
-        "gleason2_3",
-        "gleason2_4",
-        "gleason2_5",
-    ]
-    label = "mortCancer"
-    df = pd.read_csv(
-        os.path.abspath(
-            os.path.join(ROOT_DIR, "../Data/")
-        )
-    )
-    mask = df[label] is True
-    df_dead = df[mask]
-    df_survive = df[~mask]
-    df = pd.concat(
-        [
-            df_dead.sample(1000, random_state=random_seed),
-            df_survive.sample(1000, random_state=random_seed),
-        ]
-    )
-    df = sklearn.utils.shuffle(df, random_state=random_seed)
-    df = df.reset_index(drop=True)
-    return df[features], df[label]
 
 def approximation_quality(
     cv: int = 0,
