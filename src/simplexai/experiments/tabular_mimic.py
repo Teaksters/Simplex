@@ -210,6 +210,7 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
             pkl.dump(data_df, f)
 
     print(data_df)
+    exit()
 
     df = sklearn.utils.shuffle(data_df, random_state=random_seed)
     df = df.reset_index(drop=True)
