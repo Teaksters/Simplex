@@ -135,7 +135,7 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
     # Prepare the subset for episode time serie feature
     sub_sequences = np.array([0.1, 0.25, 0.5])
 
-    print('Reading and gathering timeserie data, this can take a while...'')
+    print('Reading and gathering timeserie data, this can take a while...')
     ###################### FIND SOME WAY TO READ TIMESERIE DATA HERE ###########
     for i, path in enumerate(timeserie_paths):
         # Read timeseries data into dataframe
