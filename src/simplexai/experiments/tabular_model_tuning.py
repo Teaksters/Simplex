@@ -156,7 +156,7 @@ def approximation_quality(
             )
             return test_accs, auc_score
 
-        test_acc, auc_score = test()
+        test_acc, auc_score = test(val_loader)
         test_accs.append([test_acc[0].item()])
         test_aucs.append(auc_score)
         for epoch in range(1, n_epoch_model + 1):
