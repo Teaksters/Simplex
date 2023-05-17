@@ -24,7 +24,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     "-cv_list",
     nargs="+",
-    default=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    default=[0, 1, 2, 3, 4, 5],
     help="The list of experiment cv identifiers to plot",
     type=int,
 )
@@ -45,7 +45,7 @@ load_path = current_path / "experiments/results/mimic/quality/scaled/"
 for scaler in scalers:
     for cv in cv_list:
         current_path = load_path / str(scaler) / f"BNorm_out_data_cv{cv}.pkl"
-        with open(current_path, rb) as f:
+        with open(current_path, 'rb') as f:
             data = CPU_Unpickler(file).load()
         print(data)
         # TODO: load the bathnorm output data
