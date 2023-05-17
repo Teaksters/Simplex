@@ -64,7 +64,7 @@ val_std = val_losses.std(axis=0)
 
 # print('train_losses:\n', train_mean, train_std)
 print('val_losses:\n', val_mean, val_std)
-print('test_performance:\n', test_acc.mean() "(+-", test_acc.std(), ")", "(accuracy)", test_AUC.mean() "(+-", test_AUC.std(), ")", '(AUC)')
+print('test_performance:\n', test_acc.mean(), "(+-", test_acc.std(), ")", "(accuracy)", test_AUC.mean(), "(+-", test_AUC.std(), ")", '(AUC)')
 
 plt.figure(1)
 plt.plot(train_counter, train_mean, label='train loss')
