@@ -29,8 +29,8 @@ val_losses = []
 val_AUCs = []
 train_counter = []
 epochs = []
-test_AUC = 0
-test_acc = 0
+test_AUC = []
+test_acc = []
 for epoch_path in os.listdir(load_path):
     epochs.append(int(epoch_path))
     cur_path = load_path / epoch_path
@@ -49,8 +49,8 @@ for epoch_path in os.listdir(load_path):
                 temp_path = cur_path / data_path
                 file = open(temp_path, 'rb')
                 data = CPU_Unpickler(file).load()
-                test_acc = data[0][0].item()
-                test_AUC = data[1]
+                test_acc.append(data[0][0].item())
+                test_AUC.append(data[1])
 
 # train_losses = np.array(train_losses)
 # print(train_losses)
@@ -64,7 +64,7 @@ val_std = val_losses.std(axis=0)
 
 # print('train_losses:\n', train_mean, train_std)
 print('val_losses:\n', val_mean, val_std)
-print('test_performance:\n', test_acc, "(accuracy)", test_AUC, '(AUC)')
+print('test_performance:\n', test_acc.mean() "(+-", test_acc.std(), ")", "(accuracy)", test_AUC.mean() "(+-", test_AUC.std(), ")", '(AUC)')
 
 plt.figure(1)
 plt.plot(train_counter, train_mean, label='train loss')
