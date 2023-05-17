@@ -136,31 +136,33 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
     sub_sequences = np.array([0.1, 0.25, 0.5])
 
     print('Reading and gathering timeserie data, this can take a while...')
-    ###################### FIND SOME WAY TO READ TIMESERIE DATA HERE ###########
     for i, path in enumerate(timeserie_paths):
-        # Read timeseries data into dataframe
+        # Read timeseries data of first 48 hours into dataframe
         episode_df = pd.read_csv(path)
-        # mortality pred only up to 48 hours
         episode_df = episode_df[episode_df.Hours < 48.0]
 
         # Prepare the subset slices for episode time serie feature
         pos_slice = (sub_sequences * episode_df.shape[0]).astype(int)
 
-        # Gather statistics on full timeserie
+        # Gather and tabularize statistics on timeserie
         stay = '_'.join(path.parts[-2:])
         episode_dict = {}
         episode_dict['stay'] = stay
         for col in desired_cols:
+            # First the full time serie
             episode_dict_col = generate_episode_dict(episode_df, col)
             episode_dict.update(episode_dict_col)
             for slice, partition in zip(pos_slice, sub_sequences):
+                # Then different partitions
                 episode_dict_col = generate_episode_dict(episode_df, col, slice, partition)
                 episode_dict.update(episode_dict_col)
                 episode_dict_col = generate_episode_dict(episode_df, col, slice, partition)
                 episode_dict.update(episode_dict_col)
 
+        # Create DataFrame
         if i == 0:
             final_df = pd.DataFrame(episode_dict, index=[i])
+        # Add new data to existing DataFrame
         else:
             episode_df = pd.DataFrame(episode_dict, index=[i])
             final_df = pd.concat([final_df, episode_df])
@@ -211,6 +213,7 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
     df = sklearn.utils.shuffle(data_df, random_state=random_seed)
     df = df.reset_index(drop=True)
     features, labels = df.loc[:, df.columns != 'y_true'], df['y_true']
+    print(features)
     return features, labels
 
 def approximation_quality(
