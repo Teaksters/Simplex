@@ -71,6 +71,6 @@ for i, data in enumerate(all_data_mean):
              alpha=0.2)
 plt.legend()
 plt.tight_layout()
-plt.savefig()
+plt.savefig(safe_path / 'out_histogram.png')
 
 # TODO: plot the metrics (in the correct directory not where I am loading from rn)
