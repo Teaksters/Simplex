@@ -53,7 +53,6 @@ for scaler in scalers:
     all_data.append(torch.cat(scaler_data, 0).numpy())
 
 all_data = np.array(all_data)
-print(all_data)
 print(all_data.shape)
 exit()
         # TODO: load the bathnorm output data
