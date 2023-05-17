@@ -182,7 +182,6 @@ def main(experiment: str = "approximation_quality",
          age_scaler: float = 1.,
          corpus_scaler: float = 1.) -> None:
     if experiment == "approximation_quality":
-
         approximation_quality(cv=cv, age_scaler=age_scaler)
     else:
         raise ValueError(
