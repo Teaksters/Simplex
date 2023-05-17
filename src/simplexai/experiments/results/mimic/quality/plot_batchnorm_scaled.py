@@ -54,9 +54,11 @@ for scaler in scalers:
 
 all_data = np.array(all_data)
 print(all_data.shape)
-exit()
-        # TODO: load the bathnorm output data
-        # measure them somehow
+
+# First try plotting histograms for all the features next to eachother
+all_data_mean = all_data.mean(axis=1)
+all_data_mean = all_data.std(axis=1)
+print(all_data_mean.shape)
 
 # TODO: plot the metrics (in the correct directory not where I am loading from rn)
 safe_path = load_path / 'plots/'
