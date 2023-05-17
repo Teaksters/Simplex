@@ -23,7 +23,6 @@ from simplexai.experiments.tabular_mimic import MimicDataset, \
                                                 load_tabular_mimic
 
 
-
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = '../Data/preprocessed'
 
