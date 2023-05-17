@@ -45,6 +45,9 @@ for epoch_path in os.listdir(load_path):
             val_losses.append(data[2])
             val_AUCs.append(data[-1])
         elif data_path[-4:] == '.pkl' and data_path[:4] == 'test':
+            temp_path = cur_path / data_path
+            file = open(temp_path, 'rb')
+            data = CPU_Unpickler(file).load()
             test_acc = data[0][0]
             test_AUC = data[1]
 
