@@ -46,7 +46,7 @@ for scaler in scalers:
     for cv in cv_list:
         current_path = load_path / str(scaler) / f"BNorm_out_data_cv{cv}.pkl"
         with open(current_path, 'rb') as f:
-            data = CPU_Unpickler(file).load()
+            data = CPU_Unpickler(f).load()
         print(data)
         # TODO: load the bathnorm output data
         # measure them somehow
