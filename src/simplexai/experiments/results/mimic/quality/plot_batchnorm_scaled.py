@@ -46,8 +46,8 @@ all_data = []
 for scaler in scalers:
     scaler_data = []
     for cv in cv_list:
-        current_path = load_path / str(scaler) / f"BNorm_out_data_cv{cv}.pkl"
-        with open(current_path, 'rb') as f:
+        temp_path = load_path / str(scaler) / f"BNorm_out_data_cv{cv}.pkl"
+        with open(temp_path, 'rb') as f:
             data = CPU_Unpickler(f).load()
         scaler_data.append(data)
     all_data.append(torch.cat(scaler_data, 0).numpy())
