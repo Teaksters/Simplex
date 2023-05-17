@@ -52,6 +52,7 @@ for scaler in scalers:
         scaler_data.append(data)
     all_data.append(torch.cat(scaler_data, 0).numpy())
 
+all_data = np.array(all_data)
 print(all_data)
 print(all_data.shape)
 exit()
