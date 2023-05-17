@@ -49,11 +49,12 @@ for epoch_path in os.listdir(load_path):
             test_acc = data[0][0]
             test_AUC = data[1]
 
-train_losses = np.array(train_losses)
+# train_losses = np.array(train_losses)
+print(train_losses)
 val_losses = np.array(val_losses)
 val_AUCs = np.array(val_AUCs)
 
-train_mean = train_losses.mean(axis=0)
+train_mean = np.mean(train_losses, axis=0)
 train_std = train_losses.std(axis=0)
 val_mean = val_losses.mean(axis=0)
 val_std = val_losses.std(axis=0)
