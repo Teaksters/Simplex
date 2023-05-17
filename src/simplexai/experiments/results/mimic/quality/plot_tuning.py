@@ -32,7 +32,6 @@ epochs = []
 test_AUC = 0
 test_acc = 0
 for epoch_path in os.listdir(load_path):
-    if epoch_path != '20': continue
     epochs.append(int(epoch_path))
     cur_path = load_path / epoch_path
     for data_path in os.listdir(cur_path):
