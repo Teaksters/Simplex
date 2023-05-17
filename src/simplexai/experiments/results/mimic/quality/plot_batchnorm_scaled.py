@@ -55,12 +55,22 @@ for scaler in scalers:
 all_data = np.array(all_data)
 print(all_data.shape)
 
-# First try plotting histograms for all the features next to eachother
-all_data_mean = all_data.mean(axis=1)
-all_data_mean = all_data.std(axis=1)
-print(all_data_mean.shape)
-
-# TODO: plot the metrics (in the correct directory not where I am loading from rn)
-safe_path = load_path / 'plots/'
+# Plot data
+safe_path = current_path / "experiments/results/mimic/batchnorm/scaled/plots/"
 if not os.path.exists(safe_path):
     os.makedirs(safe_path)
+
+# First try plotting histograms for all the features next to eachother
+all_data_mean = all_data.mean(axis=1)
+all_data_std = all_data.std(axis=1)
+print(all_data_mean.shape)
+
+bins = np.arange(1, 191)
+for i, data in enumerate(all_data_mean):
+    plt.hist(bins, all_data_mean[i], yerr=all_data_std[i], label=scalers[i],
+             alpha=0.2)
+plt.legend()
+plt.tight_layout()
+plt.savefig()
+
+# TODO: plot the metrics (in the correct directory not where I am loading from rn)
