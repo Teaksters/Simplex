@@ -44,7 +44,7 @@ for epoch_path in os.listdir(load_path):
             train_counter = data[1]
             val_losses.append(data[2])
             val_AUCs.append(data[-1])
-        elif data_path[-4:] == '.pkl':
+        elif data_path[-4:] == '.pkl' and data_path[:4] == 'test':
             test_acc = data[0][0]
             test_AUC = data[1]
 
