@@ -46,7 +46,7 @@ for epoch_path in os.listdir(load_path):
             val_losses.append(data[2])
             val_AUCs.append(data[-1])
         elif data_path[-4:] == '.pkl':
-            test_acc = data[0][0].item()
+            test_acc = data[0][0]
             test_AUC = data[1]
 
 train_losses = np.array(train_losses)
