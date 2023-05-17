@@ -18,8 +18,6 @@ class CPU_Unpickler(pkl.Unpickler):
             return lambda b: torch.load(io.BytesIO(b), map_location='cpu')
         else: return super().find_class(module, name)
 
-################## WORKING ########################################
-
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "-cv_list",
@@ -42,13 +40,21 @@ scalers = args.age_scalers
 current_path = Path.cwd()
 load_path = current_path / "experiments/results/mimic/quality/scaled/"
 
+################## WORKING ########################################
+# Gather all data based on scaler
+all_data = []
 for scaler in scalers:
+    scaler_data = []
     for cv in cv_list:
         current_path = load_path / str(scaler) / f"BNorm_out_data_cv{cv}.pkl"
         with open(current_path, 'rb') as f:
             data = CPU_Unpickler(f).load()
-    print('############################', scaler, '#########################')
-    print(data)
+        scaler_data.append(data)
+    all_data.append(torch.cat(scaler_data, 0).numpy())
+
+print(all_data)
+print(all_data.shape)
+exit()
         # TODO: load the bathnorm output data
         # measure them somehow
 
