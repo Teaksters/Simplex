@@ -184,13 +184,6 @@ def main(experiment: str = "approximation_quality",
     if experiment == "approximation_quality":
 
         approximation_quality(cv=cv, age_scaler=age_scaler)
-    elif experiment == "outlier_detection": # BUSY
-        outlier_detection(cv=cv, age_scaler=age_scaler)
-    elif experiment == "outlier_detection2": # BUSY
-        outlier_detection2(cv=cv, age_scaler=age_scaler,
-                          corpus_scaler=corpus_scaler)
-    elif experiment == "corpus_size": #TODO
-        corpus_size_effect()
     else:
         raise ValueError(
             "The name of the experiment is not valid. "
@@ -203,7 +196,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-experiment",
         type=str,
-        default="outlier_detection",
+        default="approximation_quality",
         help="Experiment to perform",
     )
     parser.add_argument("-cv", type=int, default=0, help="Cross validation parameter")
