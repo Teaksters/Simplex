@@ -25,38 +25,44 @@ current_path = Path.cwd()
 load_path = current_path / "experiments/results/mimic/quality/tuning/epochs"
 
 train_losses = []
-test_losses = []
-test_AUCs = []
+val_losses = []
+val_AUCs = []
 train_counter = []
 epochs = []
+test_AUC = 0
+test_acc = 0
 for epoch_path in os.listdir(load_path):
     if epoch_path != '20': continue
     epochs.append(int(epoch_path))
     cur_path = load_path / epoch_path
     for data_path in os.listdir(cur_path):
-        if data_path[-4:] == '.pkl':
+        if data_path[-4:] == '.pkl' and data_path[:4] != 'test':
             temp_path = cur_path / data_path
             file = open(temp_path, 'rb')
             data = CPU_Unpickler(file).load()
             print(data, data_path)
             train_losses.append(data[0])
             train_counter = data[1]
-            test_losses.append(data[2])
-            test_AUCs.append(data[-1])
+            val_losses.append(data[2])
+            val_AUCs.append(data[-1])
+        elif data_path[-4:] == '.pkl':
+            test_acc = data[0][0].item()
+            test_AUC = data[1]
 
 train_losses = np.array(train_losses)
-test_losses = np.array(test_losses)
-test_AUCs = np.array(test_AUCs)
+val_losses = np.array(val_losses)
+val_AUCs = np.array(val_AUCs)
 
 train_mean = train_losses.mean(axis=0)
 train_std = train_losses.std(axis=0)
-test_mean = train_losses.mean(axis=0)
-test_std = train_losses.std(axis=0)
+val_mean = val_losses.mean(axis=0)
+val_std = val_losses.std(axis=0)
 
 print('xxxxxxxxxxxxxxxxxxEPOCH: ', epoch_path, 'xxxxxxxxxxxxxxx')
 print('train_losses:\n', train_mean, train_std)
-print('test_losses:\n', test_mean, test_std)
-print('test_AUCs:\n', test_AUCs.mean(), "+- (", test_AUCs.std(), ')')
+print('val_losses:\n', val_mean, val_std)
+print('val_AUCs:\n', test_AUCs.mean(), "+- (", test_AUCs.std(), ')')
+print('test_performance:\n', test_acc, "(accuracy)", test_AUC, '(AUC)')
 
 plt.figure(1)
 plt.plot(train_counter, train_mean, label='train loss')
