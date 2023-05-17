@@ -36,20 +36,22 @@ for epoch_path in os.listdir(load_path):
     epochs.append(int(epoch_path))
     cur_path = load_path / epoch_path
     for data_path in os.listdir(cur_path):
-        if data_path[-4:] == '.pkl' and data_path[:4] != 'test':
-            temp_path = cur_path / data_path
-            file = open(temp_path, 'rb')
-            data = CPU_Unpickler(file).load()
-            train_losses.append(data[0])
-            train_counter = data[1]
-            val_losses.append(data[2])
-            val_AUCs.append(data[-1])
-        elif data_path[-4:] == '.pkl' and data_path[:4] == 'test':
-            temp_path = cur_path / data_path
-            file = open(temp_path, 'rb')
-            data = CPU_Unpickler(file).load()
-            test_acc = data[0][0].item()
-            test_AUC = data[1]
+        if epoch_path == '20':
+            if data_path[-4:] == '.pkl' and data_path[:4] != 'test':
+                temp_path = cur_path / data_path
+                file = open(temp_path, 'rb')
+                data = CPU_Unpickler(file).load()
+                train_losses.append(data[0])
+                train_counter = data[1]
+                val_losses.append(data[2])
+                val_AUCs.append(data[-1])
+        if epoch_path == '5':
+            if data_path[-4:] == '.pkl' and data_path[:4] == 'test':
+                temp_path = cur_path / data_path
+                file = open(temp_path, 'rb')
+                data = CPU_Unpickler(file).load()
+                test_acc = data[0][0].item()
+                test_AUC = data[1]
 
 # train_losses = np.array(train_losses)
 # print(train_losses)
