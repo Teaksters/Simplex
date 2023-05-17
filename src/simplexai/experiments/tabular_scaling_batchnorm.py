@@ -77,7 +77,7 @@ def approximation_quality(
 
     if train_model:
         # Create the model
-        classifier = MortalityPredictor(n_cont=188, input_feature_num=26)
+        classifier = MortalityPredictor()
         classifier.to(device)
         optimizer = optim.Adam(classifier.parameters(), weight_decay=weight_decay)
 
@@ -140,7 +140,7 @@ def approximation_quality(
         torch.save(optimizer.state_dict(), save_path / f"optimizer_cv{cv}.pth")
 
     # Load model:
-    classifier = MortalityPredictor(n_cont=188, input_feature_num=26)
+    classifier = MortalityPredictor()
     classifier.load_state_dict(torch.load(save_path / f"model_cv{cv}.pth"))
     classifier.to(device)
     classifier.eval()
