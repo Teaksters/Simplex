@@ -213,7 +213,6 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
     df = sklearn.utils.shuffle(data_df, random_state=random_seed)
     df = df.reset_index(drop=True)
     features, labels = df.loc[:, df.columns != 'y_true'], df['y_true']
-    print(features)
     return features, labels
 
 def approximation_quality(
