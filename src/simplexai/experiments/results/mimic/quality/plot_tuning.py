@@ -60,7 +60,7 @@ val_mean = val_losses.mean(axis=0)
 val_std = val_losses.std(axis=0)
 
 print('xxxxxxxxxxxxxxxxxxEPOCH: ', epoch_path, 'xxxxxxxxxxxxxxx')
-print('train_losses:\n', train_mean, train_std)
+# print('train_losses:\n', train_mean, train_std)
 print('val_losses:\n', val_mean, val_std)
 print('val_AUCs:\n', test_AUCs.mean(), "+- (", test_AUCs.std(), ')')
 print('test_performance:\n', test_acc, "(accuracy)", test_AUC, '(AUC)')
