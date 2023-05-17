@@ -40,7 +40,6 @@ for epoch_path in os.listdir(load_path):
             temp_path = cur_path / data_path
             file = open(temp_path, 'rb')
             data = CPU_Unpickler(file).load()
-            print(len(data[0]))
             train_losses.append(data[0])
             train_counter = data[1]
             val_losses.append(data[2])
@@ -59,10 +58,8 @@ val_AUCs = np.array(val_AUCs)
 val_mean = val_losses.mean(axis=0)
 val_std = val_losses.std(axis=0)
 
-print('xxxxxxxxxxxxxxxxxxEPOCH: ', epoch_path, 'xxxxxxxxxxxxxxx')
 # print('train_losses:\n', train_mean, train_std)
 print('val_losses:\n', val_mean, val_std)
-print('val_AUCs:\n', test_AUCs.mean(), "+- (", test_AUCs.std(), ')')
 print('test_performance:\n', test_acc, "(accuracy)", test_AUC, '(AUC)')
 
 plt.figure(1)
