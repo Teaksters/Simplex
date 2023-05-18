@@ -77,7 +77,8 @@ plt.clf()
 
 # Try plotting a box
 columns = all_data.reshape((all_data.shape[0], -1))
-plt.boxplot(columns, names=scalers)
+plt.boxplot(columns)
+plt.xticks(np.arange(1, len(scalers) + 1), scalers)
 plt.tight_layout()
 plt.savefig(safe_path / 'out_boxplot.png')
 
