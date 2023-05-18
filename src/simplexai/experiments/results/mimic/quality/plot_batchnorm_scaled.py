@@ -62,10 +62,11 @@ if not os.path.exists(safe_path):
 # First try plotting histograms for all the features next to eachother
 all_data_mean = all_data.mean(axis=1)
 all_data_std = all_data.std(axis=1)
-print(all_data_mean.shape)
+print(all_data_mean.shape, all_data_std.shape)
 
 ################## WORKING ########################################
 bins = np.arange(1, 191)
+print(scaler, bins)
 print(bins.shape, all_data_mean[0].shape, all_data_std[0].shape, scaler[0])
 for i, data in enumerate(all_data_mean):
     plt.hist(bins, all_data_mean[i], yerr=all_data_std[i], label=scalers[i],
