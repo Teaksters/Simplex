@@ -68,7 +68,7 @@ print(all_data_mean.shape, all_data_std.shape)
 # Try plotting a histogram of the features after batchnorm
 bins = np.arange(1, 191)
 for i, data in enumerate(all_data_mean):
-    plt.hist(bins, all_data_mean[i], yerr=all_data_std[i], label=scalers[i],
+    plt.bar(bins, all_data_mean[i], yerr=all_data_std[i], label=scalers[i],
              alpha=0.2)
 plt.legend()
 plt.tight_layout()
