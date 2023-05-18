@@ -65,6 +65,7 @@ all_data_std = all_data.std(axis=1)
 print(all_data_mean.shape, all_data_std.shape)
 
 ################## WORKING ########################################
+# Try plotting a histogram of the features after batchnorm
 bins = np.arange(1, 191)
 for i, data in enumerate(all_data_mean):
     plt.hist(bins, all_data_mean[i], yerr=all_data_std[i], label=scalers[i],
@@ -72,5 +73,12 @@ for i, data in enumerate(all_data_mean):
 plt.legend()
 plt.tight_layout()
 plt.savefig(safe_path / 'out_histogram.png')
+plt.clf()
+
+# Try plotting a box
+columns = all_data.reshape((all_data.shape[0], -1))
+plt.boxplot(columns, names=scalers)
+plt.tight_layout()
+plt.savefig(safe_path / 'out_boxplot.png')
 
 # TODO: plot the metrics (in the correct directory not where I am loading from rn)
