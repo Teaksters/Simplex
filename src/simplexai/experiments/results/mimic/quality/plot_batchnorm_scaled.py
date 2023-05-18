@@ -40,7 +40,6 @@ scalers = args.age_scalers
 current_path = Path.cwd()
 load_path = current_path / "experiments/results/mimic/quality/scaled/"
 
-################## WORKING ########################################
 # Gather all data based on scaler
 all_data = []
 for scaler in scalers:
@@ -65,7 +64,9 @@ all_data_mean = all_data.mean(axis=1)
 all_data_std = all_data.std(axis=1)
 print(all_data_mean.shape)
 
+################## WORKING ########################################
 bins = np.arange(1, 191)
+print(bins.shape, all_data_mean[0].shape, all_data_std[0].shape, scaler[0])
 for i, data in enumerate(all_data_mean):
     plt.hist(bins, all_data_mean[i], yerr=all_data_std[i], label=scalers[i],
              alpha=0.2)
