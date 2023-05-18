@@ -66,8 +66,6 @@ print(all_data_mean.shape, all_data_std.shape)
 
 ################## WORKING ########################################
 bins = np.arange(1, 191)
-print(scalers, bins)
-print(bins.shape, all_data_mean[0].shape, all_data_std[0].shape, scalers[0])
 for i, data in enumerate(all_data_mean):
     plt.hist(bins, all_data_mean[i], yerr=all_data_std[i], label=scalers[i],
              alpha=0.2)
