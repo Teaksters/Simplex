@@ -76,6 +76,14 @@ plt.savefig(safe_path / 'out_histogram.png')
 plt.clf()
 
 # Try plotting a box
+print(all_data[0])
+age = all_data[:, :, 0]
+print(age.shape)
+age = age.reshape((all_data.shape[0], -1))
+print(age.shape)
+print(age[0])
+exit()
+
 columns = all_data.reshape((all_data.shape[0], -1))
 plt.boxplot(columns)
 plt.xticks(np.arange(1, len(scalers) + 1), scalers)
