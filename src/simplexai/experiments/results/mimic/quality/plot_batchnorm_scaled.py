@@ -72,7 +72,7 @@ age_mean = age.mean(axis=1)
 age_std = age.std(axis=1)
 other_mean = other.mean(axis=1)
 other_std = other.std(axis=1)
-print(age_mean., other_mean)
+print(age_mean, other_mean)
 exit()
 
 bins = np.arange(1, 191)
