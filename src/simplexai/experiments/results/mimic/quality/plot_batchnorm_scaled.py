@@ -81,7 +81,7 @@ age_median = np.median(age, axis=1)
 # plt.clf()
 
 # Try plotting a box
-print(age.shape, scalers.shape)
+print(age.shape, len(scalers))
 plt.boxplot(age)
 plt.xticks(np.arange(1, len(scalers) + 1), scalers)
 plt.tight_layout()
