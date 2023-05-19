@@ -82,6 +82,7 @@ plt.clf()
 
 # Try plotting a box
 df = pd.DataFrame(data=age, columns=scalers)
+print(df)
 sns.boxplot(x='scaler', y='batchnorm output', data=pd.melt(df))
 # plt.boxplot(age, columns=scalers)
 plt.tight_layout()
