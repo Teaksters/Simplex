@@ -88,7 +88,6 @@ plt.savefig(safe_path / 'out_boxplot.png')
 plt.clf()
 
 # Try plotting a line plot with other metrics
-age_min.flatten()
 print(age_min.shape, age_max.shape)
 plt.plot(bins, age_min, label='min')
 plt.plot(bins, age_max, label='max')
