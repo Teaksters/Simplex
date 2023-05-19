@@ -81,9 +81,9 @@ plt.savefig(safe_path / 'out_histogram.png')
 plt.clf()
 
 # Try plotting a box
-print(age)
-plt.boxplot(age)
-plt.xticks(np.arange(1, len(scalers) + 1), scalers)
+df = pd.DataFrame(data=age, columns=scalers)
+sns.boxplot(x='scaler', y='batchnorm output', data=pd.melt(df))
+# plt.boxplot(age, columns=scalers)
 plt.tight_layout()
 plt.savefig(safe_path / 'out_boxplot.png')
 plt.clf()
