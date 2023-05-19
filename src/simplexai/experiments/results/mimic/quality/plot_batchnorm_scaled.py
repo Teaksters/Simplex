@@ -65,14 +65,9 @@ age = all_data[:, :, 0]
 # other = all_data[:, :, 1:]
 # other = other.reshape((all_data.shape[0], -1))
 
-print(age.shape)
-
-# Try plotting a histogram of the features after batchnorm
+# Try plotting a barplot of the scaled age after batchnorm
 age_mean = age.mean(axis=1)
 age_std = age.std(axis=1)
-print(age_mean, age_std)
-exit()
-
 bins = np.arange(1, age.shape[0] + 1)
 plt.bar(bins, age_mean, yerr=age_std, label=scalers)
 plt.legend()
