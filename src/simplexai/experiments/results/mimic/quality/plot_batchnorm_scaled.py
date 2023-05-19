@@ -70,23 +70,18 @@ print(age.shape)
 # Try plotting a histogram of the features after batchnorm
 age_mean = age.mean(axis=1)
 age_std = age.std(axis=1)
-# other_mean = other.mean(axis=1)
-# other_std = other.std(axis=1)
 print(age_mean, age_std)
 exit()
 
-bins = np.arange(1, 191)
-for i, data in enumerate(all_data_mean):
-    plt.bar(bins, all_data_mean[i], yerr=all_data_std[i], label=scalers[i],
-             alpha=0.2)
+bins = np.arange(1, age.shape[0] + 1)
+plt.bar(bins, age_mean, yerr=age_std, label=scalers)
 plt.legend()
 plt.tight_layout()
 plt.savefig(safe_path / 'out_histogram.png')
 plt.clf()
 
 # Try plotting a box
-columns = all_data.reshape((all_data.shape[0], -1))
-plt.boxplot(columns)
+plt.boxplot(age)
 plt.xticks(np.arange(1, len(scalers) + 1), scalers)
 plt.tight_layout()
 plt.savefig(safe_path / 'out_boxplot.png')
