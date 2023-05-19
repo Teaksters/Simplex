@@ -38,7 +38,7 @@ cv_list = args.cv_list
 scalers = args.age_scalers
 
 current_path = Path.cwd()
-load_path = current_path / "experiments/results/mimic/quality/scaled/"
+load_path = current_path / "experiments/results/mimic/batchnormAffine/scaled/"
 
 # Gather all data based on scaler
 all_data = []
