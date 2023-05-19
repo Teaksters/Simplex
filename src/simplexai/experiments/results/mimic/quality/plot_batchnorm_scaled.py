@@ -60,19 +60,19 @@ if not os.path.exists(safe_path):
     os.makedirs(safe_path)
 
 ################## WORKING ########################################
-# Separate scaled feature from the rest
+# Separate scaled feature from the rest (other features were unaffected, so I leave them out)
 age = all_data[:, :, 0]
-other = all_data[:, :, 1:]
-other = other.reshape((all_data.shape[0], -1))
+# other = all_data[:, :, 1:]
+# other = other.reshape((all_data.shape[0], -1))
 
-print(age.shape, other.shape)
+print(age.shape)
 
 # Try plotting a histogram of the features after batchnorm
 age_mean = age.mean(axis=1)
 age_std = age.std(axis=1)
-other_mean = other.mean(axis=1)
-other_std = other.std(axis=1)
-print(age_mean, other_mean)
+# other_mean = other.mean(axis=1)
+# other_std = other.std(axis=1)
+print(age_mean, age_std)
 exit()
 
 bins = np.arange(1, 191)
