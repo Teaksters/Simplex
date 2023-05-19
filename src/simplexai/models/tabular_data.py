@@ -17,7 +17,7 @@ class MortalityPredictor(BlackBox):
         self.lin2 = nn.Linear(200, 50)
         self.lin3 = nn.Linear(50, 2)
         if self.n_cont > 0:
-            self.bn1 = nn.BatchNorm1d(self.n_cont)
+            self.bn1 = nn.BatchNorm1d(self.n_cont, affine=False) # CHANGED AFFINE HERE!!
         self.drops = nn.Dropout(0.3)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:

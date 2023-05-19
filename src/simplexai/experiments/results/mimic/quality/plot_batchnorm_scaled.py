@@ -62,9 +62,6 @@ if not os.path.exists(safe_path):
 ################## WORKING ########################################
 # Separate scaled feature from the rest (other features were unaffected, so I leave them out)
 age = all_data[:, :, 0]
-# other = all_data[:, :, 1:]
-# other = other.reshape((all_data.shape[0], -1))
-print(age.shape)
 # Gather statistics
 age_mean = age.mean(axis=1)
 age_std = age.std(axis=1)
@@ -81,8 +78,6 @@ plt.savefig(safe_path / 'out_histogram.png')
 plt.clf()
 
 # Try plotting a box
-# df = pd.DataFrame(data=age.T, columns=scalers)
-# sns.boxplot(x='scalers', y='batchnorm output', data=pd.melt(df))
 plt.boxplot(age.T)
 plt.xticks(np.arange(1, len(scalers) + 1), scalers)
 plt.tight_layout()
@@ -90,7 +85,6 @@ plt.savefig(safe_path / 'out_boxplot.png')
 plt.clf()
 
 # Try plotting a line plot with other metrics
-print(age_min.shape, age_max.shape)
 plt.plot(scalers, age_min, label='min')
 plt.plot(scalers, age_max, label='max')
 plt.plot(scalers, age_mean, label='mean')
