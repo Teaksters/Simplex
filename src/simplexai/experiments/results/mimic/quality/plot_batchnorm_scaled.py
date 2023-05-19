@@ -81,7 +81,7 @@ plt.savefig(safe_path / 'out_histogram.png')
 plt.clf()
 
 # Try plotting a box
-print(age.shape)
+print(age.shape, scalers.shape)
 plt.boxplot(age)
 plt.xticks(np.arange(1, len(scalers) + 1), scalers)
 plt.tight_layout()
