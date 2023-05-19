@@ -73,12 +73,12 @@ age_min = age.min(axis=1)
 age_median = np.median(age, axis=1)
 
 # Try plotting a barplot of the scaled age after batchnorm
-bins = np.arange(1, age.shape[0] + 1)
-plt.bar(bins, age_mean, yerr=age_std, label=scalers)
-plt.legend()
-plt.tight_layout()
-plt.savefig(safe_path / 'out_histogram.png')
-plt.clf()
+# bins = np.arange(1, age.shape[0] + 1)
+# plt.bar(bins, age_mean, yerr=age_std, label=scalers)
+# plt.legend()
+# plt.tight_layout()
+# plt.savefig(safe_path / 'out_histogram.png')
+# plt.clf()
 
 # Try plotting a box
 print(age.shape, scalers.shape)
