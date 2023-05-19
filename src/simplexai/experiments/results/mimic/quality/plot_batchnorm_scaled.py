@@ -65,9 +65,14 @@ age = all_data[:, :, 0]
 # other = all_data[:, :, 1:]
 # other = other.reshape((all_data.shape[0], -1))
 
-# Try plotting a barplot of the scaled age after batchnorm
+# Gather statistics
 age_mean = age.mean(axis=1)
 age_std = age.std(axis=1)
+age_max = age.max(axis=1)
+age_min = age.min(axis=1)
+age_median = age.median(axis=1)
+
+# Try plotting a barplot of the scaled age after batchnorm
 bins = np.arange(1, age.shape[0] + 1)
 plt.bar(bins, age_mean, yerr=age_std, label=scalers)
 plt.legend()
@@ -80,5 +85,17 @@ plt.boxplot(age)
 plt.xticks(np.arange(1, len(scalers) + 1), scalers)
 plt.tight_layout()
 plt.savefig(safe_path / 'out_boxplot.png')
+plt.clf()
 
+# Try plotting a line plot with other metrics
+age_min.flatten()
+plt.plot(age_min, label='min')
+plt.plot(age_max, label='max')
+plt.plot(age_median, label='median')
+plt.plot(age_mean, label='mean')
+plt.fill_between(age_mean - age_std, age_mean + age_std, alpha=0.2)
+plt.legend()
+plt.tight_layout()
+plt.savefig(safe_path / 'out_lineplot.png')
+plt.clf()
 # TODO: plot the metrics (in the correct directory not where I am loading from rn)
