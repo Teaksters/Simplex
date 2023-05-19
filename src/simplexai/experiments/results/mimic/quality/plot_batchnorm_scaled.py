@@ -62,9 +62,8 @@ if not os.path.exists(safe_path):
 ################## WORKING ########################################
 # Separate scaled feature from the rest
 age = all_data[:, :, 0]
-# age = age.reshape((all_data.shape[0], -1))
 other = all_data[:, :, 1:]
-# other = other.reshape((all_data.shape[0], -1))
+other = other.reshape((all_data.shape[0], -1))
 
 print(age.shape, other.shape)
 
@@ -73,7 +72,7 @@ age_mean = age.mean(axis=1)
 age_std = age.std(axis=1)
 other_mean = other.mean(axis=1)
 other_std = other.std(axis=1)
-print(age_mean.shape, other_mean.shape)
+print(age_mean., other_mean)
 exit()
 
 bins = np.arange(1, 191)
