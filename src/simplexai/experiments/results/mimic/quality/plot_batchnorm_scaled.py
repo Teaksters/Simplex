@@ -59,23 +59,22 @@ safe_path = current_path / "experiments/results/mimic/batchnorm/scaled/plots/"
 if not os.path.exists(safe_path):
     os.makedirs(safe_path)
 
-# First try plotting histograms for all the features next to eachother
-all_data_mean = all_data.mean(axis=1)
-all_data_std = all_data.std(axis=1)
-print(all_data_mean.shape, all_data_std.shape)
-
 ################## WORKING ########################################
-
 # Separate scaled feature from the rest
-print(all_data[0])
 age = all_data[:, :, 0]
-print(age.shape)
 age = age.reshape((all_data.shape[0], -1))
-print(age.shape)
-print(age[0])
-exit()
+other = all_data[:, :, 1:]
+other = other.reshape((all_data.shape[0], -1))
+
+print(age.shape, other.shape)
 
 # Try plotting a histogram of the features after batchnorm
+age_mean = age.mean(axis=1)
+age_std = age.std(axis=1)
+other_mean = other.mean(axis=1)
+other_std = other.std(axis=1)
+print(age_mean.shape, other_mean.shape)
+
 bins = np.arange(1, 191)
 for i, data in enumerate(all_data_mean):
     plt.bar(bins, all_data_mean[i], yerr=all_data_std[i], label=scalers[i],
