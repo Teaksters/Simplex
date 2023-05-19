@@ -70,7 +70,7 @@ age_mean = age.mean(axis=1)
 age_std = age.std(axis=1)
 age_max = age.max(axis=1)
 age_min = age.min(axis=1)
-age_median = age.median(axis=1)
+age_median = np.median(age, axis=1)
 
 # Try plotting a barplot of the scaled age after batchnorm
 bins = np.arange(1, age.shape[0] + 1)
