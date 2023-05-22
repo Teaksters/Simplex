@@ -652,7 +652,8 @@ def jacobian_corruption(
 
             # Add a percentage of noise to corpus
             for pert_id, n_pert in enumerate(n_pert_list):
-                noise = torch.cuda.FloatTensor(corpus_inputs.shape, device=device).uniform_(0, 1)
+                noise = torch.FloatTensor(corpus_inputs.shape, device=device).uniform_(0, 1)
+                noise.to(device)
                 mask = noise > n_pert
                 corpus_inputs_pert = (corpus_inputs * ~mask) + (noise * mask)
 
