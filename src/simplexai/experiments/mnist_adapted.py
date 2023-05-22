@@ -644,11 +644,12 @@ def jacobian_corruption(
             )
             test_input = test_input.to(device)
             corpus_inputs = corpus_inputs.to(device).requires_grad_()
+            Corpus_inputs[lower_id:higher_id] = corpus_inputs.detach()
             test_latent = classifier.latent_representation(test_input).detach()
 
+
+            # Add a percentage of noise to corpus
             for pert_id, n_pert in enumerate(n_pert_list):
-                # Add a percentage of noise to corpus
-                # corpus_inputs needs to be noised an put into corpus_inputs_pert_jp
                 noise = torch.cuda.FloatTensor(corpus_inputs.shape, device=device).uniform_(0, 1)
                 mask = noise > n_pert
                 corpus_inputs_pert = (corpus_inputs * ~mask) + (noise * mask)
@@ -662,7 +663,7 @@ def jacobian_corruption(
                 f"Now fitting the noise-corrupted SimplEx with {n_pert} perturbation(s) per image"
             )
             simplex = Simplex(
-                Corpus_inputs_pert[pert_id], # this needs to be corpus noised
+                Corpus_inputs_pert[pert_id],
                 classifier.latent_representation(
                     Corpus_inputs_pert[pert_id]
                 ).detach(),
