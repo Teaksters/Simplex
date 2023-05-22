@@ -584,7 +584,7 @@ def jacobian_corruption(
     test_size=500,
     n_bins=100,
     batch_size=50,
-    train: bool = False, #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Set back to True later
+    train: bool = True,
 ) -> None:
     print(
         100 * "-" + "\n" + "Welcome in the Jacobian Projection check for MNIST. \n"
@@ -593,7 +593,7 @@ def jacobian_corruption(
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     torch.random.manual_seed(random_seed)
-    n_pert_list = [0.25, 0.5, 0.75, 1.0]
+    n_pert_list = [0.0, 0.25, 0.5, 0.75, 1.0]
     metric_data = []
     df_columns = ["Method", "N_pert", "Residual"]
     current_folder = Path.cwd()
