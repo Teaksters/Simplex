@@ -644,8 +644,10 @@ def jacobian_corruption(
             )
             test_input = test_input.to(device)
             corpus_inputs = corpus_inputs.to(device).requires_grad_()
-            Corpus_inputs[lower_id:higher_id] = corpus_inputs.detach()
             test_latent = classifier.latent_representation(test_input).detach()
+
+            lower_id = batch_id * batch_size
+            higher_id = lower_id + batch_size
 
 
             # Add a percentage of noise to corpus
