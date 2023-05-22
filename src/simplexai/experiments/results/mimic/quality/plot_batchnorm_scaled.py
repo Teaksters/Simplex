@@ -55,7 +55,7 @@ all_data = np.array(all_data)
 print(all_data.shape)
 
 # Plot data
-safe_path = current_path / "experiments/results/mimic/batchnorm/scaled/plots/"
+safe_path = current_path / "experiments/results/mimic/batchnormAffine/scaled/plots/"
 if not os.path.exists(safe_path):
     os.makedirs(safe_path)
 
