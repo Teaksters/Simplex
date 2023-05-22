@@ -685,6 +685,12 @@ def jacobian_corruption(
     plt.xlabel("Percentage of noisy pixels")
     plt.savefig(save_path / "box_plot.png")
 
+    data_path = save_path / f"corrupted_results_cv{cv}.pkl"
+    with open(data_path, "wb") as f:
+        print(f"Saving nn_dist decomposition in {data_path}.")
+        pkl.dump(metric_df, f)
+
+
 
 def timing_experiment() -> None:
     print(100 * "-" + "\n" + "Welcome in timing experiment for MNIST. \n" + 100 * "-")
@@ -803,7 +809,7 @@ def main(experiment: str, cv: int) -> None:
     elif experiment == "outlier_detection":
         outlier_detection(cv)
     elif experiment == "jacobian_corruption":
-        jacobian_corruption(test_size=100)
+        jacobian_corruption(random_seed=42 + cv, test_size=100)
     elif experiment == "influence":
         influence_function(n_keep_list=[2, 5, 10, 20, 50], cv=cv)
     elif experiment == "timing":
