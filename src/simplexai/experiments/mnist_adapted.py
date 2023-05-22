@@ -800,7 +800,7 @@ def main(experiment: str, cv: int) -> None:
     elif experiment == "outlier_detection":
         outlier_detection(cv)
     elif experiment == "jacobian_corruption":
-        jacobian_corruption(test_size=100, train=True)
+        jacobian_corruption(test_size=100)
     elif experiment == "influence":
         influence_function(n_keep_list=[2, 5, 10, 20, 50], cv=cv)
     elif experiment == "timing":
