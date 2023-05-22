@@ -32,7 +32,7 @@ def approximation_quality(
     cv: int = 0,
     age_scaler: float=1.,
     random_seed: int = 55,
-    save_path: str = "experiments/results/mimic/batchnormAffine/scaled", # update here
+    save_path: str = "experiments/results/mimic/batchnorm/scaled", # update here
     train_model: bool = True,
     train_data_only=False,
 ) -> None:

@@ -38,7 +38,7 @@ cv_list = args.cv_list
 scalers = args.age_scalers
 
 current_path = Path.cwd()
-load_path = current_path / "experiments/results/mimic/batchnormAffine/scaled/"
+load_path = current_path / "experiments/results/mimic/batchnorm/scaled/"
 
 # Gather all data based on scaler
 all_data = []
@@ -55,7 +55,7 @@ all_data = np.array(all_data)
 print(all_data.shape)
 
 # Plot data
-safe_path = current_path / "experiments/results/mimic/batchnormAffine/scaled/plots/"
+safe_path = current_path / "experiments/results/mimic/batchnorm/scaled/plots/"
 if not os.path.exists(safe_path):
     os.makedirs(safe_path)
 
