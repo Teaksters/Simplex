@@ -61,9 +61,6 @@ def load_mnist(
     if (not train) and val:
         generator = torch.Generator()
         test, val = torch.utils.data.random_split(dataset, [0.5, 0.5], generator=generator)
-        print(len(test))
-        print('============================')
-        print(len(val))
         test_loader = DataLoader(test, batch_size=batch_size, shuffle=shuffle)
         val_loader = DataLoader(val, batch_size=batch_size, shuffle=shuffle)
         return val_loader, test_loader
@@ -324,6 +321,7 @@ def approximation_quality(
         f"Settings: random_seed = {random_seed} ; cv = {cv}.\n" + 100 * "-"
     )
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    explainers_name = ["simplex"]
 
     current_path = Path.cwd()
     save_path = current_path / save_path
