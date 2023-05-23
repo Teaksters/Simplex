@@ -656,7 +656,7 @@ def jacobian_corruption(
                 mask = noise > n_pert
                 mask.to(device)
                 noise.to(device)
-                print(corpus_inputs.device, mask.device, noise.device)
+                print(corpus_inputs.device, mask.device, noise.device, device)
                 corpus_inputs_pert = (corpus_inputs * ~mask) + (noise * mask)
 
                 Corpus_inputs_pert[
