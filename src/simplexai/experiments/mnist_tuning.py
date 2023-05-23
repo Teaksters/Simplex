@@ -66,8 +66,6 @@ def load_mnist(
         print(len(val))
         test_loader = DataLoader(test, batch_size=batch_size, shuffle=shuffle)
         val_loader = DataLoader(val, batch_size=batch_size, shuffle=shuffle)
-
-        exit()
         return val_loader, test_loader
     return DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
 
