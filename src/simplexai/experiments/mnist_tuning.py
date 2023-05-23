@@ -41,7 +41,7 @@ class MNISTSubset(Dataset):
 
 
 def load_mnist(
-    batch_size: int, train: bool, subset_size=None, shuffle: bool = True
+    batch_size: int, train: bool, subset_size=None, shuffle: bool = True, val=False
 ) -> DataLoader:
     dataset = torchvision.datasets.MNIST(
         "./data/",
@@ -58,6 +58,17 @@ def load_mnist(
         dataset = torch.utils.data.Subset(
             dataset, torch.randperm(len(dataset))[:subset_size]
         )
+    if (not train) and val:
+        generator = torch.Generator()
+        test, val = torch.utils.data.random_split(dataset, [0.5, 0.5], generator=generator)
+        print(test)
+        print('============================')
+        print(val)
+        test_loader = DataLoader(test, batch_size=batch_size, shuffle=shuffle)
+        val_loader = DataLoader(val, batch_size=batch_size, shuffle=shuffle)
+
+        exit()
+        return val_loader, test_loader
     return DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
 
 
