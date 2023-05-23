@@ -652,7 +652,7 @@ def jacobian_corruption(
 
             # Add a percentage of noise to corpus
             for pert_id, n_pert in enumerate(n_pert_list):
-                noise = torch.FloatTensor(corpus_inputs.shape, device=device).uniform_(0, 1)
+                noise = torch.FloatTensor(corpus_inputs.shape).uniform_(0, 1)
                 noise.to(device)
                 mask = noise > n_pert
                 corpus_inputs_pert = (corpus_inputs * ~mask) + (noise * mask)
@@ -683,7 +683,7 @@ def jacobian_corruption(
     sns.set_palette("colorblind")
     sns.boxplot(data=metric_df, x="N_pert", y="Residual", hue="Method")
     plt.xlabel("Percentage of noisy pixels")
-    plt.savefig(save_path / "box_plot.png")
+    plt.savefig(save_path / f"box_plot_cv{cv}.png")
 
     data_path = save_path / f"corrupted_results_cv{cv}.pkl"
     with open(data_path, "wb") as f:
