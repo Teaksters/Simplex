@@ -125,7 +125,9 @@ def train_model(
     train_losses = []
     train_counter = []
     val_losses = []
+    val_accs = []
     test_losses = 0
+    test_accs = 0
 
     def train(epoch):
         classifier.train()
@@ -180,9 +182,17 @@ def train_model(
     for epoch in range(1, n_epoch + 1):
         train(epoch)
         val_loss, val_acc = test(val_loader)
-    test_loss, test_accs = test(test_loader)
+        val_losses.append(val_loss)
+        val_accs.append(val_acc)
+    test_losses, test_accs = test(test_loader)
     torch.save(classifier.state_dict(), os.path.join(save_path, f"model_cv{cv}.pth"))
     torch.save(optimizer.state_dict(), os.path.join(save_path, f"optimizer_cv{cv}.pth"))
+
+    # Store losses for tuning purposes
+    performance_data = [train_losses, train_counter , test_losses, test_accs]
+    file = open(save_path / f"performance_cv{cv}.pkl", 'wb')
+    pkl.dump(performance_data, file)
+
     return classifier
 
 
