@@ -109,7 +109,7 @@ def train_model(
 
     # Prepare data
     train_loader = load_mnist(batch_size_train, train=True)
-    test_loader = load_mnist(batch_size_test, train=False)
+    val_loader, test_loader = load_mnist(batch_size_test, train=False, val=True)
 
     # Create the model
     classifier = MnistClassifier()
@@ -124,7 +124,8 @@ def train_model(
     # Train the model
     train_losses = []
     train_counter = []
-    test_losses = []
+    val_losses = []
+    test_losses = 0
 
     def train(epoch):
         classifier.train()
@@ -154,29 +155,32 @@ def train_model(
                     os.path.join(save_path, f"optimizer_cv{cv}.pth"),
                 )
 
-    def test():
+    def test(loader):
         classifier.eval()
         test_loss = 0
         correct = 0
         with torch.no_grad():
-            for data, target in test_loader:
+            for data, target in loader:
                 data = data.to(device)
                 target = target.to(device)
                 output = classifier(data)
                 test_loss += F.nll_loss(output, target, reduction="sum").item()
                 pred = output.data.max(1, keepdim=True)[1]
                 correct += pred.eq(target.data.view_as(pred)).sum()
-        test_loss /= len(test_loader.dataset)
-        test_losses.append(test_loss)
+        test_loss /= len(loader.dataset)
+        test_acc = correct / len(loader.dataset)
         print(
-            f"\nTest set: Avg. loss: {test_loss:.4f}, Accuracy: {correct}/{len(test_loader.dataset)}"
-            f"({100. * correct / len(test_loader.dataset):.0f}%)\n"
+            f"\nTest set: Avg. loss: {test_loss:.4f}, Accuracy: {correct}/{len(loader.dataset)}"
+            f"({100. * correct / len(loader.dataset):.0f}%)\n"
         )
+        return test_loss, test_acc
 
-    test()
+    val_loss, val_acc = test(val_loader)
+    val_losses.append(val_loss)
     for epoch in range(1, n_epoch + 1):
         train(epoch)
-        test()
+        val_loss, val_acc = test(val_loader)
+    test_loss, test_accs = test(test_loader)
     torch.save(classifier.state_dict(), os.path.join(save_path, f"model_cv{cv}.pth"))
     torch.save(optimizer.state_dict(), os.path.join(save_path, f"optimizer_cv{cv}.pth"))
     return classifier
@@ -311,7 +315,6 @@ def approximation_quality(
         f"Settings: random_seed = {random_seed} ; cv = {cv}.\n" + 100 * "-"
     )
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    explainers_name = ["simplex", "nn_uniform", "nn_dist", "representer"]
 
     current_path = Path.cwd()
     save_path = current_path / save_path
@@ -379,442 +382,9 @@ def approximation_quality(
     print(f"representer output r2 = {output_r2_score:.2g}.")
 
 
-def influence_function(
-    n_keep_list: list,
-    cv: int = 0,
-    random_seed: int = 42,
-    save_path: str = "experiments/results/mnist/influence/",
-    corpus_size: int = 1000,
-    test_size: int = 100,
-) -> None:
-    print(
-        100 * "-" + "\n" + "Welcome in the influence function computation for MNIST. \n"
-        f"Settings: random_seed = {random_seed} ; cv = {cv}.\n" + 100 * "-"
-    )
-    device = torch.device(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
-    torch.random.manual_seed(random_seed + cv)
-    current_path = Path.cwd()
-    save_path = current_path / save_path
-
-    # Create saving directory if inexistent
-    if not save_path.exists():
-        print(f"Creating the saving directory {save_path}")
-        os.makedirs(save_path)
-
-    # Training a model if necessary, save it
-    if not (save_path / f"model_cv{cv}.pth").exists():
-        print(100 * "-" + "\n" + "Now fitting the model. \n" + 100 * "-")
-        train_model(
-            device=device,
-            random_seed=random_seed,
-            cv=cv,
-            save_path=save_path,
-            model_reg_factor=0,
-        )
-
-    # Load the model
-    classifier = MnistClassifier()
-    classifier.load_state_dict(torch.load(save_path / f"model_cv{cv}.pth"))
-    classifier.to(device)
-    classifier.eval()
-
-    corpus_loader = load_mnist(
-        subset_size=corpus_size, train=True, batch_size=corpus_size
-    )
-    test_loader = load_mnist(
-        subset_size=test_size, train=False, batch_size=50, shuffle=False
-    )
-
-    corpus_features = next(iter(corpus_loader))[0].to(device)
-    corpus_latent_reps = classifier.latent_representation(corpus_features).detach()
-    scheduler = ExponentialScheduler(0.1, 100, 20000)
-
-    with open(save_path / f"corpus_latent_reps_cv{cv}.pkl", "wb") as f:
-        pkl.dump(corpus_latent_reps.cpu().numpy(), f)
-
-    test_latent_reps = np.zeros((test_size, corpus_latent_reps.shape[-1]))
-    for batch_id, batch in enumerate(test_loader):
-        test_latent_reps[
-            batch_id * len(batch[0]) : (batch_id + 1) * len(batch[0]), :
-        ] = (
-            classifier.latent_representation(batch[0].to(device)).detach().cpu().numpy()
-        )
-    with open(save_path / f"test_latent_reps_cv{cv}.pkl", "wb") as f:
-        pkl.dump(test_latent_reps, f)
-
-    print(30 * "-" + "Fitting SimplEx" + 30 * "-")
-    for n_keep in n_keep_list:
-        print(
-            20 * "-"
-            + f"Training Simplex by allowing to keep {n_keep} corpus examples"
-            + 20 * "-"
-        )
-        weights = np.zeros((test_size, corpus_size))
-        for batch_id, batch in enumerate(test_loader):
-            print(
-                20 * "-"
-                + f"Working with batch {batch_id + 1} / {len(test_loader)}"
-                + 20 * "-"
-            )
-            simplex = Simplex(corpus_features, corpus_latent_reps)
-            test_features = batch[0].to(device)
-            test_latent_reps = classifier.latent_representation(test_features).detach()
-            simplex.fit(
-                test_features,
-                test_latent_reps,
-                n_keep=n_keep,
-                reg_factor=0.1,
-                reg_factor_scheduler=scheduler,
-                n_epoch=20000,
-            )
-            weights_batch = simplex.weights.cpu().numpy()
-            weights[
-                batch_id * len(weights_batch) : (batch_id + 1) * len(weights_batch), :
-            ] = weights_batch
-
-        with open(save_path / f"simplex_weights_cv{cv}_n{n_keep}.pkl", "wb") as f:
-            pkl.dump(weights, f)
-
-    print(30 * "-" + "Computing Influence Functions" + 30 * "-")
-    ptif.init_logging()
-    config = ptif.get_default_config()
-    config["outdir"] = str(save_path)
-    config["test_sample_num"] = False
-    ptif.calc_img_wise(config, classifier, corpus_loader, test_loader)
-    # Delete temporary files, rename the result file
-    for root, dirs, files in os.walk(save_path):
-        for name in files:
-            if "influence_results_tmp" in name or "influences_results_meta_0" in name:
-                os.remove(save_path / name)
-            elif name == "influence_results_0_False.json":
-                os.rename(
-                    save_path / name, save_path / f"influence_functions_cv{cv}.json"
-                )
-
-
-def outlier_detection(
-    cv: int = 0,
-    random_seed: int = 42,
-    save_path: str = "experiments/results/mnist/outlier/OOD_corpus",
-    train: bool = True,
-) -> None:
-    torch.random.manual_seed(random_seed + cv)
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    n_epoch_simplex = 10000
-    K = 5
-
-    print(
-        100 * "-" + "\n" + "Welcome in the outlier detection experiment for MNIST. \n"
-        f"Settings: random_seed = {random_seed} ; cv = {cv}.\n" + 100 * "-"
-    )
-    current_path = Path.cwd()
-    save_path = current_path / save_path
-    # Create saving directory if inexistent
-    if not save_path.exists():
-        print(f"Creating the saving directory {save_path}")
-        os.makedirs(save_path)
-
-    # Training a model, save it
-    if train:
-        print(100 * "-" + "\n" + "Now fitting the model. \n" + 100 * "-")
-        train_model(
-            device=device,
-            random_seed=random_seed,
-            cv=cv,
-            save_path=save_path,
-            model_reg_factor=0,
-        )
-
-    # Load the model
-    classifier = MnistClassifier()
-    classifier.load_state_dict(torch.load(os.path.join(save_path, f"model_cv{cv}.pth")))
-    classifier.to(device)
-    classifier.eval()
-
-    # Load data:
-    corpus_loader = load_emnist(batch_size=1000, train=True) # Altered corpus loader here
-    mnist_test_loader = load_mnist(batch_size=100, train=False)
-    emnist_test_loader = load_emnist(batch_size=100, train=True)
-    corpus_examples = enumerate(corpus_loader)
-    batch_id_corpus, (corpus_features, corpus_target) = next(corpus_examples)
-    corpus_features = corpus_features.to(device).detach()
-    mnist_test_examples = enumerate(mnist_test_loader)
-    batch_id_test_mnist, (mnist_test_features, mnist_test_target) = next(
-        mnist_test_examples
-    )
-    mnist_test_features = mnist_test_features.to(device).detach()
-    emnist_test_examples = enumerate(emnist_test_loader)
-    batch_id_test_emnist, (emnist_test_features, emnist_test_target) = next(
-        emnist_test_examples
-    )
-    emnist_test_features = emnist_test_features.to(device).detach()
-    test_features = torch.cat([mnist_test_features, emnist_test_features], dim=0)
-    corpus_latent_reps = classifier.latent_representation(corpus_features).detach()
-    test_latent_reps = classifier.latent_representation(test_features).detach()
-
-    # Fit corpus:
-    simplex = Simplex(
-        corpus_examples=corpus_features, corpus_latent_reps=corpus_latent_reps
-    )
-    simplex.fit(
-        test_examples=test_features,
-        test_latent_reps=test_latent_reps,
-        n_epoch=n_epoch_simplex,
-        reg_factor=0,
-        n_keep=corpus_features.shape[0],
-    )
-    explainer_path = save_path / f"simplex_cv{cv}.pkl"
-    with open(explainer_path, "wb") as f:
-        print(f"Saving simplex decomposition in {explainer_path}.")
-        pkl.dump(simplex, f)
-    nn_uniform = NearNeighLatent(
-        corpus_examples=corpus_features, corpus_latent_reps=corpus_latent_reps
-    )
-    nn_uniform.fit(test_features, test_latent_reps, n_keep=K)
-    nn_dist = NearNeighLatent(
-        corpus_examples=corpus_features,
-        corpus_latent_reps=corpus_latent_reps,
-        weights_type="distance",
-    )
-    nn_dist.fit(test_features, test_latent_reps, n_keep=K)
-    explainer_path = save_path / f"nn_dist_cv{cv}.pkl"
-    with open(explainer_path, "wb") as f:
-        print(f"Saving nn_dist decomposition in {explainer_path}.")
-        pkl.dump(nn_dist, f)
-    explainer_path = save_path / f"nn_uniform_cv{cv}.pkl"
-    with open(explainer_path, "wb") as f:
-        print(f"Saving nn_uniform decomposition in {explainer_path}.")
-        pkl.dump(nn_uniform, f)
-
-
-
-def jacobian_corruption(
-    random_seed=42,
-    save_path="experiments/results/mnist/jacobian_corruption/",
-    corpus_size=500,
-    test_size=500,
-    n_bins=100,
-    batch_size=50,
-    train: bool = False, #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Set back to True later
-) -> None:
-    print(
-        100 * "-" + "\n" + "Welcome in the Jacobian Projection check for MNIST. \n"
-        f"Settings: random_seed = {random_seed} .\n" + 100 * "-"
-    )
-
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    torch.random.manual_seed(random_seed)
-    n_pert_list = [0.25, 0.5, 0.75, 1.0]
-    metric_data = []
-    df_columns = ["Method", "N_pert", "Residual"]
-    current_folder = Path.cwd()
-    save_path = current_folder / save_path
-    # Create saving directory if inexistent
-    if not save_path.exists():
-        print(f"Creating the saving directory {save_path}")
-        os.makedirs(save_path)
-
-    # Training a model, save it
-    if train:
-        print(100 * "-" + "\n" + "Now fitting the model. \n" + 100 * "-")
-        train_model(
-            device=device,
-            random_seed=random_seed,
-            cv=0,
-            save_path=save_path,
-            model_reg_factor=0,
-        )
-
-    # Load the model
-    classifier = MnistClassifier()
-    classifier.load_state_dict(torch.load(save_path / "model_cv0.pth"))
-    classifier.to(device)
-    classifier.eval()
-
-    # Prepare the corpus and the test set
-    corpus_loader = load_mnist(
-        subset_size=corpus_size, train=True, batch_size=batch_size
-    )
-    test_loader = load_mnist(
-        subset_size=test_size, train=False, batch_size=1, shuffle=False
-    )
-    Corpus_inputs = torch.zeros((corpus_size, 1, 28, 28), device=device)
-    Corpus_inputs_pert = torch.zeros(
-        (len(n_pert_list), corpus_size, 1, 28, 28), device=device
-    )
-
-    for test_id, (test_input, _) in enumerate(test_loader):
-        print(
-            25 * "="
-            + f"Now working with test sample {test_id + 1}/{test_size}"
-            + 25 * "="
-        )
-        for batch_id, (corpus_inputs, corpus_targets) in enumerate(corpus_loader):
-            print(
-                f"Now working with corpus batch {batch_id + 1}/{math.ceil(corpus_size / batch_size)}."
-            )
-            test_input = test_input.to(device)
-            corpus_inputs = corpus_inputs.to(device).requires_grad_()
-            test_latent = classifier.latent_representation(test_input).detach()
-
-            for pert_id, n_pert in enumerate(n_pert_list):
-                # Add a percentage of noise to corpus
-                # corpus_inputs needs to be noised an put into corpus_inputs_pert_jp
-                noise = torch.cuda.FloatTensor(corpus_inputs.shape, device=device).uniform_(0, 1)
-                mask = noise > n_pert
-                corpus_inputs_pert = (corpus_inputs * ~mask) + (noise * mask)
-
-                Corpus_inputs_pert[
-                    pert_id, lower_id:higher_id
-                ] = corpus_inputs_pert
-
-        for pert_id, n_pert in enumerate(n_pert_list):
-            print(
-                f"Now fitting the noise-corrupted SimplEx with {n_pert} perturbation(s) per image"
-            )
-            simplex = Simplex(
-                Corpus_inputs_pert[pert_id], # this needs to be corpus noised
-                classifier.latent_representation(
-                    Corpus_inputs_pert[pert_id]
-                ).detach(),
-            )
-            simplex.fit(test_input, test_latent, reg_factor=0)
-            residual = torch.sqrt(
-                torch.sum((test_latent - simplex.latent_approx()) ** 2)
-            )
-            metric_data.append(
-                ["SimplEx", n_pert, residual.cpu().numpy().item()]
-            )
-
-    metric_df = pd.DataFrame(metric_data, columns=df_columns)
-    sns.set_palette("colorblind")
-    sns.boxplot(data=metric_df, x="N_pert", y="Residual", hue="Method")
-    plt.xlabel("Percentage of noisy pixels")
-    plt.savefig(save_path / "box_plot.png")
-
-
-def timing_experiment() -> None:
-    print(100 * "-" + "\n" + "Welcome in timing experiment for MNIST. \n" + 100 * "-")
-
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    torch.random.manual_seed(42)
-    n_bins = 30
-    batch_size = 50
-    test_size = 100
-    CV = 10
-    times = np.zeros((4, CV))
-    load_path = Path.cwd() / "experiments/results/mnist/quality"
-    if not (load_path / "model_cv0.pth").exists():
-        raise RuntimeError(
-            "The timing experiment should be run after the approximation quality experiment."
-        )
-
-    # Load the model
-    classifier = MnistClassifier()
-    classifier.load_state_dict(torch.load(load_path / "model_cv0.pth"))
-    classifier.to(device)
-    classifier.eval()
-
-    for cv in range(CV):
-        # Prepare the corpus and the test set
-        corpus_loader = load_mnist(subset_size=1000, train=True, batch_size=batch_size)
-        test_loader_single = load_mnist(
-            subset_size=1, train=False, batch_size=1, shuffle=False
-        )
-        test_loader_multiple = load_mnist(
-            subset_size=test_size, train=False, batch_size=test_size, shuffle=False
-        )
-        Corpus_inputs = torch.zeros((1000, 1, 28, 28), device=device)
-
-        for test_id, (test_input, _) in enumerate(test_loader_single):
-            print(
-                25 * "="
-                + f"Now working with test sample {test_id + 1}/{len(test_loader_single)}"
-                + 25 * "="
-            )
-            test_latent = classifier.latent_representation(
-                test_input.to(device)
-            ).detach()
-            t1 = time.time()
-            for batch_id, (corpus_inputs, corpus_targets) in enumerate(corpus_loader):
-                print(
-                    f"Now working with corpus batch {batch_id + 1}/{len(corpus_loader)}."
-                )
-                test_input = test_input.to(device)
-                corpus_inputs = corpus_inputs.to(device).requires_grad_()
-                baseline_inputs = -0.4242 * torch.ones(
-                    corpus_inputs.shape, device=device
-                )
-                baseline_latents = classifier.latent_representation(baseline_inputs)
-                latent_shift = test_latent - baseline_latents
-                latent_shift_sqrdnorm = torch.sum(
-                    latent_shift**2, dim=-1, keepdim=True
-                )
-                input_grad = torch.zeros(
-                    corpus_inputs.shape, device=corpus_inputs.device
-                )
-                for n in range(1, n_bins + 1):
-                    t = n / n_bins
-                    inputs = baseline_inputs + t * (corpus_inputs - baseline_inputs)
-                    latent_reps = classifier.latent_representation(inputs)
-                    latent_reps.backward(gradient=latent_shift / latent_shift_sqrdnorm)
-                    input_grad += corpus_inputs.grad
-                    corpus_inputs.grad.data.zero_()
-                lower_id = batch_id * batch_size
-                higher_id = lower_id + batch_size
-                Corpus_inputs[lower_id:higher_id] = corpus_inputs.detach()
-            t2 = time.time()
-            times[2, cv] = t2 - t1
-
-        for test_id, (test_inputs, _) in enumerate(test_loader_multiple):
-            test_latents = classifier.latent_representation(
-                test_inputs.to(device)
-            ).detach()
-            t1 = time.time()
-            Corpus_latents = classifier.latent_representation(
-                Corpus_inputs.to(device)
-            ).detach()
-            simplex = Simplex(Corpus_inputs, Corpus_latents)
-            simplex.fit(test_inputs, test_latents, reg_factor=0, n_epoch=1000)
-            simplex.latent_approx()
-            t2 = time.time()
-            times[0, cv] = (t2 - t1) / test_size
-
-            t1 = time.time()
-            Corpus_latents = classifier.latent_representation(
-                Corpus_inputs.to(device)
-            ).detach()
-            knn = NearNeighLatent(Corpus_inputs, Corpus_latents)
-            knn.fit(test_inputs, test_latents)
-            knn.latent_approx()
-            t2 = time.time()
-            times[1, cv] = (t2 - t1) / test_size
-
-        # Influence Functions
-        t1 = time.time()
-        ptif.init_logging()
-        config = ptif.get_default_config()
-        config["outdir"] = str(load_path)
-        config["test_sample_num"] = False
-        ptif.calc_img_wise(config, classifier, corpus_loader, test_loader_single)
-        t2 = time.time()
-        times[3, cv] = t2 - t1
-
-    print(np.mean(times, axis=-1))
-    print(np.std(times, axis=-1))
-
-
 def main(experiment: str, cv: int) -> None:
     if experiment == "approximation_quality":
-        approximation_quality(cv=cv, n_keep_list=[3, 5, 10, 20, 50])
-    elif experiment == "outlier_detection":
-        outlier_detection(cv)
-    elif experiment == "jacobian_corruption":
-        jacobian_corruption(test_size=100, train=True)
-    elif experiment == "influence":
-        influence_function(n_keep_list=[2, 5, 10, 20, 50], cv=cv)
-    elif experiment == "timing":
-        timing_experiment()
+        approximation_quality(cv=cv, n_keep_list=[10])
     else:
         raise ValueError(
             "The name of the experiment is not valid. "
