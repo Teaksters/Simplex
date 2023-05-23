@@ -61,9 +61,9 @@ def load_mnist(
     if (not train) and val:
         generator = torch.Generator()
         test, val = torch.utils.data.random_split(dataset, [0.5, 0.5], generator=generator)
-        print(test)
+        print(len(test))
         print('============================')
-        print(val)
+        print(len(val))
         test_loader = DataLoader(test, batch_size=batch_size, shuffle=shuffle)
         val_loader = DataLoader(val, batch_size=batch_size, shuffle=shuffle)
 
