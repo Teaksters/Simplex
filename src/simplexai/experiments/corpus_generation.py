@@ -30,7 +30,7 @@ def main():
     X_df, y_df = load_tabular_mimic()
     print(X_df)
     X_df.replace(-1.0, np.nan)
-    diagnoses_df = X_df.iloc[:, -24:]
+    diagnoses_df = X_df.iloc[:, -25:]
     print(X_df)
 
     # Interpret grand scale patterns
@@ -38,7 +38,7 @@ def main():
     occurances = diagnoses_df.sum()
     diagnoses_probs = occurances / occurances.sum()
     print(diagnoses_probs)
-    exit()
+    # exit()
 
     # Generate diagnoses prototypes using averaging and thresholding
     # prototype_df = pd.DataFrame(columns=list(X_df))
@@ -48,13 +48,13 @@ def main():
         prototype = single_df.mean()
 
         # Normalize diagnoses into probability function
-        prototype.iloc[-24:] /= prototype.iloc[-24:].sum()
+        prototype.iloc[-25:] /= prototype.iloc[-25:].sum()
         prototype = dict(prototype)
         prototype_df.append(prototype)
 
     # Binarize diagnosis features using the occurance probability as threshold
     prototype_df = pd.DataFrame.from_dict(prototype_df, orient='columns')
-    prototype_df.iloc[:, -24:] = (prototype_df.iloc[:, -24:] >= diagnoses_probs).astype('float')
+    prototype_df.iloc[:, -25:] = (prototype_df.iloc[:, -25:] >= diagnoses_probs).astype('float')
     for row in prototype_df:
         print(prototype_df[row])
     return 0
