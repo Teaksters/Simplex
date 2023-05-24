@@ -49,7 +49,7 @@ def main():
     # Binarize diagnosis features using the occurance probability as threshold
     prototype_df = pd.DataFrame.from_dict(prototype_df, orient='columns')
     prototype_df.iloc[:, -23:] = (prototype_df.iloc[:, -23:] >= diagnoses_probs).astype('float')
-    print(prototype_df.to_string())
+    print(prototype_df.to_markdown())
     return 0
 
 
