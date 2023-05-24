@@ -31,7 +31,7 @@ def main():
     # Replace all place holders for nan with nan again for later calculations
     X_df.iloc[:, :-25][X_df.iloc[:, :-25] <= 0] = np.nan
 
-    diagnoses_df = X_df.iloc[:, -25:]
+    diagnoses_df = X_df.iloc[:, -24:]
 
     # Interpret grand scale patterns
     diagnoses = list(diagnoses_df)
@@ -53,7 +53,7 @@ def main():
     # Binarize diagnosis features using the occurance probability as threshold
     prototype_df = pd.DataFrame.from_dict(prototype_df)
     print(prototype_df.iloc[0, -25:], '\n', diagnoses_probs)
-    prototype_df.iloc[:, -25:] = (prototype_df.iloc[:, -25:] >= diagnoses_probs).astype('float')
+    prototype_df.iloc[:, -25:] = (prototype_df.iloc[:, -24:] >= diagnoses_probs).astype('float')
     # for row in prototype_df:
     #     print(prototype_df[row])
     return 0
