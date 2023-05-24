@@ -31,7 +31,7 @@ def main():
     # Replace all place holders for nan with nan again for later calculations
     X_df[X_df <= 0] = np.nan
     print(X_df)
-    print(list(X_df.columns), list(X_df.columns)[-23:])
+    print(list(X_df.columns), list(X_df.columns)[-25:])
     exit()
     ######################### SO FAR SO GOOD #####################3
     diagnoses_df = X_df.iloc[:, -25:]
