@@ -29,12 +29,18 @@ def main():
     X_df, y_df = load_tabular_mimic()
     diagnoses_df = X_df.iloc[:, -23:]
 
-    # Organize it
+    # Interpret grand scale patterns
     diagnoses = list(diagnoses_df)
     occurances = diagnoses_df.sum(axis=0)
     diagnoses_probs = occurances / occurances.sum()
-    print(diagnoses_df)
-    print(occurances, diagnoses, diagnoses_probs, diagnoses_probs.sum())
+
+    # Generate diagnoses prototypes using averaging and thresholding
+    prototype_df = pd.DataFrame(columns=list(X_df))
+    print(prototype_df)
+    for diagnosis in diagnoses:
+        single_df = X_df.loc[:, X_df.columns == diagnosis]
+        prototype_df = pd.concat([prototype_df, single_df], ignore_index=True)
+    print(prototype_df)
     return 0
 
 
