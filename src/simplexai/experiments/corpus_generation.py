@@ -46,7 +46,7 @@ def main():
         prototype = single_df.mean()
         # print(prototype)
         for col in list(single_df):
-            print(prototype[col])
+            print(col, prototype[col])
         exit()
 
         # Normalize binary diagnoses features into probability function
