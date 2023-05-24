@@ -31,7 +31,7 @@ def main():
 
     # Interpret grand scale patterns
     diagnoses = list(diagnoses_df)
-    occurances = diagnoses_df.sum(axis=0)
+    occurances = diagnoses_df.sum()
     diagnoses_probs = occurances / occurances.sum()
 
     # Generate diagnoses prototypes using averaging and thresholding
@@ -39,7 +39,8 @@ def main():
     print(prototype_df)
     for diagnosis in diagnoses:
         single_df = X_df.loc[X_df[diagnosis] == 1.]
-        prototype = pd.DataFrame(single_df.mean(axis=0))
+        single_df.loc['mean'] = single_df.mean()
+        prototype = single_df.loc['mean']
         print(prototype)
         prototype_df = pd.concat([prototype_df, prototype], ignore_index=True)
     print(prototype_df)
