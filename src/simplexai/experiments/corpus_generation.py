@@ -43,6 +43,7 @@ def main():
         prototype_df.append(prototype)
     prototype_df = pd.DataFrame.from_dict(prototype_df, orient='columns')
     print(prototype_df)
+    print(diagnoses_probs)
     return 0
 
 
