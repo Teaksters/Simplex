@@ -25,13 +25,16 @@ DATA_DIR = '../Data/preprocessed'
 
 
 def main():
+    # Load the data
     X_df, y_df = load_tabular_mimic()
     diagnoses_df = X_df.iloc[:, -23:]
-    occurance = diagnoses_df.sum(axis=0)
+
+    # Organize it
+    diagnoses = list(diagnoses_df)
+    occurances = diagnoses_df.sum(axis=0)
+    total_diagnoses = occurances.sum()
     print(diagnoses_df)
-    print(occurance[0])
-    print(list(occurance))
-    print(occurance['Cardiac dysrhythmias'])
+    print(occurances, diagnoses, total_diagnoses)
     return 0
 
 
