@@ -50,10 +50,9 @@ def main():
         prototype = dict(prototype)
         prototype_df.append(prototype)
 
-    print(prototype_df[-1])
     # Binarize diagnosis features using the occurance probability as threshold
     prototype_df = pd.DataFrame.from_dict(prototype_df)
-    print(prototype_df.iloc[-1, -25:])
+    print(prototype_df.iloc[:, -25:].shape, diagnoses_probs.shape)
     prototype_df.iloc[:, -25:] = (prototype_df.iloc[:, -25:] >= diagnoses_probs).astype('float')
     # for row in prototype_df:
     #     print(prototype_df[row])
