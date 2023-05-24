@@ -44,7 +44,10 @@ def main():
     for diagnosis in diagnoses:
         single_df = X_df.loc[X_df[diagnosis] == 1.]
         prototype = single_df.mean()
-        print(prototype)
+        # print(prototype)
+        for col in list(prototype):
+            print(prototype[col])
+        exit()
 
         # Normalize binary diagnoses features into probability function
         prototype.iloc[-25:] /= prototype.iloc[-25:].sum()
