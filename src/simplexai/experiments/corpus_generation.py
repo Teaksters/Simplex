@@ -47,12 +47,9 @@ def main():
         ######################### SO FAR SO GOOD #####################3
         # Normalize binary diagnoses features into probability function
         prototype.iloc[-25:] /= prototype.iloc[-25:].sum()
-
-        for col in list(single_df):
-            print(col, prototype[col])
-        exit()
-
+        print(prototype.iloc[-25:])
         prototype = dict(prototype)
+        print(prototype)
         prototype_df.append(prototype)
 
     exit()
