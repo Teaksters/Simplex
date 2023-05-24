@@ -38,7 +38,7 @@ def main():
     prototype_df = pd.DataFrame(columns=list(X_df))
     print(prototype_df)
     for diagnosis in diagnoses:
-        single_df = X_df.loc[:, X_df.columns == diagnosis]
+        single_df = X_df.loc[X_df.columns == diagnosis]
         print(single_df)
         prototype_df = pd.concat([prototype_df, single_df], ignore_index=True)
     print(prototype_df)
