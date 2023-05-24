@@ -28,20 +28,18 @@ DATA_DIR = '../Data/preprocessed'
 def main():
     # Load the data
     X_df, y_df = load_tabular_mimic()
-    print(X_df['Weight mean 1.0'].value_counts())
-    X_df[X_df < 0] = np.nan
-    print(X_df['Weight mean 1.0'].value_counts())
-    exit()
+    # Replace all place holders for nan with nan again for later calculations
+    X_df[X_df <= 0] = np.nan
     diagnoses_df = X_df.iloc[:, -25:]
-    print(X_df)
+    # print(list(X_df), list(diagnoses_df))
 
     # Interpret grand scale patterns
     diagnoses = list(diagnoses_df)
     occurances = diagnoses_df.sum()
     diagnoses_probs = occurances / occurances.sum()
-    print(diagnoses_probs)
-    print(list(X_df.iloc[:, -25:]))
-    exit()
+    # print(diagnoses_probs)
+    # print(list(X_df.iloc[:, -25:]))
+    # exit()
 
     # Generate diagnoses prototypes using averaging and thresholding
     # prototype_df = pd.DataFrame(columns=list(X_df))
