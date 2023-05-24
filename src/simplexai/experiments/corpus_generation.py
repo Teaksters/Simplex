@@ -38,19 +38,20 @@ def main():
     occurances = diagnoses_df.sum()
     diagnoses_probs = occurances / occurances.sum()
 
-    ######################### SO FAR SO GOOD #####################3
     # Generate diagnoses prototypes using mean values for each diagnosis
     prototype_df = []
     for diagnosis in diagnoses:
         single_df = X_df.loc[X_df[diagnosis] == 1.]
         prototype = single_df.mean()
-        # print(prototype)
+
+        ######################### SO FAR SO GOOD #####################3
+        # Normalize binary diagnoses features into probability function
+        prototype.iloc[-25:] /= prototype.iloc[-25:].sum()
+
         for col in list(single_df):
             print(col, prototype[col])
         exit()
 
-        # Normalize binary diagnoses features into probability function
-        prototype.iloc[-25:] /= prototype.iloc[-25:].sum()
         prototype = dict(prototype)
         prototype_df.append(prototype)
 
