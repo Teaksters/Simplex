@@ -41,7 +41,7 @@ def main():
         single_df = X_df.loc[X_df[diagnosis] == 1.]
         single_df.loc['mean'] = single_df.mean()
         prototype = single_df.loc['mean']
-        print(prototype)
+        print(prototype.shape)
         prototype_df = pd.concat([prototype_df, prototype], ignore_index=True)
     print(prototype_df)
     return 0
