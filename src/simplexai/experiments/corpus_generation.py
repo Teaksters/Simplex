@@ -55,8 +55,8 @@ def main():
     prototype_df = pd.DataFrame.from_dict(prototype_df)
     print(prototype_df.iloc[-1, -25:])
     prototype_df.iloc[:, -25:] = (prototype_df.iloc[:, -25:] >= diagnoses_probs).astype('float')
-    for row in prototype_df:
-        print(prototype_df[row])
+    # for row in prototype_df:
+    #     print(prototype_df[row])
     return 0
 
 
