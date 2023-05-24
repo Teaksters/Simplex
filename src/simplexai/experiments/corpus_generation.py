@@ -40,15 +40,17 @@ def main():
     for diagnosis in diagnoses:
         single_df = X_df.loc[X_df[diagnosis] == 1.]
         prototype = single_df.mean()
-        print(prototype.iloc[-23:].sum())
+
         # Normalize diagnoses into probability function
         prototype.iloc[-23:] /= prototype.iloc[-23:].sum()
-        print(prototype.iloc[-23:].sum())
         prototype = dict(prototype)
         prototype_df.append(prototype)
+
+    # Binarize diagnosis features using the occurance probability as threshold
     prototype_df = pd.DataFrame.from_dict(prototype_df, orient='columns')
     print(prototype_df)
-    print(diagnoses_probs)
+    prototype_df.iloc[:, -23:] = prototype_df.iloc[:, -23:] >= diagnoses_probs
+    print(prototype_df)
     return 0
 
 
