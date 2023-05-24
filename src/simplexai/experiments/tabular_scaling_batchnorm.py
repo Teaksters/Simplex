@@ -186,7 +186,7 @@ def main(experiment: str = "approximation_quality",
     else:
         raise ValueError(
             "The name of the experiment is not valid. "
-            "Valid names are: approximation_quality , outlier_detection , outlier_detection2 , corpus_size.  "
+            "Valid names are: approximation_quality, outlier_detection, outlier_detection2, corpus_size."
         )
 
 
