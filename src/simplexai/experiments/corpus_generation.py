@@ -39,9 +39,10 @@ def main():
     print(prototype_df)
     for diagnosis in diagnoses:
         single_df = X_df.loc[X_df[diagnosis] == 1.]
-        single_df = single_df.mean(axis=0)
+        prototype = single_df.mean(axis=0)
         print(single_df)
-        prototype_df = pd.concat([prototype_df, single_df], ignore_index=True)
+        prototype_df.append(prototype)
+        # prototype_df = pd.concat([prototype_df, single_df], ignore_index=True)
     print(prototype_df)
     return 0
 
