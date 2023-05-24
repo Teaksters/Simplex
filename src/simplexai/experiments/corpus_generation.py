@@ -35,15 +35,13 @@ def main():
     diagnoses_probs = occurances / occurances.sum()
 
     # Generate diagnoses prototypes using averaging and thresholding
-    prototype_df = pd.DataFrame(columns=list(X_df))
-    print(prototype_df)
+    # prototype_df = pd.DataFrame(columns=list(X_df))
+    prototype_df = []
     for diagnosis in diagnoses:
         single_df = X_df.loc[X_df[diagnosis] == 1.]
-        single_df = dict(single_df.mean())
-        print(single_df)
-        # prototype = pd.DataFrame
-        # print(prototype.shape)
-        prototype_df = pd.concat([prototype_df, prototype], ignore_index=True)
+        prototype = dict(single_df.mean())
+        prototype_df.append(prototype)
+    prototype_df = pd.DataFrame.from_dict(prototype_df, orient='columns')
     print(prototype_df)
     return 0
 
