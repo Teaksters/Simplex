@@ -28,8 +28,10 @@ DATA_DIR = '../Data/preprocessed'
 def main():
     # Load the data
     X_df, y_df = load_tabular_mimic()
-    print(X_df)
+    print(X_df['Weight mean 1.0'].value_counts())
     X_df.replace(-1.0, np.nan)
+    print(X_df['Weight mean 1.0'].value_counts())
+    exit()
     diagnoses_df = X_df.iloc[:, -25:]
     print(X_df)
 
