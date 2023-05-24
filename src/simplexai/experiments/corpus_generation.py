@@ -32,9 +32,9 @@ def main():
     # Organize it
     diagnoses = list(diagnoses_df)
     occurances = diagnoses_df.sum(axis=0)
-    total_diagnoses = occurances.sum()
+    diagnoses_probs = occurances / occurances.sum()
     print(diagnoses_df)
-    print(occurances, diagnoses, total_diagnoses)
+    print(occurances, diagnoses, diagnoses_probs)
     return 0
 
 
