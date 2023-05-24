@@ -24,8 +24,8 @@ DATA_DIR = Path('../Data/preprocessed')
 
 def create_corpus(data, n_bin=25):
     # Replace all place holders for nan with nan again for later calculations
-    X_df.iloc[:, :-n_bin][X_df.iloc[:, :-n_bin] <= 0] = np.nan
-    diagnoses_df = X_df.iloc[:, -n_bin:]
+    data.iloc[:, :-n_bin][data.iloc[:, :-n_bin] <= 0] = np.nan
+    diagnoses_df = data.iloc[:, -n_bin:]
 
     # Calculate occurance probabilities (thresholds)
     diagnoses = list(diagnoses_df)
@@ -35,7 +35,7 @@ def create_corpus(data, n_bin=25):
     # Generate diagnoses prototypes using mean values for each diagnosis
     prototype_df = []
     for diagnosis in diagnoses:
-        single_df = X_df.loc[X_df[diagnosis] == 1.]
+        single_df = data.loc[data[diagnosis] == 1.]
         prototype = single_df.mean()
 
         # Normalize binary diagnoses features into probability function
