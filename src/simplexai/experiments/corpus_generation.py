@@ -27,7 +27,7 @@ DATA_DIR = '../Data/preprocessed'
 def main():
     X_df, y_df = load_tabular_mimic()
     diagnoses_df = X_df.iloc[:, -23:]
-    print(diagnoses_df, diagnoses_df.sum(axis=1))
+    print(diagnoses_df, diagnoses_df.sum(axis=0))
     return 0
 
 
