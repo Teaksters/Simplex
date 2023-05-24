@@ -31,6 +31,8 @@ def main():
     # Replace all place holders for nan with nan again for later calculations
     X_df.iloc[:, :-25][X_df.iloc[:, :-25] <= 0] = np.nan
 
+    print(X_df)
+    exit()
     ######################### SO FAR SO GOOD #####################3
     diagnoses_df = X_df.iloc[:, -25:]
     print(diagnoses_df.shape)
