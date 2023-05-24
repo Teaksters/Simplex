@@ -6,7 +6,7 @@ from simplexai.models.base import BlackBox
 
 
 class MortalityPredictor(BlackBox):
-    def __init__(self, n_cont: int = 190, input_feature_num=213) -> None:
+    def __init__(self, n_cont: int = 295, input_feature_num=320) -> None:
         """
         Mortality predictor MLP
         :param n_cont: number of continuous features among the output features

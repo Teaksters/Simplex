@@ -75,7 +75,6 @@ def load_age(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
 def generate_episode_dict(df, col, slice=False, partition=1.0):
     df_col = df[col]
     if partition == 1.0:
-        print('1: 5 features.')
         episode_dict = {col + ' mean ' + str(partition): df_col.mean()}
         episode_dict_std = {col + ' std ' + str(partition): df_col.std()}
         episode_dict_min = {col + ' min ' + str(partition): df_col.min()}
@@ -86,13 +85,11 @@ def generate_episode_dict(df, col, slice=False, partition=1.0):
         episode_dict.update(episode_dict_len)
 
     elif slice > 0:
-        print('2 (pos): 4 features.')
         episode_dict = {col + ' mean ' + str(partition): df_col[slice:].mean()}
         episode_dict_std = {col + ' std ' + str(partition): df_col[slice:].std()}
         episode_dict_min = {col + ' min ' + str(partition): df_col[slice:].min()}
         episode_dict_max = {col + ' max ' + str(partition): df_col[slice:].max()}
     else:
-        print('2 (neg): 4 features.')
         episode_dict = {col + ' mean ' + str(partition): df_col[:slice].mean()}
         episode_dict_std = {col + ' std ' + str(partition): df_col[:slice].std()}
         episode_dict_min = {col + ' min ' + str(partition): df_col[:slice].min()}
@@ -104,7 +101,6 @@ def generate_episode_dict(df, col, slice=False, partition=1.0):
 
     # Replace nan with standard numeric value
     episode_dict = {k: 0.0 if np.isnan(v) else v for k, v in episode_dict.items()}
-    print('total added features:', len(episode_dict))
     return episode_dict
 
 def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
@@ -154,15 +150,12 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
         episode_dict['stay'] = stay
         for col in desired_cols:
             # First the full time serie
-            print(1.0)
             episode_dict_col = generate_episode_dict(episode_df, col)
             episode_dict.update(episode_dict_col)
             for slice, partition in zip(pos_slice, sub_sequences):
                 # Then different partitions
-                print(partition, slice)
                 episode_dict_col = generate_episode_dict(episode_df, col, slice, partition)
                 episode_dict.update(episode_dict_col)
-                print(-partition, -slice)
                 episode_dict_col = generate_episode_dict(episode_df, col, -slice, -partition)
                 episode_dict.update(episode_dict_col)
 
@@ -212,6 +205,7 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
         data_df = pd.merge(time_df, data_df, on='stay')
         data_df = pd.merge(age_df, data_df, on='stay')
         data_df.drop(columns=drop_cols, inplace=True)
+        print(data_df.shape)
 
         # Safe pickle for later use
         print('Done, storing data for quick retrieval next time.')
