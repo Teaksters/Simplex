@@ -52,6 +52,7 @@ def main():
     # Load the data
     X_df, _ = load_tabular_mimic()
     prototypes = create_corpus(X_df)
+    print(prototypes)
 
     # Store the created corpus
     corpus_path = DATA_DIR / 'pickles' / 'tab_mort_diagnosis_prototypes.pkl'
