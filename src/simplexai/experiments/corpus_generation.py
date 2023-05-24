@@ -31,21 +31,20 @@ def main():
     # Replace all place holders for nan with nan again for later calculations
     X_df.iloc[:, :-25][X_df.iloc[:, :-25] <= 0] = np.nan
 
-    ######################### SO FAR SO GOOD #####################3
     diagnoses_df = X_df.iloc[:, -25:]
 
     # Interpret grand scale patterns
     diagnoses = list(diagnoses_df)
     occurances = diagnoses_df.sum()
     diagnoses_probs = occurances / occurances.sum()
-    print(diagnoses, diagnoses_probs, diagnoses_probs.shape)
-    exit()
 
+    ######################### SO FAR SO GOOD #####################3
     # Generate diagnoses prototypes using mean values for each diagnosis
     prototype_df = []
     for diagnosis in diagnoses:
         single_df = X_df.loc[X_df[diagnosis] == 1.]
         prototype = single_df.mean()
+        print(prototype)
 
         # Normalize binary diagnoses features into probability function
         prototype.iloc[-25:] /= prototype.iloc[-25:].sum()
