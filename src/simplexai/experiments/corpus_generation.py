@@ -28,15 +28,16 @@ DATA_DIR = '../Data/preprocessed'
 def main():
     # Load the data
     X_df, y_df = load_tabular_mimic()
-    print(X_df)
+    # print(X_df)
     X_df.replace(-1.0, np.nan)
     diagnoses_df = X_df.iloc[:, -23:]
-    print(X_df)
+    # print(X_df)
 
     # Interpret grand scale patterns
     diagnoses = list(diagnoses_df)
     occurances = diagnoses_df.sum()
     diagnoses_probs = occurances / occurances.sum()
+    print(diagnoses_probs.shape)
 
     # Generate diagnoses prototypes using averaging and thresholding
     # prototype_df = pd.DataFrame(columns=list(X_df))
