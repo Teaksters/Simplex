@@ -27,7 +27,10 @@ DATA_DIR = '../Data/preprocessed'
 def main():
     # Load the data
     X_df, y_df = load_tabular_mimic()
+    print(X_df)
+    X_df.replace(-1.0, np.nan)
     diagnoses_df = X_df.iloc[:, -23:]
+    print(X_df)
 
     # Interpret grand scale patterns
     diagnoses = list(diagnoses_df)
