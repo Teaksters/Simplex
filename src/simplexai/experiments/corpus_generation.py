@@ -34,7 +34,7 @@ def main():
     occurances = diagnoses_df.sum(axis=0)
     diagnoses_probs = occurances / occurances.sum()
     print(diagnoses_df)
-    print(occurances, diagnoses, diagnoses_probs)
+    print(occurances, diagnoses, diagnoses_probs, diagnoses_probs.sum())
     return 0
 
 
