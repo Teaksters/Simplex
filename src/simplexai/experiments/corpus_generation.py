@@ -47,16 +47,13 @@ def main():
         ######################### SO FAR SO GOOD #####################3
         # Normalize binary diagnoses features into probability function
         prototype.iloc[-25:] /= prototype.iloc[-25:].sum()
-
-        for col in list(single_df):
-            print(col, prototype[col])
         prototype = dict(prototype)
-        print(prototype)
         prototype_df.append(prototype)
 
-    exit()
+    print(prototype_df[-1])
     # Binarize diagnosis features using the occurance probability as threshold
-    prototype_df = pd.DataFrame.from_dict(prototype_df, orient='columns')
+    prototype_df = pd.DataFrame.from_dict(prototype_df)
+    print(prototype_df.iloc[-1, -25:])
     prototype_df.iloc[:, -25:] = (prototype_df.iloc[:, -25:] >= diagnoses_probs).astype('float')
     for row in prototype_df:
         print(prototype_df[row])
