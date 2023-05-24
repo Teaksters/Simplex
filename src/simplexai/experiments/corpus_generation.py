@@ -29,7 +29,7 @@ def main():
     # Load the data
     X_df, y_df = load_tabular_mimic()
     # Replace all place holders for nan with nan again for later calculations
-    X_df[X_df <= 0] = np.nan
+    X_df.iloc[:, :-25][X_df.iloc[:, :-25] <= 0] = np.nan
 
     ######################### SO FAR SO GOOD #####################3
     diagnoses_df = X_df.iloc[:, -25:]
