@@ -41,7 +41,6 @@ def main():
     # Generate diagnoses prototypes using mean values for each diagnosis
     prototype_df = []
     for diagnosis in diagnoses:
-        print(diagnosis)
         single_df = X_df.loc[X_df[diagnosis] == 1.]
         prototype = single_df.mean()
 
@@ -53,10 +52,11 @@ def main():
 
     # Binarize diagnosis features using the occurance probability as threshold
     prototype_df = pd.DataFrame.from_dict(prototype_df)
-    # print(prototype_df.iloc[0, -25:], '\n', diagnoses_probs)
     prototype_df.iloc[:, -25:] = (prototype_df.iloc[:, -25:] >= diagnoses_probs).astype('float')
-    # for row in prototype_df:
-    #     print(prototype_df[row])
+    for row in prototype_df:
+        print(prototype_df[row])
+    print(prototype_df)
+
     return 0
 
 
