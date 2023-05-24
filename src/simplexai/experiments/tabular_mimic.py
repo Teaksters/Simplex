@@ -154,9 +154,11 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
             episode_dict.update(episode_dict_col)
             for slice, partition in zip(pos_slice, sub_sequences):
                 # Then different partitions
+                print(slice, partition)
                 episode_dict_col = generate_episode_dict(episode_df, col, slice, partition)
                 episode_dict.update(episode_dict_col)
-                episode_dict_col = generate_episode_dict(episode_df, col, slice, partition)
+                print(-slice, -partition)
+                episode_dict_col = generate_episode_dict(episode_df, -col, -slice, partition)
                 episode_dict.update(episode_dict_col)
 
         # Create DataFrame
