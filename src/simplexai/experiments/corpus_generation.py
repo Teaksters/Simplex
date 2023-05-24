@@ -37,7 +37,7 @@ def main():
     diagnoses = list(diagnoses_df)
     occurances = diagnoses_df.sum()
     diagnoses_probs = occurances / occurances.sum()
-    print(diagnoses_probs.shape)
+    print(diagnoses_probs)
     exit()
 
     # Generate diagnoses prototypes using averaging and thresholding
