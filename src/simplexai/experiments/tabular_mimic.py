@@ -154,11 +154,9 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
             episode_dict.update(episode_dict_col)
             for slice, partition in zip(pos_slice, sub_sequences):
                 # Then different partitions
-                print(slice, partition)
                 episode_dict_col = generate_episode_dict(episode_df, col, slice, partition)
                 episode_dict.update(episode_dict_col)
-                print(-slice, -partition)
-                episode_dict_col = generate_episode_dict(episode_df, -col, -slice, partition)
+                episode_dict_col = generate_episode_dict(episode_df, col, -slice, -partition)
                 episode_dict.update(episode_dict_col)
 
         # Create DataFrame
@@ -200,6 +198,7 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
         feature_df = load_from_preprocessed(feature_dir)
         age_df = load_age()
         time_df = load_timeseries()
+        print(feature_df.shape, age_df.shape, time_df.shape)
 
         # Merge data into workable complete format
         data_df = pd.merge(label_df, feature_df, on='stay')
