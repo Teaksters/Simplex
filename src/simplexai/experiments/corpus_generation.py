@@ -45,7 +45,7 @@ def main():
         single_df = X_df.loc[X_df[diagnosis] == 1.]
         prototype = single_df.mean()
         # print(prototype)
-        for col in list(prototype):
+        for col in list(single_df):
             print(prototype[col])
         exit()
 
