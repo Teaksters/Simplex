@@ -149,6 +149,14 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
         episode_dict = {}
         episode_dict['stay'] = stay
         for col in desired_cols:
+            print(col)
+            # For singular measurements have special handling
+            if col == 'Weight' or col == 'Height':
+                episode_dict_col = {col: episode_df[col].mean()}
+                print(episode_dict_col)
+                episode_dict.update(episode_dict_col)
+                continue
+            print('reg treatment')
             # First the full time serie
             episode_dict_col = generate_episode_dict(episode_df, col)
             episode_dict.update(episode_dict_col)
