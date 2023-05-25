@@ -52,6 +52,9 @@ def main():
     # Load the data
     X_df, _ = load_tabular_mimic()
     prototypes = create_corpus(X_df)
+
+    for col in prototypes:
+        print(prototypes[col])
     print(prototypes)
 
     # Store the created corpus
