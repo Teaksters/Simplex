@@ -56,6 +56,7 @@ def main():
     for col in prototypes:
         print(prototypes[col])
     print(prototypes)
+    print(list(prototypes.columns))
 
     # Store the created corpus
     corpus_path = DATA_DIR / 'pickles' / 'tab_mort_diagnosis_prototypes.pkl'
