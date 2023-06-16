@@ -502,6 +502,7 @@ def outlier_detection2(
 
     # Load the data
     X, y = load_tabular_mimic(random_seed=random_seed + cv)
+    print(X.shape, list(X))
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.15, random_state=random_seed + cv, stratify=y
     )
