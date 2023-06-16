@@ -30,9 +30,9 @@ class MortalityPredictor(BlackBox):
         x_cont, x_disc = x[:, : self.n_cont], x[:, self.n_cont :]
         if self.n_cont > 0:
             print(x_cont)
-            x_cont_norm = self.bn1(x_cont)
-            print(x_cont_norm)
-        print(x_cont_norm)
+            x_cont = self.bn1(x_cont[:3])
+            print(x_cont)
+        print(x_cont)
         x = torch.cat([x_cont, x_disc], 1)
         x = F.relu(self.lin1(x))
         x = self.drops(x)
