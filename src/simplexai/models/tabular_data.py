@@ -27,14 +27,21 @@ class MortalityPredictor(BlackBox):
         return x
 
     def latent_representation(self, x: torch.Tensor) -> torch.Tensor:
+        print(x)
         x_cont, x_disc = x[:, : self.n_cont], x[:, self.n_cont :]
         if self.n_cont > 0:
             x_cont = self.bn1(x_cont)
         x = torch.cat([x_cont, x_disc], 1)
+        print(x)
         x = F.relu(self.lin1(x))
+        print(x)
         x = self.drops(x)
+        print(x)
         x = F.relu(self.lin2(x))
+        print(x)
         x = self.drops(x)
+        print(x)
+        print('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx')
         return x
 
     def probabilities(self, x: torch.Tensor) -> torch.Tensor:
