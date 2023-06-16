@@ -633,7 +633,8 @@ def outlier_detection2(
         pkl.dump([test_latent_reps, test_targets], f)
 
     # Fit explainers:
-    print(corpus_features, corpus_latent_reps)
+    print(corpus_features, corpus_latent_reps) ###########################################################################3
+    exit()
     simplex = Simplex(
         corpus_examples=corpus_features, corpus_latent_reps=corpus_latent_reps
     )
