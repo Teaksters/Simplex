@@ -517,7 +517,6 @@ def outlier_detection2(
     if train_model:
         # Create the model
         classifier = MortalityPredictor()
-        print(classifier.n_cont)
         classifier.to(device)
         optimizer = optim.Adam(classifier.parameters(), weight_decay=weight_decay)
         # Train the model
@@ -564,6 +563,7 @@ def outlier_detection2(
                     test_loss += F.nll_loss(output, target, reduction="sum").item()
                     pred = output.data.max(1, keepdim=True)[1]
                     correct += pred.eq(target.data.view_as(pred)).sum()
+                    print(test_loss)
             test_loss /= len(test_loader.dataset)
             test_losses.append(test_loss)
             print(
