@@ -585,6 +585,7 @@ def jacobian_corruption(
     n_bins=100,
     batch_size=50,
     train: bool = True,
+    cv=0
 ) -> None:
     print(
         100 * "-" + "\n" + "Welcome in the Jacobian Projection check for MNIST. \n"
@@ -592,7 +593,7 @@ def jacobian_corruption(
     )
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    torch.random.manual_seed(random_seed)
+    torch.random.manual_seed(random_seed + cv)
     n_pert_list = [0.0, 0.25, 0.5, 0.75, 1.0]
     metric_data = []
     df_columns = ["Method", "N_pert", "Residual"]
@@ -609,7 +610,7 @@ def jacobian_corruption(
         train_model(
             device=device,
             random_seed=random_seed,
-            cv=0,
+            cv=cv,
             save_path=save_path,
             model_reg_factor=0,
         )
@@ -811,7 +812,7 @@ def main(experiment: str, cv: int) -> None:
     elif experiment == "outlier_detection":
         outlier_detection(cv)
     elif experiment == "jacobian_corruption":
-        jacobian_corruption(random_seed=42 + cv, test_size=100)
+        jacobian_corruption(random_seed=42, test_size=100, cv=cv)
     elif experiment == "influence":
         influence_function(n_keep_list=[2, 5, 10, 20, 50], cv=cv)
     elif experiment == "timing":
