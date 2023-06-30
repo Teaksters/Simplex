@@ -200,10 +200,6 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
         label_df = load_from_preprocessed(label_dir)
         feature_dir = os.path.join(DATA_DIR, 'phenotyping')
         feature_df = load_from_preprocessed(feature_dir)
-
-        print(feature_df.loc[:, feature_df.isna().any()])
-        exit()
-
         age_df = load_age()
 
         print(age_df.loc[:, age_df.isna().any()])
