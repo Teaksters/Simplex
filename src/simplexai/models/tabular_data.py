@@ -30,7 +30,7 @@ class MortalityPredictor(BlackBox):
         nans = torch.nonzero(torch.isnan(x_cont))
         for idx in nans:
             print(idx)
-            print(x_cont[idx])
+            print(x_cont[idx[0], idx[1]])
         exit()
         # print(x_cont)
         # print(x_cont.mean(axis=0))
