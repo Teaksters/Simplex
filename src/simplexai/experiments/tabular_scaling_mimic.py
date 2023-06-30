@@ -556,6 +556,7 @@ def outlier_detection2(
             correct = 0
             with torch.no_grad():
                 for data, target in test_loader:
+                    data = data.type(torch.FloatTensor)
                     data = data.to(device)
                     target = target.type(torch.LongTensor)
                     target = target.to(device)
