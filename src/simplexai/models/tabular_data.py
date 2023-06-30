@@ -33,7 +33,7 @@ class MortalityPredictor(BlackBox):
         x_cont = self.bn1(x_cont)
         print(self.bn1.running_mean)
         print(self.bn1.running_var)
-        exit()
+        # exit()
         x = torch.cat([x_cont, x_disc], 1)
         x = F.relu(self.lin1(x))
         x = self.drops(x)
