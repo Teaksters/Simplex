@@ -71,7 +71,6 @@ def load_age(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
     general_df.drop(columns=drop_cols, inplace=True)
     return general_df
 
-############### WORKINGGGG############
 def generate_episode_dict(df, col, slice=False, partition=1.0):
     df_col = df[col]
     if partition == 1.0:
@@ -84,7 +83,7 @@ def generate_episode_dict(df, col, slice=False, partition=1.0):
         episode_dict_len = {col + ' len ': df_col.size}
         episode_dict.update(episode_dict_len)
 
-    elif slice > 0:
+    elif slice < 0:
         episode_dict = {col + ' mean ' + str(partition): df_col[slice:].mean()}
         episode_dict_std = {col + ' std ' + str(partition): df_col[slice:].std()}
         episode_dict_min = {col + ' min ' + str(partition): df_col[slice:].min()}
@@ -212,6 +211,9 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
         data_df.drop(columns=drop_cols, inplace=True)
         print(data_df.shape)
 
+        print(data_df.loc[:, data_df.isna().any()])
+        exit()
+
         # Safe pickle for later use
         print('Done, storing data for quick retrieval next time.')
         with open(pickle_path, "wb") as f:
@@ -219,6 +221,10 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
 
     df = sklearn.utils.shuffle(data_df, random_state=random_seed)
     df = df.reset_index(drop=True)
+    print(df.loc[:, df.isna().any()])
+    exit()
+
+
     features, labels = df.loc[:, df.columns != 'y_true'], df['y_true']
     return features, labels
 
