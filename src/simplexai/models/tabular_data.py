@@ -27,7 +27,7 @@ class MortalityPredictor(BlackBox):
 
     def latent_representation(self, x: torch.Tensor) -> torch.Tensor:
         x_cont, x_disc = x[:, :self.n_cont], x[:, self.n_cont:]
-        print(torch.isnan(x_cont).any(), torch.isnan(x_cont))
+        print(torch.index(torch.isnan(x_cont) == True))
         exit()
         # print(x_cont)
         # print(x_cont.mean(axis=0))
