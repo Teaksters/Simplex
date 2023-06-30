@@ -150,8 +150,14 @@ def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THO
         for col in desired_cols:
             # For singular measurements have special handling
             if col == 'Weight' or col == 'Height':
-                episode_dict_col = {col: episode_df[col].mean()}
-                episode_dict.update(episode_dict_col)
+                if len(episode_df[col]) > 0:
+                    print('mean: ', episode_df[col])
+                    episode_dict_col = {col: episode_df[col].mean()}
+                    episode_dict.update(episode_dict_col)
+                else:
+                    print('nan: ', print(episode_df[col]))
+                    episode_dict_col = {col: 0.0}
+                    episode_dict.update(episode_dict_col)
                 continue
             # First the full time serie
             episode_dict_col = generate_episode_dict(episode_df, col)
