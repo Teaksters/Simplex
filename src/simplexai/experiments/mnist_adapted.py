@@ -596,7 +596,7 @@ def jacobian_corruption(
     torch.random.manual_seed(random_seed + cv)
     n_pert_list = [0.0, 0.25, 0.5, 0.75, 1.0]
     metric_data = []
-    df_columns = ["Method", "N_pert", "Residual"]
+    df_columns = ["Method", "N_pert", "Residual", "MLS"]
     current_folder = Path.cwd()
     save_path = current_folder / save_path
     # Create saving directory if inexistent
@@ -655,10 +655,7 @@ def jacobian_corruption(
             for pert_id, n_pert in enumerate(n_pert_list):
                 noise = torch.tensor(np.random.uniform(size=corpus_inputs.shape)).to(device)
                 mask = noise > n_pert
-                # mask.to(device)
-                # noise.to(device)
-                print(corpus_inputs.device, mask.device, noise.device, device)
-                corpus_inputs_pert = (corpus_inputs * ~mask) + (noise * mask)
+                corpus_inputs_pert = (corpus_inputs * mask) + (noise * ~mask)
 
                 Corpus_inputs_pert[
                     pert_id, lower_id:higher_id
@@ -678,20 +675,32 @@ def jacobian_corruption(
             residual = torch.sqrt(
                 torch.sum((test_latent - simplex.latent_approx()) ** 2)
             )
+            mls = torch.max(torch.flatten(simplex.latent_approx()))
             metric_data.append(
-                ["SimplEx", n_pert, residual.cpu().numpy().item()]
+                ["SimplEx", n_pert, residual.cpu().numpy().item(),
+                 mls.cpu().numpy().item()]
             )
 
     metric_df = pd.DataFrame(metric_data, columns=df_columns)
     sns.set_palette("colorblind")
     sns.boxplot(data=metric_df, x="N_pert", y="Residual", hue="Method")
     plt.xlabel("Percentage of noisy pixels")
-    plt.savefig(save_path / f"box_plot_cv{cv}.png")
+    plt.title('Effect of Increasingly Unfamiliar Corpus on Approximation Quality')
+    plt.savefig(save_path / f"res_box_plot_cv{cv}.png")
+
+    metric_df = pd.DataFrame(metric_data, columns=df_columns)
+    sns.set_palette("colorblind")
+    sns.boxplot(data=metric_df, x="N_pert", y="MLS", hue="Method")
+    plt.xlabel("Percentage of noisy pixels")
+    plt.title('Effect of Increasingly Unfamiliar Corpus on MLS.')
+    plt.savefig(save_path / f"MLS_box_plot_cv{cv}.png")
 
     data_path = save_path / f"corrupted_results_cv{cv}.pkl"
     with open(data_path, "wb") as f:
         print(f"Saving nn_dist decomposition in {data_path}.")
         pkl.dump(metric_df, f)
+
+    return 0
 
 
 
