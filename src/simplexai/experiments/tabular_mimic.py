@@ -100,7 +100,6 @@ def generate_episode_dict(df, col, slice=False, partition=1.0):
 
     # Replace nan with standard numeric value
     episode_dict = {k: 0.0 if np.isnan(v) else v for k, v in episode_dict.items()}
-    print(episode_dict)
     return episode_dict
 
 def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
