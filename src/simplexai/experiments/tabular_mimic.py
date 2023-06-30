@@ -100,6 +100,7 @@ def generate_episode_dict(df, col, slice=False, partition=1.0):
 
     # Replace nan with standard numeric value
     episode_dict = {k: 0.0 if np.isnan(v) else v for k, v in episode_dict.items()}
+    print(episode_dict)
     return episode_dict
 
 def load_timeseries(): # COULD BE USED FOR MORE VALUES LATER BY NOT DROPPING THOSE COLS
@@ -201,10 +202,6 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
         feature_dir = os.path.join(DATA_DIR, 'phenotyping')
         feature_df = load_from_preprocessed(feature_dir)
         age_df = load_age()
-
-        print(age_df.loc[:, age_df.isna().any()])
-        exit()
-
         time_df = load_timeseries()
 
         print(time_df.loc[:, time_df.isna().any()])
