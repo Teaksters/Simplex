@@ -552,24 +552,25 @@ def outlier_detection2(
 
         def test():
             classifier.eval()
-            test_loss = 0
-            correct = 0
             with torch.no_grad():
-                for data, target in test_loader:
-                    data = data.type(torch.FloatTensor)
-                    data = data.to(device)
-                    target = target.type(torch.LongTensor)
-                    target = target.to(device)
-                    output = classifier(data)
-                    test_loss += F.nll_loss(output, target, reduction="sum").item()
-                    pred = output.data.max(1, keepdim=True)[1]
-                    correct += pred.eq(target.data.view_as(pred)).sum()
-            test_loss /= len(test_loader.dataset)
-            test_losses.append(test_loss)
-            print(
-                f"\nTest set: Avg. loss: {test_loss:.4f}, Accuracy: {correct}/{len(test_loader.dataset)}"
-                f"({100. * correct / len(test_loader.dataset):.0f}%)\n"
-            )
+                test_loss = 0
+                correct = 0
+                with torch.no_grad():
+                    for data, target in test_loader:
+                        data = data.type(torch.FloatTensor)
+                        data = data.to(device)
+                        target = target.type(torch.LongTensor)
+                        target = target.to(device)
+                        output = classifier(data)
+                        test_loss += F.nll_loss(output, target, reduction="sum").item()
+                        pred = output.data.max(1, keepdim=True)[1]
+                        correct += pred.eq(target.data.view_as(pred)).sum()
+                test_loss /= len(test_loader.dataset)
+                test_losses.append(test_loss)
+                print(
+                    f"\nTest set: Avg. loss: {test_loss:.4f}, Accuracy: {correct}/{len(test_loader.dataset)}"
+                    f"({100. * correct / len(test_loader.dataset):.0f}%)\n"
+                )
 
         test()
         for epoch in range(1, n_epoch_model + 1):
