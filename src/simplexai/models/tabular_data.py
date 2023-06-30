@@ -29,7 +29,8 @@ class MortalityPredictor(BlackBox):
         x_cont, x_disc = x[:, :self.n_cont], x[:, self.n_cont:]
         print(x_cont)
         print(x_cont.mean(axis=0))
-        print(x_cont.var(axis=1))
+        print(x_cont.var(axis=0))
+        exit()
         x_cont = self.bn1(x_cont)
         x = torch.cat([x_cont, x_disc], 1)
         x = F.relu(self.lin1(x))
