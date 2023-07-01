@@ -93,13 +93,13 @@ fig.suptitle('The Effect Of Unfamiliarity On The Maximum Logit Score (MLS)')
 df.boxplot(column=[1.0, 1.25, 1.5, 2.0, 5.0], ax=ax1)
 # df.boxplot()
 safe_path = 'experiments/results/mimic/quality/logits/plots/logit_boxplot_short.png'
-ax1.ylabel('MLS')
-ax1.xlabel('Scaling Factor')
+ax1.set_ylabel('MLS')
+ax1.set_xlabel('Scaling Factor')
 
 # Plot the wide variant
 df.boxplot(column=[1.0, 1.25, 1.5, 2.0, 5.0, 10.0, 20.0, 50.0, 100.0], ax=ax2)
-ax2.ylabel('MLS')
-ax2.xlabel('Scaling Factor')
+ax2.set_ylabel('MLS')
+ax2.set_xlabel('Scaling Factor')
 
 
 safe_path = 'experiments/results/mimic/quality/logits/plots/logit_boxplot_final.png'
