@@ -71,11 +71,11 @@ data = np.array(data)
 #     for i_cv in range(len(data[0])):
 #         logit_norms[i_scale, i_cv] = np.linalg.norm(data[i_scale, i_cv])
 
-# Reduce logits to their vector length (norms)
+# Reduce logits to their MLS
 logit_norms = np.empty(data.shape[:2])
 for i_scale in range(len(data)):
     for i_cv in range(len(data[0])):
-        logit_norms[i_scale, i_cv] = torch.max(torch.flatten(data[i_scale, i_cv])).item()
+        logit_norms[i_scale, i_cv] = data[i_scale, i_cv].flatten().max()
 
 # plot logit norms into a histogram
 if not os.path.exists('experiments/results/mimic/quality/logits/plots'):
