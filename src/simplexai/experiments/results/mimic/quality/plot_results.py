@@ -138,18 +138,18 @@ for m, metric_name in enumerate(metric_names):
             alpha=0.2,
         )
 
-plt.figure(1)
-plt.xlabel(r"$K$")
-plt.ylabel(r"$R^2_{\mathcal{H}}$")
-plt.ylim(top=1.0)
-plt.legend()
-plt.savefig(load_path / "r2_latent.pdf", bbox_inches="tight")
-plt.figure(2)
-plt.xlabel(r"$K$")
-plt.ylabel(r"$R^2_{\mathcal{Y}}$")
-plt.ylim(top=1.0)
-plt.legend()
-plt.savefig(load_path / "r2_output.pdf", bbox_inches="tight")
+# plt.figure(1)
+# plt.xlabel(r"$K$")
+# plt.ylabel(r"$R^2_{\mathcal{H}}$")
+# plt.ylim(top=1.0)
+# plt.legend()
+# plt.savefig(load_path / "r2_latent.pdf", bbox_inches="tight")
+# plt.figure(2)
+# plt.xlabel(r"$K$")
+# plt.ylabel(r"$R^2_{\mathcal{Y}}$")
+# plt.ylim(top=1.0)
+# plt.legend()
+# plt.savefig(load_path / "r2_output.pdf", bbox_inches="tight")
 plt.figure(3)
 plt.xlabel(r"$K$")
 plt.ylabel(r"$\| \hat{\boldsymbol{h}} - \boldsymbol{h} \| $")
@@ -160,6 +160,39 @@ plt.xlabel(r"$K$")
 plt.ylabel(r"$\| \hat{\boldsymbol{y}} - \boldsymbol{y} \| $")
 plt.legend()
 plt.savefig(load_path / "residual_output.pdf", bbox_inches="tight")
+
+fig, (ax1, ax2) = plt.subplots(1, 2)
+fig.suptitle('The Effect of Corpus Unfamiliarity On Decomposition Quality.')
+ax1.plot(
+    n_keep_list,
+    mean_df[metric_names[2], explainer_names[2]],
+    line_styles[explainer_names[2]],
+    label=names_dict[explainer_names[2]],
+)
+ax1.fill_between(
+    n_keep_list,
+    mean_df[metric_names[2], explainer_names[2]] - std_df[metric_names[2], explainer_names[2]],
+    mean_df[metric_names[2], explainer_names[2]] + std_df[metric_names[2], explainer_names[2]],
+    alpha=0.2,
+)
+
+ax1.set_xlabel(r"$K$")
+ax1.set_ylabel(r"$\| \hat{\boldsymbol{h}} - \boldsymbol{h} \| $")
+
+ax2.plot(
+    n_keep_list,
+    mean_df[metric_names[3], explainer_names[3]],
+    line_styles[explainer_names[3]],
+    label=names_dict[explainer_names[3]],
+)
+ax2.fill_between(
+    n_keep_list,
+    mean_df[metric_names[3], explainer_names[3]] - std_df[metric_names[3], explainer_names[3]],
+    mean_df[metric_names[3], explainer_names[3]] + std_df[metric_names[3], explainer_names[3]],
+    alpha=0.2,
+)
+ax2.set_xlabel(r"$K$")
+ax2.set_ylabel(r"$\| \hat{\boldsymbol{y}} - \boldsymbol{y} \| $")
 
 print(
     f"Representer metrics: r2_output = {representer_metrics[0].mean():.2g} +/- {representer_metrics[0].std():.2g}"
