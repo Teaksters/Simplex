@@ -687,6 +687,7 @@ def jacobian_corruption(
     plt.xlabel("Percentage of noisy pixels")
     plt.title('Effect of Increasingly Unfamiliar Corpus on Approximation Quality')
     plt.savefig(save_path / f"res_box_plot_cv{cv}.png")
+    plt.clf()
 
     metric_df = pd.DataFrame(metric_data, columns=df_columns)
     sns.set_palette("colorblind")
