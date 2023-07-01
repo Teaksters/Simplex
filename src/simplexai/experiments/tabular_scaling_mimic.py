@@ -954,7 +954,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-experiment",
         type=str,
-        default="outlier_detection",
+        default="outlier_detection3",
         help="Experiment to perform",
     )
     parser.add_argument("-cv", type=int, default=0, help="Cross validation parameter")
