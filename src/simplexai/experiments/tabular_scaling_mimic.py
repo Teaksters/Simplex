@@ -672,10 +672,9 @@ def outlier_detection2(
 def outlier_detection3(
     cv: int = 0,
     random_seed: int = 42,
-    save_path: str = "experiments/results/mimic/outlier/scaled2/",
+    save_path: str = "experiments/results/mimic/outlier/scaled3/",
     train_model: bool = True,
     age_scaler: float=1.,
-    corpus_scaler: float=1.,
 ) -> None:
     torch.random.manual_seed(random_seed + cv)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -796,7 +795,13 @@ def outlier_detection3(
     with open(corpus_path, "rb") as f:
         corpus = pkl.load(f)
     print(corpus)
-    # corpus_examples = ...
+    print(corpus.shape)
+    exit()
+
+    #######################3
+    # Create corpus loader
+    corpus_data = MimicDataset(corpus)
+    corpus_loader = DataLoader(corpus_data, batch_size=corpus.shape[0], shuffle=True)
 
     # Scale OOD sample's ages
     OOD_test = copy.deepcopy(X_test)
@@ -933,6 +938,8 @@ def main(experiment: str = "approximation_quality",
     elif experiment == "outlier_detection2": # BUSY
         outlier_detection2(cv=cv, age_scaler=age_scaler,
                           corpus_scaler=corpus_scaler)
+    elif experiment == "outlier_detection3": # BUSY
+        outlier_detection3(cv=cv, age_scaler=age_scaler)
     elif experiment == "corpus_size": #TODO
         corpus_size_effect()
     else:
