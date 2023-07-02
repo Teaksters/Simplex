@@ -23,9 +23,9 @@ DATA_DIR = Path('../Data/preprocessed')
 
 
 class MimicDataset(Dataset):
-    def __init__(self, X, y=None) -> None:
+    def __init__(self, X, y=[]) -> None:
         self.X = X
-        if y:
+        if len(y) > 0:
             self.y = y.astype(int)
         else:
             labels = np.zeros(self.X.shape[0], dtype=int)
