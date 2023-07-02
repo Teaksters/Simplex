@@ -211,19 +211,11 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
         age_df = load_age()
         time_df = load_timeseries()
 
-        print(time_df.loc[:, time_df.isna().any()])
-        exit()
-        print(feature_df.shape, age_df.shape, time_df.shape)
-
         # Merge data into workable complete format
         data_df = pd.merge(label_df, feature_df, on='stay')
         data_df = pd.merge(time_df, data_df, on='stay')
         data_df = pd.merge(age_df, data_df, on='stay')
         data_df.drop(columns=drop_cols, inplace=True)
-        print(data_df.shape)
-
-        print(data_df.loc[:, data_df.isna().any()])
-        exit()
 
         # Safe pickle for later use
         print('Done, storing data for quick retrieval next time.')
@@ -232,8 +224,6 @@ def load_tabular_mimic(random_seed: int = 42) -> tuple:
 
     df = sklearn.utils.shuffle(data_df, random_state=random_seed)
     df = df.reset_index(drop=True)
-    print(df.loc[:, df.isna().any()])
-    exit()
 
 
     features, labels = df.loc[:, df.columns != 'y_true'], df['y_true']
