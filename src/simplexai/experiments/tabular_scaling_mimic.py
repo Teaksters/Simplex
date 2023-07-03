@@ -831,7 +831,7 @@ def outlier_detection3(
     corpus_probas = classifier.probabilities(corpus_features).detach()
     corpus_true_classes = torch.zeros(corpus_probas.shape, device=device)
     corpus_true_classes[
-        torch.arange(corpus_size), corpus_target.type(torch.LongTensor)
+        torch.arange(25), corpus_target.type(torch.LongTensor)
     ] = 1
     test_latent_reps = classifier.latent_representation(test_features).detach()
 
