@@ -194,7 +194,7 @@ ax1.fill_between(
     alpha=0.2,
 )
 
-ax1.set_xlabel(r"$K$")
+ax1.set_xlabel(r"scaler")
 ax1.set_ylabel(r"$\| \hat{\boldsymbol{h}} - \boldsymbol{h} \| $")
 
 ax2.plot(
@@ -211,7 +211,7 @@ ax2.fill_between(
 )
 ax2.yaxis.set_label_position("right")
 ax2.yaxis.tick_right()
-ax2.set_xlabel(r"$K$")
+ax2.set_xlabel(r"scaler")
 ax2.set_ylabel(r"$\| \hat{\boldsymbol{y}} - \boldsymbol{y} \| $")
 
 fig.savefig(safe_path / "final_residual_output.pdf", bbox_inches="tight")
