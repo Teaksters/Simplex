@@ -800,8 +800,9 @@ def outlier_detection3(
     print('Reading pregenerated prototypical corpus.')
     with open(corpus_path, "rb") as f:
         corpus = pkl.load(f)
-    corpus = corpus.to_numpy()
-
+    print(corpus)
+    print(X_test)
+    exit()
     #######################3
     # Create corpus loader
     corpus_data = MimicDataset(corpus)
