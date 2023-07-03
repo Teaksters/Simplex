@@ -688,12 +688,7 @@ def outlier_detection3(
 
     # Create saving directory if inexistent
     current_path = Path.cwd()
-
-########################################################################################
-    # save_path = current_path / save_path / 'pregen'
-
-    save_path = current_path / save_path / str(age_scaler) / str(corpus_scaler)
-########################################################################################
+    save_path = current_path / save_path / 'pregen'
 
     if not save_path.exists():
         print(f"Creating the saving directory {save_path}")
@@ -831,7 +826,7 @@ def outlier_detection3(
     corpus_probas = classifier.probabilities(corpus_features).detach()
     corpus_true_classes = torch.zeros(corpus_probas.shape, device=device)
     corpus_true_classes[
-        torch.arange(25), corpus_target.type(torch.LongTensor)
+        torch.arange(corpus.shape[0]), corpus_target.type(torch.LongTensor)
     ] = 1
     test_latent_reps = classifier.latent_representation(test_features).detach()
 
