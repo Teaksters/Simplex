@@ -69,7 +69,7 @@ load_path = current_path / "experiments/results/mimic/quality/scaled/"
 
 for scaler in scalers:
     for cv in cv_list:
-        classifier = MortalityPredictor(n_cont=1, input_feature_num=26)
+        classifier = MortalityPredictor()
         classifier.load_state_dict(torch.load(load_path / str(scaler) / f"model_cv{cv}.pth"))
         classifier.to(device)
         classifier.eval()
