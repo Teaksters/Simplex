@@ -25,13 +25,7 @@ DATA_DIR = Path('../Data/preprocessed')
 class MimicDataset(Dataset):
     def __init__(self, X, y=[]) -> None:
         self.X = X
-        if len(y) > 0:
-            self.y = y.astype(int)
-        else:
-            labels = np.zeros(self.X.shape[0], dtype=int)
-            self.y = pd.DataFrame({'y': labels}).astype(int)
-            print(self.y)
-            print(self.X)
+        self.y = y.astype(int)
 
     def __len__(self) -> int:
         return len(self.X)
