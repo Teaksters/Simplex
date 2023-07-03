@@ -802,11 +802,12 @@ def outlier_detection3(
         corpus = pkl.load(f)
     print(corpus)
     print(X_test, y_test)
-    exit()
     #######################3
     # Create corpus loader
     corpus_data = MimicDataset(corpus)
-    print(corpus_data)
+
+    exit()
+    
     corpus_loader = DataLoader(corpus_data, batch_size=corpus.shape[0], shuffle=True)
     print(next(enumerate(corpus_loader)))
     exit()
