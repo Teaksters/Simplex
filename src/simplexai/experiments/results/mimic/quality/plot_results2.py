@@ -209,10 +209,12 @@ ax2.fill_between(
     mean_df[metric_names[3], "simplex"] + std_df[metric_names[3], "simplex"],
     alpha=0.2,
 )
+ax2.yaxis.set_label_position("right")
+ax2.yaxis.tick_right()
 ax2.set_xlabel(r"$K$")
 ax2.set_ylabel(r"$\| \hat{\boldsymbol{y}} - \boldsymbol{y} \| $")
 
-fig.savefig(safe_path / "final_residual_output.pdf")
+fig.savefig(safe_path / "final_residual_output.pdf", bbox_inches="tight)
 
 print(
     f"Representer metrics: r2_output = {representer_metrics[0].mean():.2g} +/- {representer_metrics[0].std():.2g}"
