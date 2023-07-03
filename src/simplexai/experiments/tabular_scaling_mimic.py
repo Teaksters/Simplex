@@ -689,9 +689,11 @@ def outlier_detection3(
     # Create saving directory if inexistent
     current_path = Path.cwd()
 
+########################################################################################
     # save_path = current_path / save_path / 'pregen'
 
     save_path = current_path / save_path / str(age_scaler) / str(corpus_scaler)
+########################################################################################
 
     if not save_path.exists():
         print(f"Creating the saving directory {save_path}")
@@ -798,15 +800,14 @@ def outlier_detection3(
     print('Reading pregenerated prototypical corpus.')
     with open(corpus_path, "rb") as f:
         corpus = pkl.load(f)
-    print(corpus)
-    print(corpus.shape)
-    exit()
 
     #######################3
     # Create corpus loader
     corpus_data = MimicDataset(corpus)
+    print(corpus_data)
     corpus_loader = DataLoader(corpus_data, batch_size=corpus.shape[0], shuffle=True)
-
+    print(enumerate(corpus_loader))
+    exit()
     # Scale OOD sample's ages
     OOD_test = copy.deepcopy(X_test)
     OOD_test['AGE'] = OOD_test['AGE'].apply(lambda x: x * age_scaler)
