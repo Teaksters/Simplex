@@ -212,7 +212,7 @@ ax2.fill_between(
 ax2.set_xlabel(r"$K$")
 ax2.set_ylabel(r"$\| \hat{\boldsymbol{y}} - \boldsymbol{y} \| $")
 
-fig.savefig(safe_path / "final_residual_output.pdf", bbox_inches="tight")
+fig.savefig(safe_path / "final_residual_output.pdf")
 
 print(
     f"Representer metrics: r2_output = {representer_metrics[0].mean():.2g} +/- {representer_metrics[0].std():.2g}"
