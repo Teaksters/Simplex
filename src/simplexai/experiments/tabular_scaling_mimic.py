@@ -673,7 +673,7 @@ def outlier_detection3(
     cv: int = 0,
     random_seed: int = 42,
     save_path: str = "experiments/results/mimic/outlier/scaled3/",
-    train_model: bool = False,
+    train_model: bool = True,
     age_scaler: float=1.,
 ) -> None:
     torch.random.manual_seed(random_seed + cv)
