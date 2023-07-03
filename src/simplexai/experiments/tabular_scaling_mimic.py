@@ -802,7 +802,7 @@ def outlier_detection3(
         corpus = pkl.load(f)
     #######################3
     # Create corpus loader
-    y = corpus['Shock']
+    y = corpus.loc['Shock']
     print(y)
     y = y.iloc[:, :corpus.shape[0]]
     print(y)
