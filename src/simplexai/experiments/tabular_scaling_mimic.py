@@ -805,10 +805,8 @@ def outlier_detection3(
     y = corpus.iloc[:corpus.shape[0], -1].astype(int)
     y.iloc[:] = 0
     corpus_data = MimicDataset(corpus, y)
-
     corpus_loader = DataLoader(corpus_data, batch_size=corpus.shape[0], shuffle=True)
-    print(next(enumerate(corpus_loader)))
-    exit()
+
     # Scale OOD sample's ages
     OOD_test = copy.deepcopy(X_test)
     OOD_test['AGE'] = OOD_test['AGE'].apply(lambda x: x * age_scaler)
