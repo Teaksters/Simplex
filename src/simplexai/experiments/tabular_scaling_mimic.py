@@ -673,7 +673,7 @@ def outlier_detection3(
     cv: int = 0,
     random_seed: int = 42,
     save_path: str = "experiments/results/mimic/outlier/scaled3/",
-    train_model: bool = True,
+    train_model: bool = False,
     age_scaler: float=1.,
 ) -> None:
     torch.random.manual_seed(random_seed + cv)
@@ -688,7 +688,7 @@ def outlier_detection3(
 
     # Create saving directory if inexistent
     current_path = Path.cwd()
-    save_path = current_path / save_path / str(age_scaler) / str(corpus_scaler)
+    save_path = current_path / save_path / 'pregen'
     if not save_path.exists():
         print(f"Creating the saving directory {save_path}")
         os.makedirs(save_path)

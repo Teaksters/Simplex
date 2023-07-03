@@ -194,6 +194,8 @@ ax2.fill_between(
 ax2.set_xlabel(r"$K$")
 ax2.set_ylabel(r"$\| \hat{\boldsymbol{y}} - \boldsymbol{y} \| $")
 
+fig.savefig(load_path / "final_decomp_output.pdf", bbox_inches="tight")
+
 print(
     f"Representer metrics: r2_output = {representer_metrics[0].mean():.2g} +/- {representer_metrics[0].std():.2g}"
     f" ; residual_output = {representer_metrics[1].mean():.2g} +/- {representer_metrics[1].std():.2g}"
