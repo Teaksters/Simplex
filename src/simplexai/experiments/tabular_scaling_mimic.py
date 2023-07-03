@@ -803,9 +803,9 @@ def outlier_detection3(
     #######################3
     # Create corpus loader
     print(corpus)
-    y = corpus.iloc[:corpus.shape[0], -1]
+    y = corpus.iloc[:corpus.shape[0], -1].astype(int)
     print(y)
-    y['Shock'] = 0
+    y.iloc[:] = 0
     print(y)
     corpus_data = MimicDataset(corpus, y)
 
