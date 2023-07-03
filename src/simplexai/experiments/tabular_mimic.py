@@ -29,7 +29,7 @@ class MimicDataset(Dataset):
             self.y = y.astype(int)
         else:
             labels = np.zeros(self.X.shape[0], dtype=int)
-            self.y = pd.DataFrame({'y': labels})
+            self.y = pd.DataFrame({'y': labels}).astype(int)
 
     def __len__(self) -> int:
         return len(self.X)
