@@ -25,7 +25,7 @@ from simplexai.experiments.tabular_mimic import MimicDataset, \
 
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_DIR = '../Data/preprocessed'
+DATA_DIR = Path('../Data/preprocessed')
 
 
 def approximation_quality(
