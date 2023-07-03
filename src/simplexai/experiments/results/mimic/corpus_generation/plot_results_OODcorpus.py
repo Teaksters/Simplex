@@ -59,7 +59,7 @@ stds = []
 for scaler in OOD_scalers:
     for c_scaler in corpus_scalers:
         if c_scaler == 'pregen':
-            current_path = load_path[:-1] / 'scaled3' / 'pregen'
+            current_path = load_path.parent / 'scaled3' / 'pregen'
         else:
             current_path = load_path / str(scaler) / str(c_scaler)
         for cv in cv_list:

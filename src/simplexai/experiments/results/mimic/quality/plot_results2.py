@@ -188,7 +188,7 @@ ax1.plot(
     label=names_dict["simplex"],
 )
 ax1.fill_between(
-    n_keep_list,
+    scalers,
     mean_df[metric_names[2], "simplex"] - std_df[metric_names[2], "simplex"],
     mean_df[metric_names[2], "simplex"] + std_df[metric_names[2], "simplex"],
     alpha=0.2,
@@ -204,7 +204,7 @@ ax2.plot(
     label=names_dict["simplex"],
 )
 ax2.fill_between(
-    n_keep_list,
+    scalers,
     mean_df[metric_names[3], "simplex"] - std_df[metric_names[3], "simplex"],
     mean_df[metric_names[3], "simplex"] + std_df[metric_names[3], "simplex"],
     alpha=0.2,
