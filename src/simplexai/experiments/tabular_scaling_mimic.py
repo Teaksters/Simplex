@@ -801,7 +801,7 @@ def outlier_detection3(
     with open(corpus_path, "rb") as f:
         corpus = pkl.load(f)
     print(corpus)
-    print(X_test)
+    print(X_test, y_test)
     exit()
     #######################3
     # Create corpus loader
