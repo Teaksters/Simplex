@@ -71,34 +71,34 @@ for scaler in OOD_scalers:
                 test_latent_reps, test_targets = pkl.load(f)
             with open(current_path / f"simplex_cv{cv}.pkl", "rb") as f:
                 simplex = pkl.load(f)
-            with open(current_path / f"nn_dist_cv{cv}.pkl", "rb") as f:
-                nn_dist = pkl.load(f)
-            with open(current_path / f"nn_uniform_cv{cv}.pkl", "rb") as f:
-                nn_uniform = pkl.load(f)
+            # with open(current_path / f"nn_dist_cv{cv}.pkl", "rb") as f:
+            #     nn_dist = pkl.load(f)
+            # with open(current_path / f"nn_uniform_cv{cv}.pkl", "rb") as f:
+            #     nn_uniform = pkl.load(f)
 
             latents_true = test_latent_reps.to(device)
             test_predictions = torch.argmax(
                 classifier.latent_to_presoftmax(latents_true), dim=-1
             )
             simplex_latent_approx = simplex.latent_approx().to(device)
-            nn_dist_latent_approx = nn_dist.latent_approx().to(device)
-            nn_uniform_latent_approx = nn_uniform.latent_approx().to(device)
+            # nn_dist_latent_approx = nn_dist.latent_approx().to(device)
+            # nn_uniform_latent_approx = nn_uniform.latent_approx().to(device)
             simplex_residuals = ((latents_true - simplex_latent_approx) ** 2).mean(dim=-1)
-            nn_dist_residuals = ((latents_true - nn_dist_latent_approx) ** 2).mean(dim=-1)
-            nn_uniform_residuals = ((latents_true - nn_uniform_latent_approx) ** 2).mean(dim=-1)
+            # nn_dist_residuals = ((latents_true - nn_dist_latent_approx) ** 2).mean(dim=-1)
+            # nn_uniform_residuals = ((latents_true - nn_uniform_latent_approx) ** 2).mean(dim=-1)
             counts_simplex = []
-            counts_nn_dist = []
-            counts_nn_uniform = []
+            # counts_nn_dist = []
+            # counts_nn_uniform = []
             counts_random = []
             random_perm = torch.randperm(test_size)
             for k in range(simplex_residuals.shape[0]):
                 _, simplex_top_id = torch.topk(simplex_residuals, k)
-                _, nn_dist_top_id = torch.topk(nn_dist_residuals, k)
-                _, nn_uniform_top_id = torch.topk(nn_uniform_residuals, k)
+                # _, nn_dist_top_id = torch.topk(nn_dist_residuals, k)
+                # _, nn_uniform_top_id = torch.topk(nn_uniform_residuals, k)
                 random_id = random_perm[:k]
                 count_simplex = torch.count_nonzero(simplex_top_id > 99).item()
-                count_nn_dist = torch.count_nonzero(nn_dist_top_id > 99).item()
-                count_nn_uniform = torch.count_nonzero(nn_uniform_top_id > 99).item()
+                # count_nn_dist = torch.count_nonzero(nn_dist_top_id > 99).item()
+                # count_nn_uniform = torch.count_nonzero(nn_uniform_top_id > 99).item()
                 count_random = torch.count_nonzero(random_id > 99).item()
                 simplex_selected_targets = np.delete(
                     test_targets.cpu().numpy(), simplex_top_id.cpu().numpy()
@@ -106,18 +106,18 @@ for scaler in OOD_scalers:
                 simplex_selected_predictions = np.delete(
                     test_predictions.cpu().numpy(), simplex_top_id.cpu().numpy()
                 )
-                nn_dist_selected_targets = np.delete(
-                    test_targets.cpu().numpy(), nn_dist_top_id.cpu().numpy()
-                )
-                nn_dist_selected_predictions = np.delete(
-                    test_predictions.cpu().numpy(), nn_dist_top_id.cpu().numpy()
-                )
-                nn_uniform_selected_targets = np.delete(
-                    test_targets.cpu().numpy(), nn_uniform_top_id.cpu().numpy()
-                )
-                nn_uniform_selected_predictions = np.delete(
-                    test_predictions.cpu().numpy(), nn_uniform_top_id.cpu().numpy()
-                )
+                # nn_dist_selected_targets = np.delete(
+                #     test_targets.cpu().numpy(), nn_dist_top_id.cpu().numpy()
+                # )
+                # nn_dist_selected_predictions = np.delete(
+                #     test_predictions.cpu().numpy(), nn_dist_top_id.cpu().numpy()
+                # )
+                # nn_uniform_selected_targets = np.delete(
+                #     test_targets.cpu().numpy(), nn_uniform_top_id.cpu().numpy()
+                # )
+                # nn_uniform_selected_predictions = np.delete(
+                #     test_predictions.cpu().numpy(), nn_uniform_top_id.cpu().numpy()
+                # )
                 random_selected_targets = np.delete(
                     test_targets.cpu().numpy(), random_id.cpu().numpy()
                 )
@@ -127,22 +127,22 @@ for scaler in OOD_scalers:
                 accuracies[0, k, cv] = accuracy_score(
                     simplex_selected_targets, simplex_selected_predictions
                 )
-                accuracies[1, k, cv] = accuracy_score(
-                    nn_dist_selected_targets, nn_dist_selected_predictions
-                )
-                accuracies[2, k, cv] = accuracy_score(
-                    nn_uniform_selected_targets, nn_uniform_selected_predictions
-                )
+                # accuracies[1, k, cv] = accuracy_score(
+                #     nn_dist_selected_targets, nn_dist_selected_predictions
+                # )
+                # accuracies[2, k, cv] = accuracy_score(
+                #     nn_uniform_selected_targets, nn_uniform_selected_predictions
+                # )
                 accuracies[3, k, cv] = accuracy_score(
                     random_selected_targets, random_selected_predictions
                 )
                 counts_simplex.append(count_simplex)
-                counts_nn_dist.append(count_nn_dist)
-                counts_nn_uniform.append(count_nn_uniform)
+                # counts_nn_dist.append(count_nn_dist)
+                # counts_nn_uniform.append(count_nn_uniform)
                 counts_random.append(count_random)
             metrics[0, :, cv] = counts_simplex
-            metrics[1, :, cv] = counts_nn_dist
-            metrics[2, :, cv] = counts_nn_uniform
+            # metrics[1, :, cv] = counts_nn_dist
+            # metrics[2, :, cv] = counts_nn_uniform
             metrics[3, :, cv] = counts_random
 
         counts_ideal = [
