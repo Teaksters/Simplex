@@ -29,7 +29,7 @@ parser.add_argument(
 parser.add_argument(
     "-corpus_scalers",
     nargs="*",
-    default=[1.0, 2.0, 5.0, 10.0, 100.0],
+    default=['pregen', 1.0, 5.0],
     help="The scalars used to rescale outliers to be OOD.",
     type=float,
 )
@@ -58,9 +58,12 @@ means = []
 stds = []
 for scaler in OOD_scalers:
     for c_scaler in corpus_scalers:
-        current_path = load_path / str(scaler) / str(c_scaler)
+        if c_scaler == 'pregen':
+            current_path = load_path[:-1] / 'scaled3' / 'pregen'
+        else:
+            current_path = load_path / str(scaler) / str(c_scaler)
         for cv in cv_list:
-            classifier = MortalityPredictor(n_cont=188, input_feature_num=26)
+            classifier = MortalityPredictor()
             classifier.load_state_dict(torch.load(current_path / f"model_cv{cv}.pth"))
             classifier.to(device)
             classifier.eval()
@@ -159,11 +162,11 @@ plt.plot(n_inspected, counts_ideal, label="Maximal", color=colors[-1])
 plt.plot(n_inspected, means[0], "-", label="Prototypical Corpus", color=colors[1])
 plt.fill_between(n_inspected, means[0] - stds[0], means[0] + stds[0], alpha=0.3, color=colors[1])
 
-plt.plot(n_inspected, means[4], "-", label="Familiar Corpus" + str(corpus_scalers[4]), color=colors[5])
-plt.fill_between(n_inspected, means[4] - stds[4], means[4] + stds[4], alpha=0.3, color=colors[5])
+plt.plot(n_inspected, means[1], "-", label="Familiar Corpus" + str(corpus_scalers[1]), color=colors[5])
+plt.fill_between(n_inspected, means[1] - stds[1], means[1] + stds[1], alpha=0.3, color=colors[5])
 
-plt.plot(n_inspected, means[1], "-", label="Unfamiliar Corpus" + str(corpus_scalers[1]), color=colors[2])
-plt.fill_between(n_inspected, means[1] - stds[1], means[1] + stds[1], alpha=0.3, color=colors[2])
+plt.plot(n_inspected, means[2], "-", label="Unfamiliar Corpus (scaler: 5)" + str(corpus_scalers[2]), color=colors[2])
+plt.fill_between(n_inspected, means[2] - stds[2], means[2] + stds[2], alpha=0.3, color=colors[2])
 
 # plt.plot(n_inspected, means[2], "-", label="corpus Age x" + str(corpus_scalers[2]), color=colors[3])
 # plt.fill_between(n_inspected, means[2] - stds[2], means[2] + stds[2], alpha=0.3, color=colors[3])
@@ -182,7 +185,8 @@ plt.fill_between(
 plt.xlabel("Number of samples inspected")
 plt.ylabel("Number of outliers detected")
 plt.legend(loc='upper left', fontsize='x-small')
+plt.title("Outlier Detection Performance With Pregenerated Corpus")
 
-plt.savefig(safe_path / "outlier_pregen.pdf", bbox_inches="tight")
+plt.savefig(safe_path / "outlier_pregen.jpg", bbox_inches="tight")
 
 print('succesfully saved plot at:\n', safe_path)
